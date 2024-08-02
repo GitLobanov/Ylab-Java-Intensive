@@ -1,33 +1,54 @@
 package com.backend.repository;
 
 import com.backend.model.Car;
+import com.backend.model.User;
 import com.backend.repository.parent.CrudRepository;
 
-import java.util.List;
+import java.rmi.server.UID;
+import java.util.*;
 
 public class CarRepository implements CrudRepository<Car> {
-    @Override
-    public void save(Car car) {
 
+    private static CarRepository instance;
+    private final Map<UUID, Car> cars;
+
+    public CarRepository() {
+        cars = new HashMap<>();
+    }
+
+    public static CarRepository getInstance() {
+        if (instance == null) {
+            synchronized (CarRepository.class) {
+                if (instance == null) {
+                    instance = new CarRepository();
+                }
+            }
+        }
+        return instance;
     }
 
     @Override
-    public void update(Car car) {
-
+    public boolean save(Car car) {
+        return Objects.equals(cars.put(car.getId(), car), car);
     }
 
     @Override
-    public void delete(Car car) {
-
+    public boolean update(Car car) {
+        return false;
     }
 
     @Override
-    public Car find(Car car) {
-        return null;
+    public boolean delete(Car car) {
+        return cars.remove(car.getId(), car);
     }
 
     @Override
-    public List<Car> findAll() {
-        return List.of();
+    public Car findById(UUID uid) {
+        return  cars.get(uid);
+    }
+
+    @Override
+    public Map<UUID,Car> findAll() {
+        return cars;
     }
 }

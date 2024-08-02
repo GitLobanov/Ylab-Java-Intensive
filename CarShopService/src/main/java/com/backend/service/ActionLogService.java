@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public class ActionLogService {
 
-
     private static List<ActionLog> logEntries = new ArrayList<>();
 
     public static void log(User user, ActionLog.ActionType actionType, String message) {

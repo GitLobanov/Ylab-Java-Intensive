@@ -1,13 +1,16 @@
 package com.backend.repository.parent;
 
+import java.rmi.server.UID;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public interface CrudRepository <T>{
 
-    abstract void save(T t);
-    abstract void update(T t);
-    abstract void delete(T t);
-    abstract T find(T t);
-    abstract List<T> findAll();
+    abstract boolean save(T t);
+    abstract boolean update(T t);
+    abstract boolean delete(T t);
+    abstract T findById(UUID uid);
+    abstract Map<UUID,T> findAll();
 
 }

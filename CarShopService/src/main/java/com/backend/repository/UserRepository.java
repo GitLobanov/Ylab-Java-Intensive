@@ -1,32 +1,65 @@
 package com.backend.repository;
 
+import com.backend.model.User;
 import com.backend.repository.parent.CrudRepository;
 
-import java.util.List;
+import java.util.*;
 
-public class UserRepository implements CrudRepository {
-    @Override
-    public void save(Object object) {
+public class UserRepository implements CrudRepository<User> {
 
+    private static UserRepository instance;
+    private final Map<UUID, User> users;
+
+    public UserRepository (){
+        users = new HashMap<>();
+    }
+
+    public static UserRepository getInstance(){
+        if(instance == null){
+            synchronized (UserRepository.class){
+                if(instance == null){
+                    instance = new UserRepository();
+                }
+            }
+        }
+
+        return instance;
     }
 
     @Override
-    public void update(Object object) {
-
+    public boolean save(User user) {
+        return Objects.equals(users.put(user.getId(), user), user);
     }
 
     @Override
-    public void delete(Object object) {
-
+    public boolean update(User user) {
+        return false;
     }
 
     @Override
-    public Object find(Object object) {
+    public boolean delete(User user) {
+        return false;
+    }
+
+    @Override
+    public User findById(UUID uid) {
+        return null;
+    }
+
+    public User findByUserName(String userName, String password) {
+        Iterator<Map.Entry<UUID, User>> iterator = users.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, User> entry = iterator.next();
+            if (entry.getValue().getUserName().equals(userName) && entry.getValue().getPassword().equals(password)) {
+                return entry.getValue();
+            }
+        }
+
         return null;
     }
 
     @Override
-    public List findAll() {
-        return List.of();
+    public Map<UUID, User> findAll() {
+        return users;
     }
 }

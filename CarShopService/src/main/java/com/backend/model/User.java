@@ -3,10 +3,12 @@ package com.backend.model;
 
 import lombok.Data;
 
-@Data
-public abstract class User {
+import java.util.UUID;
 
-    private int id;
+@Data
+public class User {
+
+    private UUID id;
     private String userName;
     private String password;
     private Role role;
@@ -16,7 +18,17 @@ public abstract class User {
     private String phone;
 
     public enum Role {
-        ADMIN, USER, MANAGER
+        ADMIN, CLIENT, MANAGER
+    }
+
+    public User (String userName, String password, Role role, String name, String email, String phone){
+        setId(UUID.randomUUID());
+        setUserName(userName);
+        setPassword(password);
+        setRole(role);
+        setName(name);
+        setEmail(email);
+        setPhone(phone);
     }
 
 }
