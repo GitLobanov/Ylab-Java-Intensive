@@ -14,25 +14,6 @@ import java.util.*;
 
 public class AdminService extends EmployeeAbstractService {
 
-    @Override
-    public boolean addCar(Car car) {
-        return CarRepository.getInstance().save(car);
-    }
-
-    @Override
-    public boolean updateCar(Car car) {
-        return CarRepository.getInstance().update(car);
-    }
-
-    @Override
-    public boolean deleteCar(Car car) {
-        return CarRepository.getInstance().delete(car);
-    }
-
-    public Car findCarById(UUID id) {
-        Car car = CarRepository.getInstance().findById(id);
-        return car;
-    }
 
     // View all employees
     public void viewAllEmployees() {
@@ -45,17 +26,7 @@ public class AdminService extends EmployeeAbstractService {
 
     // Add employee
     public boolean addEmployee(User employee) {
-        if (UserRepository.getInstance().findByUserName(employee.getUserName()) != null) {
-            ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_USERNAME_ALREADY_EXIST);
-            return false;
-        }
-        if (employee.getRole() == User.Role.ADMIN || employee.getRole() == User.Role.MANAGER) {
-            UserRepository.getInstance().save(employee);
-            return true;
-        } else {
-            System.out.println("User role must be ADMIN or MANAGER.");
-            return false;
-        }
+        return  UserRepository.getInstance().save(employee);
     }
 
     // Update employee

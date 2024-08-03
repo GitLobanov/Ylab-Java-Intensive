@@ -12,12 +12,12 @@ import com.backend.util.SuccessResponses;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.UUID;
 
-public class MenuHolderAdmin implements MenuHolder {
+public class MenuHolderAdmin extends MenuHolder {
 
     private AdminService adminService;
+
 
     public MenuHolderAdmin() {
         adminService = new AdminService();
@@ -35,17 +35,16 @@ public class MenuHolderAdmin implements MenuHolder {
         System.out.print("Enter your choice: ");
     }
 
-    // cars
-
     @Override
     public void handleCars() {
 
         while (true) {
             System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Cars Menu ===" + ConsoleColors.RESET);
-            System.out.println("1️⃣ View all cars");
-            System.out.println("2️⃣ Add a new car");
-            System.out.println("3️⃣ Update a car");
-            System.out.println("4️⃣ Delete a car");
+            System.out.println("1\uFE0F⃣ View all cars");
+            System.out.println("2\uFE0F⃣ Search cars");
+            System.out.println("3\uFE0F⃣ Add a new car");
+            System.out.println("4\uFE0F⃣ Update a car");
+            System.out.println("5\uFE0F⃣ Delete a car");
             System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
             System.out.print("Enter your choice: ");
             String choice = scanner.nextLine().trim().toLowerCase();
@@ -56,113 +55,26 @@ public class MenuHolderAdmin implements MenuHolder {
                     break;
 
                 case "2":
-
-                    System.out.println("\uD83C\uDD95 Create a new car");
-
-                    System.out.println("color: ");
-                    String color = scanner.nextLine().trim();
-                    System.out.println("availability: ");
-                    String availabilityInput = scanner.nextLine().trim();
-                    boolean availability = availabilityInput.equals("yes") || availabilityInput.equals("true");
-                    System.out.println("model: ");
-                    String model = scanner.nextLine().trim();
-                    System.out.println("brand: ");
-                    String brand = scanner.nextLine().trim();
-                    System.out.println("year: ");
-                    int year = Integer.parseInt(scanner.nextLine().trim());
-                    System.out.println("price: ");
-                    double price = Double.parseDouble(scanner.nextLine().trim());
-                    System.out.println("condition: ");
-                    String condition = scanner.nextLine().trim();
-
-                    Car car = new Car(brand, model, year, price, condition, color, availability);
-
-                    adminService.addCar(car);
-
-                    System.out.println("Woo! We have new car!");
+                    String query = adminService.formingQuerySearchCars();
+                    adminService.searchCars(query);
                     break;
 
                 case "3":
-
-                    System.out.println("\uD83C\uDD99 Update a car");
-
-                    System.out.println("Input please, id of car you want to update: ");
-                    String inputUpdateId = scanner.nextLine().trim();
-                    Car carForUpdate = adminService.findCarById(UUID.fromString(inputUpdateId));
-
-                    System.out.println("\uD83D\uDC40 You sure, what do you want update this car :");
-                    System.out.println(carForUpdate.toString());
-
-                    if (!confirm()) break;
-
-
-                    System.out.println("Input info about car (if you don't wanna update some fields, just leave they empty):");
-
-                    System.out.println("color (was " + carForUpdate.getColor() + "): ");
-                    String colorInput = scanner.nextLine().trim();
-                    if (!colorInput.isEmpty()) {
-                        carForUpdate.setColor(colorInput);
-                    }
-
-                    System.out.println("availability (yes/no): ");
-                    String availabilityUpdateInput = scanner.nextLine().trim();
-                    if (!availabilityUpdateInput.isEmpty()) {
-                        carForUpdate.setAvailability(availabilityUpdateInput.equalsIgnoreCase("yes") || availabilityUpdateInput.equalsIgnoreCase("true"));
-                    }
-
-                    System.out.println("model (was " + carForUpdate.getModel() + "): ");
-                    String modelInput = scanner.nextLine().trim();
-                    if (!modelInput.isEmpty()) {
-                        carForUpdate.setModel(modelInput);
-                    }
-
-                    System.out.println("brand (was " + carForUpdate.getBrand() + "): ");
-                    String brandInput = scanner.nextLine().trim();
-                    if (!brandInput.isEmpty()) {
-                        carForUpdate.setBrand(brandInput);
-                    }
-
-                    System.out.println("year (was " + carForUpdate.getYear() + "): ");
-                    String yearInput = scanner.nextLine().trim();
-                    if (!yearInput.isEmpty()) {
-                        int yearUpdate = Integer.parseInt(yearInput);
-                        carForUpdate.setYear(yearUpdate);
-                    }
-
-                    System.out.println("price (was " + carForUpdate.getPrice() + "): ");
-                    String priceInput = scanner.nextLine().trim();
-                    if (!priceInput.isEmpty()) {
-                        double priceUpdate = Double.parseDouble(priceInput);
-                        carForUpdate.setPrice(priceUpdate);
-                    }
-
-                    System.out.println("condition: ");
-                    String conditionInput = scanner.nextLine().trim();
-                    if (!conditionInput.isEmpty()) {
-                        carForUpdate.setCondition(conditionInput);
-                    }
-
-                    adminService.updateCar(carForUpdate);
-
-                    System.out.println("Yep! Updated!");
+                    addCarConsole();
                     break;
 
                 case "4":
-                    System.out.println("Input please, id of car you want to delete: ");
-                    String inputDeleteId = scanner.nextLine().trim();
-                    Car carForDeleting = adminService.findCarById(UUID.fromString(inputDeleteId));
+                    updateCarConsole();
+                    break;
 
-                    System.out.println("\uD83D\uDC40 You sure, what do you want delete this car :");
-                    System.out.println(carForDeleting.toString());
-
-                    if (confirm()) adminService.deleteCar(carForDeleting);
-
+                case "5":
+                    deleteCarConsole();
                     break;
                 case "back":
                     return;
 
                 default:
-                    System.out.println("Invalid choice. Returning to main menu.");
+                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
             }
         }
     }
@@ -186,46 +98,19 @@ public class MenuHolderAdmin implements MenuHolder {
 
                 case "2":
                     String query = adminService.formingQuerySearchOrders(Order.TypeOrder.SERVICE);
-                    Map<UUID, Order> searchOrders = adminService.searchOrders(query);
-                    Iterator<Map.Entry<UUID, Order>> iterator = searchOrders.entrySet().iterator();
-                    if (iterator.hasNext()) {
-                        System.out.println("Fond: ");
-                    }
-
-                    while (iterator.hasNext()) {
-                        System.out.println(iterator.next().getValue());
-                    }
+                    adminService.searchOrders(query);
                     break;
 
                 case "3":
-                    Order order = createOrder(Order.TypeOrder.SERVICE);
-                    if (order != null) {
-                        adminService.createOrder(order);
-                        System.out.println("Order created successfully: " + order);
-                    } else {
-                        System.out.println("Order creation failed.");
-                    }
+                    addRequestConsole();
                     break;
 
                 case "4":
-                    System.out.println("\uD83C\uDD99 Update order");
-                    System.out.println("Input please, id of order you want to update: ");
-                    String inputDeleteId = scanner.nextLine().trim();
-                    Order orderUpdate = adminService.findOrderById(UUID.fromString(inputDeleteId));
-                    System.out.println("\uD83D\uDC40 You sure, what do you want to update this:");
-                    System.out.println(orderUpdate);
-                    if (!confirm()) break;
-                    updateOrder(orderUpdate);
+                    updateRequest();
                     break;
 
                 case "5":
-                    System.out.println("Input please, id of order you want to cancel: ");
-                    String inputCancelId = scanner.nextLine().trim();
-                    Order orderCancel = adminService.findOrderById(UUID.fromString(inputCancelId));
-                    System.out.println("\uD83D\uDC40 You sure, what do you want cancel this:");
-                    System.out.println(orderCancel);
-                    if (!confirm()) break;
-                    adminService.cancelOrder(orderCancel);
+                    cancelRequest();
                     break;
                 case "back":
                     return;
@@ -235,7 +120,6 @@ public class MenuHolderAdmin implements MenuHolder {
         }
     }
 
-    // orders
 
     public void handleOrders() {
         while (true) {
@@ -256,46 +140,19 @@ public class MenuHolderAdmin implements MenuHolder {
 
                 case "2":
                     String query = adminService.formingQuerySearchOrders(Order.TypeOrder.BUYING);
-                    Map<UUID, Order> searchOrders = adminService.searchOrders(query);
-                    Iterator<Map.Entry<UUID, Order>> iterator = searchOrders.entrySet().iterator();
-                    if (iterator.hasNext()) {
-                        System.out.println("Fond: ");
-                    }
-
-                    while (iterator.hasNext()) {
-                        System.out.println(iterator.next().getValue());
-                    }
+                    adminService.searchOrders(query);
                     break;
 
                 case "3":
-                    Order order = createOrder(Order.TypeOrder.BUYING);
-                    if (order != null) {
-                        adminService.createOrder(order);
-                        System.out.println("Order created successfully: " + order);
-                    } else {
-                        System.out.println("Order creation failed.");
-                    }
+                    addOrderConsole(Order.TypeOrder.BUYING);
                     break;
 
                 case "4":
-                    System.out.println("\uD83C\uDD99 Update order");
-                    System.out.println("Input please, id of order you want to update: ");
-                    String inputDeleteId = scanner.nextLine().trim();
-                    Order orderUpdate = adminService.findOrderById(UUID.fromString(inputDeleteId));
-                    System.out.println("\uD83D\uDC40 You sure, what do you want to update this:");
-                    System.out.println(orderUpdate);
-                    if (!confirm()) break;
-                    updateOrder(orderUpdate);
+                    updateOrderConsole();
                     break;
 
                 case "5":
-                    System.out.println("Input please, id of order you want to cancel: ");
-                    String inputCancelId = scanner.nextLine().trim();
-                    Order orderCancel = adminService.findOrderById(UUID.fromString(inputCancelId));
-                    System.out.println("\uD83D\uDC40 You sure, what do you want cancel this:");
-                    System.out.println(orderCancel);
-                    if (!confirm()) break;
-                    adminService.cancelOrder(orderCancel);
+                    cancelOrder();
                     break;
                 case "back":
                     return;
@@ -305,33 +162,204 @@ public class MenuHolderAdmin implements MenuHolder {
         }
     }
 
-    private Order createOrder(Order.TypeOrder typeOrder) {
+    public void handleEmployees() {
+        while (true) {
+            System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Employees Menu ===" + ConsoleColors.RESET);
+            System.out.println("1\uFE0F⃣  View all employees");
+            System.out.println("2\uFE0F⃣ Add a new employee");
+            System.out.println("3\uFE0F⃣ Update an employee");
+            System.out.println("4\uFE0F⃣ Remove an employee");
+            System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
+            System.out.print("Enter your choice: ");
+            String choice = scanner.nextLine().trim().toLowerCase();
+
+            switch (choice) {
+                case "1":
+                    adminService.viewAllEmployees();
+                    break;
+                case "2":
+                    addEmployeeConsole();
+                    break;
+                case "3":
+                    updateEmployeeConsole();
+                    break;
+                case "4":
+                    removeEmployeeConsole();
+                    break;
+                case "back":
+                    return;
+                default:
+                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
+            }
+        }
+    }
+
+    // cars
+
+    public void addCarConsole() {
+        System.out.println("\uD83C\uDD95 Create a new car");
+
+        System.out.println("color: ");
+        String color = scanner.nextLine().trim();
+        System.out.println("availability: ");
+        String availabilityInput = scanner.nextLine().trim();
+        boolean availability = availabilityInput.equals("yes") || availabilityInput.equals("true");
+        System.out.println("model: ");
+        String model = scanner.nextLine().trim();
+        System.out.println("brand: ");
+        String brand = scanner.nextLine().trim();
+        System.out.println("year: ");
+        int year = Integer.parseInt(scanner.nextLine().trim());
+        System.out.println("price: ");
+        double price = Double.parseDouble(scanner.nextLine().trim());
+        System.out.println("condition: ");
+        String condition = scanner.nextLine().trim();
+
+        Car car = new Car(brand, model, year, price, condition, color, availability);
+
+        adminService.addCar(car);
+
+        System.out.println("Woo! We have new car!");
+    }
+
+    public void updateCarConsole() {
+        System.out.println("\uD83C\uDD99 Update a car");
+
+        System.out.println("Input please, id of car you want to update: ");
+        String inputUpdateId = scanner.nextLine().trim();
+        Car carForUpdate = adminService.findCarById(UUID.fromString(inputUpdateId));
+
+        System.out.println("\uD83D\uDC40 You sure, what do you want update this car :");
+        System.out.println(carForUpdate.toString());
+
+        if (!confirm()) return;
+
+        System.out.println("Input info about car (if you don't wanna update some fields, just leave they empty):");
+
+        System.out.println("color (was " + carForUpdate.getColor() + "): ");
+        String colorInput = scanner.nextLine().trim();
+        if (!colorInput.isEmpty()) {
+            carForUpdate.setColor(colorInput);
+        }
+
+        System.out.println("availability (yes/no): ");
+        String availabilityUpdateInput = scanner.nextLine().trim();
+        if (!availabilityUpdateInput.isEmpty()) {
+            carForUpdate.setAvailability(availabilityUpdateInput.equalsIgnoreCase("yes") || availabilityUpdateInput.equalsIgnoreCase("true"));
+        }
+
+        System.out.println("model (was " + carForUpdate.getModel() + "): ");
+        String modelInput = scanner.nextLine().trim();
+        if (!modelInput.isEmpty()) {
+            carForUpdate.setModel(modelInput);
+        }
+
+        System.out.println("brand (was " + carForUpdate.getBrand() + "): ");
+        String brandInput = scanner.nextLine().trim();
+        if (!brandInput.isEmpty()) {
+            carForUpdate.setBrand(brandInput);
+        }
+
+        System.out.println("year (was " + carForUpdate.getYear() + "): ");
+        String yearInput = scanner.nextLine().trim();
+        if (!yearInput.isEmpty()) {
+            int yearUpdate = Integer.parseInt(yearInput);
+            carForUpdate.setYear(yearUpdate);
+        }
+
+        System.out.println("price (was " + carForUpdate.getPrice() + "): ");
+        String priceInput = scanner.nextLine().trim();
+        if (!priceInput.isEmpty()) {
+            double priceUpdate = Double.parseDouble(priceInput);
+            carForUpdate.setPrice(priceUpdate);
+        }
+
+        System.out.println("condition: ");
+        String conditionInput = scanner.nextLine().trim();
+        if (!conditionInput.isEmpty()) {
+            carForUpdate.setCondition(conditionInput);
+        }
+
+        adminService.updateCar(carForUpdate);
+        SuccessResponses.printCustomMessage("Car updated successfully.");
+    }
+
+
+    public void deleteCarConsole() {
+        System.out.println("Input please, id of car you want to delete: ");
+        String inputDeleteId = scanner.nextLine().trim();
+        Car carForDeleting = adminService.findCarById(UUID.fromString(inputDeleteId));
+
+        System.out.println("\uD83D\uDC40 You sure, what do you want delete this car :");
+        System.out.println(carForDeleting.toString());
+
+        if (confirm()) adminService.deleteCar(carForDeleting);
+    }
+
+
+
+    // requests
+
+    private void addRequestConsole() {
+        addOrderConsole(Order.TypeOrder.SERVICE);
+    }
+
+    private void updateRequest() {
+        System.out.println("\uD83C\uDD99 Update order");
+        System.out.println("Input please, id of order you want to update: ");
+        String inputDeleteId = scanner.nextLine().trim();
+        Order orderUpdate = adminService.findOrderById(UUID.fromString(inputDeleteId));
+        System.out.println("\uD83D\uDC40 You sure, what do you want to update this:");
+        System.out.println(orderUpdate);
+        if (!confirm()) return;
+        updateOrderConsole();
+    }
+
+    private void cancelRequest() {
+        System.out.println("Input please, id of request you want to cancel: ");
+        String inputCancelId = scanner.nextLine().trim();
+        Order orderCancel = adminService.findOrderById(UUID.fromString(inputCancelId));
+        System.out.println("\uD83D\uDC40 You sure, what do you want cancel this:");
+        System.out.println(orderCancel);
+        if (!confirm()) return;
+        adminService.cancelOrder(orderCancel);
+    }
+
+    // orders
+
+    private void addOrderConsole(Order.TypeOrder typeOrder) {
 
         System.out.println("\uD83C\uDD95 Create a new order:");
-
-        // Select car
         Car car = selectCar();
-        if (car == null) {
+        while (car == null) {
             ErrorResponses.printCustomMessage("Car selection failed.");
-            return null;
+            System.out.println("\uD83C\uDD95 Create a new order:");
+            car = selectCar();
         }
 
-        // Select user
         User user = selectUser();
-        if (user == null) {
+        while (user == null) {
             ErrorResponses.printCustomMessage("User selection failed.");
-            return null;
+            user = selectUser();
         }
 
-        // Enter a note
         System.out.println("Enter a note for the order:");
         String note = scanner.nextLine();
 
-        // Create and return the order
-        return new Order(car, user, typeOrder, note);
+        Order order = new Order(car, user, typeOrder, note);
+
+        SuccessResponses.printCustomMessage("Order created successfully: " + order);
     }
 
-    private void updateOrder(Order order) {
+    private void updateOrderConsole() {
+
+        System.out.println("\uD83C\uDD99 Update order");
+        System.out.println("Input please, id of order you want to update: ");
+        String inputDeleteId = scanner.nextLine().trim();
+        Order order = adminService.findOrderById(UUID.fromString(inputDeleteId));
+        System.out.println("\uD83D\uDC40 You sure, what do you want to update this:");
+        System.out.println(order);
+        if (!confirm()) return;
 
         if (order == null) {
             System.out.println("Order not found.");
@@ -410,55 +438,55 @@ public class MenuHolderAdmin implements MenuHolder {
         }
 
         adminService.updateOrder(order);
+
+        SuccessResponses.printCustomMessage("Order updated successfully.");
     }
 
-    public void handleEmployees() {
-        System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Employees Menu ===" + ConsoleColors.RESET);
-        System.out.println("1\uFE0F⃣  View all employees");
-        System.out.println("2\uFE0F⃣ Add a new employee");
-        System.out.println("3\uFE0F⃣ Update an employee");
-        System.out.println("4\uFE0F⃣ Remove an employee");
-        System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
-        System.out.print("Enter your choice: ");
-        String choice = scanner.nextLine().trim().toLowerCase();
-
-        switch (choice) {
-            case "1":
-                adminService.viewAllEmployees();
-                break;
-            case "2":
-                addEmployeeConsole();
-                break;
-            case "3":
-                updateEmployeeConsole();
-                break;
-            case "4":
-                removeEmployeeConsole();
-                break;
-            case "back":
-                return;
-            default:
-                ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
-        }
+    private void cancelOrder(){
+        System.out.println("Input please, id of order you want to cancel: ");
+        String inputCancelId = scanner.nextLine().trim();
+        Order orderCancel = adminService.findOrderById(UUID.fromString(inputCancelId));
+        System.out.println("\uD83D\uDC40 You sure, what do you want cancel this:");
+        System.out.println(orderCancel);
+        if (!confirm()) return;
+        adminService.cancelOrder(orderCancel);
     }
+
+
+    // employees
 
     private void addEmployeeConsole() {
-        System.out.print("Enter username: ");
+        System.out.println("Enter username: ");
         String userName = scanner.nextLine();
 
-        System.out.print("Enter password: ");
+        while (UserRepository.getInstance().findByUserName(userName) != null) {
+            ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_USERNAME_ALREADY_EXIST);
+            System.out.println("Enter username: ");
+            userName = scanner.nextLine();
+        }
+
+        System.out.println("Enter password: ");
         String password = scanner.nextLine();
 
-        System.out.print("Enter role (ADMIN/MANAGER): ");
-        User.Role role = User.Role.valueOf(scanner.nextLine().toUpperCase());
+        System.out.println("Enter role (ADMIN/MANAGER): ");
 
-        System.out.print("Enter name: ");
+        User.Role role = null;
+        while (role == null) {
+            System.out.print("Enter role (ADMIN/MANAGER): ");
+            try {
+                role = User.Role.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                ErrorResponses.printCustomMessage("User role must be ADMIN or MANAGER.");
+            }
+        }
+
+        System.out.println("Enter name: ");
         String name = scanner.nextLine();
 
-        System.out.print("Enter email: ");
+        System.out.println("Enter email: ");
         String email = scanner.nextLine();
 
-        System.out.print("Enter phone: ");
+        System.out.println("Enter phone: ");
         String phone = scanner.nextLine();
 
         User employee = new User(userName, password, role, name, email, phone);
@@ -468,7 +496,7 @@ public class MenuHolderAdmin implements MenuHolder {
     }
 
     private void updateEmployeeConsole() {
-        System.out.print("Enter username of the employee to update: ");
+        System.out.println("Enter username of the employee to update: ");
         String userName = scanner.nextLine();
 
         if (UserRepository.getInstance().findByUserName(userName)==null) {
@@ -476,16 +504,16 @@ public class MenuHolderAdmin implements MenuHolder {
             return;
         }
 
-        System.out.print("Enter new password (leave blank to keep unchanged): ");
+        System.out.println("Enter new password (leave blank to keep unchanged): ");
         String password = scanner.nextLine();
 
-        System.out.print("Enter new name (leave blank to keep unchanged): ");
+        System.out.println("Enter new name (leave blank to keep unchanged): ");
         String name = scanner.nextLine();
 
-        System.out.print("Enter new email (leave blank to keep unchanged): ");
+        System.out.println("Enter new email (leave blank to keep unchanged): ");
         String email = scanner.nextLine();
 
-        System.out.print("Enter new phone (leave blank to keep unchanged): ");
+        System.out.println("Enter new phone (leave blank to keep unchanged): ");
         String phone = scanner.nextLine();
 
         User existingEmployee = UserRepository.getInstance().findByUserName(userName);
@@ -504,7 +532,7 @@ public class MenuHolderAdmin implements MenuHolder {
     }
 
     private void removeEmployeeConsole() {
-        System.out.print("Enter username of the employee to remove: ");
+        System.out.println("Enter username of the employee to remove: ");
         String userName = scanner.nextLine();
 
         if (adminService.removeEmployee(userName)) {

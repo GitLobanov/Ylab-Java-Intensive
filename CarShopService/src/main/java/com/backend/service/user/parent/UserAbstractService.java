@@ -103,30 +103,30 @@ public abstract class UserAbstractService {
     public String formingQuerySearchCars (){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Введите параметры для поиска автомобилей (оставьте пустыми, чтобы пропустить):");
+        System.out.println("Input parameters (if field doesn't need leave it blank)");
 
-        System.out.print("Марка (например, toyota): ");
+        System.out.println("Brand (example, toyota): ");
         String brand = scanner.nextLine().trim();
 
-        System.out.print("Цвет (например, white): ");
+        System.out.println("Color (example, white): ");
         String color = scanner.nextLine().trim();
 
-        System.out.print("Минимальная цена (оставьте пустым, если не нужно): ");
+        System.out.println("Min price (leave it blank, if field doesn't need leave it blank): ");
         String priceFrom = scanner.nextLine().trim();
 
-        System.out.print("Максимальная цена (оставьте пустым, если не нужно): ");
+        System.out.println("Max price (leave it blank, if field doesn't need leave it blank): ");
         String priceTo = scanner.nextLine().trim();
 
-        System.out.print("Модель (например, xr200): ");
+        System.out.println("Model (leave it blank, if field doesn't need leave it blank): : ");
         String model = scanner.nextLine().trim();
 
-        System.out.print("Год выпуска от (оставьте пустым, если не нужно): ");
+        System.out.println("Year from (оставьте пустым, если не нужно): ");
         String yearFrom = scanner.nextLine().trim();
 
-        System.out.print("Год выпуска до (оставьте пустым, если не нужно): ");
+        System.out.println("Year to (leave it blank, if field doesn't need leave it blank): ");
         String yearTo = scanner.nextLine().trim();
 
-        System.out.print("Доступность (true/false, оставьте пустым, если не нужно): ");
+        System.out.println("Availability (true/false, оставьте пустым, если не нужно): ");
         String availability = scanner.nextLine().trim();
 
         // Создание строки запроса

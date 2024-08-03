@@ -7,6 +7,7 @@ import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
 import com.backend.repository.UserRepository;
 import com.backend.service.user.AdminService;
+import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
 import com.backend.util.menu.MenuHolder;
@@ -27,8 +28,8 @@ public class AdminController {
     }
 
     public void start () {
-        System.out.println("Admen is HERE!");
-        System.out.println("Hello, " + Session.getInstance().getUser().getName() + " \uD83D\uDC51");
+        System.out.println(ConsoleColors.BLUE_BOLD + "\n \uD83D\uDC51 Admen is HERE!");
+        System.out.println("Hello, " + Session.getInstance().getUser().getName() + ConsoleColors.RESET);
         while (true) {
             menuHolderAdmin.showMainMenu();
             String command = scanner.nextLine().trim().toLowerCase();

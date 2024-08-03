@@ -4,13 +4,13 @@ import com.backend.util.ErrorResponses;
 
 import java.util.Scanner;
 
-public interface MenuHolder {
+public abstract class MenuHolder {
 
     static final Scanner scanner = new Scanner(System.in);
-    void showMainMenu();
-    void handleCars();
+    abstract void showMainMenu();
+    abstract void handleCars();
 
-    default boolean confirm() {
+    boolean confirm() {
         while (true) {
             System.out.println("Input yes/y or not/n");
             String answer = scanner.nextLine().trim();

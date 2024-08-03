@@ -66,11 +66,6 @@ public class ManagerService extends EmployeeAbstractService {
     }
 
     @Override
-    public Map<UUID,Order> searchOrders(String query) {
-        return orderRepository.findAll();
-    }
-
-    @Override
     public Map<UUID,ActionLog> viewMyActionLog() {
         return actionLogRepository.findAll();
     }

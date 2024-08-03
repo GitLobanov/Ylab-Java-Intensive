@@ -5,6 +5,7 @@ import com.backend.service.user.LoginRegisterService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
+import com.backend.util.SuccessResponses;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -17,7 +18,7 @@ public class LoginRegisterController {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
-            System.out.println("\uD83E\uDD14 What you want my friend? (register/login/end):");
+            System.out.print("\uD83E\uDD14 What you want my friend? (register/login/end): ");
             String command = scanner.nextLine();
             switch (command.toLowerCase()) {
                 case "register":
@@ -57,7 +58,7 @@ public class LoginRegisterController {
         );
         boolean success = loginRegisterService.register(user);
         if (success) {
-            System.out.println("My congrats friend. Registration successfully.");
+            SuccessResponses.printCustomMessage("My congrats friend. Registration successfully.");
             return true;
         } else {
             String message = ErrorResponses.RESPONSES_TO_USERNAME_ALREADY_EXIST.get(new Random().nextInt(ErrorResponses.RESPONSES_TO_USERNAME_ALREADY_EXIST.size())-1);
@@ -77,7 +78,7 @@ public class LoginRegisterController {
 
         User user = loginRegisterService.login(userName, password);
         if (user != null) {
-            System.out.println("Authentication successful!");
+
             session.setUser(user);
 
             if (user.getRole() == User.Role.ADMIN) {
@@ -91,6 +92,8 @@ public class LoginRegisterController {
             if (user.getRole() == User.Role.CLIENT) {
                 session.setStage(Session.Stage.CLIENT);
             }
+
+            SuccessResponses.printCustomMessage("You have successfully logged in.");
 
             return true;
         } else {

@@ -3,18 +3,31 @@ package com.backend.service.user.parent;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
+import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
 import com.backend.repository.UserRepository;
 import com.backend.util.ConsoleColors;
+import com.backend.util.ErrorResponses;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 public abstract class EmployeeAbstractService extends UserAbstractService {
 
-    public abstract boolean addCar(Car car);
-    public abstract boolean updateCar(Car car);
-    public abstract boolean deleteCar(Car car);
+    public boolean addCar(Car car) {
+        return CarRepository.getInstance().save(car);
+    }
+    public boolean updateCar(Car car) {
+        return CarRepository.getInstance().update(car);
+    }
+    public boolean deleteCar(Car car) {
+        return CarRepository.getInstance().delete(car);
+    }
+
+    public Car findCarById(UUID id) {
+        Car car = CarRepository.getInstance().findById(id);
+        return car;
+    }
 
     public void viewAllBuyingOrders (){
         Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.BUYING).entrySet().iterator();
@@ -25,12 +38,17 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
     public void viewAllServiceOrders() {
         Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.SERVICE).entrySet().iterator();
+
+        if (!iterator.hasNext()) {
+            ErrorResponses.printCustomMessage("Hmm, sorry I cannot find any requests");
+        }
+
         while (iterator.hasNext()) {
             System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
         }
     }
 
-    public Map<UUID, Order> searchOrders(String query) {
+    public void searchOrders(String query) {
         Map<UUID, Order> result = new HashMap<>();
 
         String[] filters = query.split(";");
@@ -88,7 +106,19 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
             }
         }
 
-        return result;
+        Iterator<Map.Entry<UUID, Order>> iterator = result.entrySet().iterator();
+
+        if (!iterator.hasNext()) {
+            ErrorResponses.printCustomMessage("What did you choose? I can't find anything at all");
+        }
+
+        if (iterator.hasNext()) {
+            System.out.println("Fond: ");
+        }
+
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next().getValue());
+        }
     }
 
     public String formingQuerySearchOrders (Order.TypeOrder typeOrder){

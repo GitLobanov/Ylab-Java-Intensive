@@ -8,7 +8,7 @@ public class LoginRegisterService {
 
     public boolean register(User user) {
         if (UserRepository.getInstance().findAll().containsKey(user.getId())) {
-            return false; // Пользователь уже существует
+            return false;
         }
         UserRepository.getInstance().save(user);
         return true;
