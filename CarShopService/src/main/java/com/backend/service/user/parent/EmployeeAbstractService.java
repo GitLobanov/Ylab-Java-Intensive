@@ -182,4 +182,34 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         }
     }
 
+    public boolean addClient(User client) {
+        return UserRepository.getInstance().save(client);
+    }
+
+    public boolean updateClient(String userName, User updatedClient) {
+        if (UserRepository.getInstance().findByUserName(userName)==null) {
+            ErrorResponses.printCustomMessage("Client not found");
+            return false;
+        } else {
+            UserRepository.getInstance().update(updatedClient);
+            return true;
+        }
+    }
+
+    public boolean removeClient(String userName) {
+        if (UserRepository.getInstance().findByUserName(userName)==null){
+            ErrorResponses.printCustomMessage("Client not found.");
+            return false;
+        }
+        User employee = UserRepository.getInstance().findByUserName(userName);
+        if (employee.getRole() == User.Role.CLIENT) {
+            UserRepository.getInstance().delete(employee);
+            return true;
+        } else {
+            ErrorResponses.printCustomMessage("Hey! Who you want to delete? This user is not a client!");
+            System.out.println(ConsoleColors.YELLOW_BOLD + "User role must be ADMIN or MANAGER." + ConsoleColors.RESET);
+            return false;
+        }
+    }
+
 }

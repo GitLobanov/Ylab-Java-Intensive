@@ -35,24 +35,29 @@ public abstract class UserAbstractService {
         return info.toString();
     }
 
-    public void viewAllCars() {
+    public static void viewAllCars() {
         Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAll().entrySet().iterator();
         while (iterator.hasNext()) {
             System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
         }
     }
 
-    // Filter and search cars
-    public Map<UUID, Car> searchCars(String query) {
+    public void searchCars(String query) {
 
         Map<UUID, Car> cars = CarRepository.getInstance().findAll();
         String[] params = query.split(";");
 
-        // Фильтрация по каждому параметру
         for (String param : params) {
             String[] keyValue = param.split(":");
+
+            if (keyValue.length < 2) {
+                continue;
+            }
+
             String key = keyValue[0];
             String value = keyValue[1];
+
+
 
             switch (key) {
                 case "brand":
@@ -67,10 +72,24 @@ public abstract class UserAbstractService {
                     break;
                 case "priceFrom<price<priceTo":
                     String[] priceRange = value.split("<price<");
-                    double priceFrom = Double.parseDouble(priceRange[0]);
-                    double priceTo = Double.parseDouble(priceRange[1]);
+                    double priceRangeFrom = Double.parseDouble(priceRange[0]);
+                    double priceRangeTo = Double.parseDouble(priceRange[1]);
                     cars = cars.values().stream()
-                            .filter(car -> car.getPrice() >= priceFrom && car.getPrice() <= priceTo)
+                            .filter(car -> car.getPrice() >= priceRangeFrom && car.getPrice() <= priceRangeTo)
+                            .collect(Collectors.toMap(Car::getId, car -> car));
+                    break;
+                case "priceFrom<price":
+                    String[] priceOnlyFrom = value.split("<price");
+                    double priceFrom = Double.parseDouble(priceOnlyFrom[0]);
+                    cars = cars.values().stream()
+                            .filter(car -> car.getPrice() >= priceFrom)
+                            .collect(Collectors.toMap(Car::getId, car -> car));
+                    break;
+                case "price<priceTo":
+                    String[] priceOnlyTo = value.split("price<");
+                    double priceTo = Double.parseDouble(priceOnlyTo[0]);
+                    cars = cars.values().stream()
+                            .filter(car -> car.getPrice() <= priceTo)
                             .collect(Collectors.toMap(Car::getId, car -> car));
                     break;
                 case "model":
@@ -80,10 +99,24 @@ public abstract class UserAbstractService {
                     break;
                 case "yearFrom<year<yearTo":
                     String[] yearRange = value.split("<year<");
-                    int yearFrom = Integer.parseInt(yearRange[0]);
-                    int yearTo = Integer.parseInt(yearRange[1]);
+                    int yearRangeFrom = Integer.parseInt(yearRange[0]);
+                    int yearRangeTo = Integer.parseInt(yearRange[1]);
                     cars = cars.values().stream()
-                            .filter(car -> car.getYear() >= yearFrom && car.getYear() <= yearTo)
+                            .filter(car -> car.getYear() >= yearRangeFrom && car.getYear() <= yearRangeTo)
+                            .collect(Collectors.toMap(Car::getId, car -> car));
+                    break;
+                case "yearFrom<year":
+                    String[] yearOnlyFrom = value.split("<year<");
+                    int yearFrom = Integer.parseInt(yearOnlyFrom[0]);
+                    cars = cars.values().stream()
+                            .filter(car -> car.getYear() >= yearFrom)
+                            .collect(Collectors.toMap(Car::getId, car -> car));
+                    break;
+                case "year<yearTo":
+                    String[] yearOnlyTo = value.split("<year<");
+                    int yearTo = Integer.parseInt(yearOnlyTo[0]);
+                    cars = cars.values().stream()
+                            .filter(car -> car.getYear() <= yearTo)
                             .collect(Collectors.toMap(Car::getId, car -> car));
                     break;
                 case "availability":
@@ -97,7 +130,11 @@ public abstract class UserAbstractService {
             }
         }
 
-        return cars;
+        Iterator<Map.Entry<UUID, Car>> iterator = cars.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, Car> car = iterator.next();
+            System.out.println(car.getValue());
+        }
     }
     // forming query: brand:toyota;color:white;priceFrom<price<priceTo;model:xr200;yearFrom<2000<yearTo;availability:true
     public String formingQuerySearchCars (){

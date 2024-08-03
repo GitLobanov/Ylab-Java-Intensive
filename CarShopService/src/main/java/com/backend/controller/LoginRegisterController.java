@@ -31,8 +31,7 @@ public class LoginRegisterController {
                     Session.getInstance().setStage(Session.Stage.EXIT);
                     return;
                 default:
-                    String message = ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND.get(new Random().nextInt(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND.size())-1);
-                    System.out.println(message);
+                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
             }
         }
     }

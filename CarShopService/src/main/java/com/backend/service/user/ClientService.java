@@ -30,11 +30,6 @@ public class ClientService extends UserAbstractService {
     }
 
     @Override
-    public Map<UUID, Car> searchCars(String query) {
-        return carRepository.findAll();
-    }
-
-    @Override
     public Map<UUID,ActionLog> viewMyActionLog() {
         return actionLogRepository.findAll();
     }

@@ -1,17 +1,14 @@
-package com.backend.util.menu;
+package com.backend.view;
 
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
-import com.backend.repository.CarRepository;
 import com.backend.repository.UserRepository;
 import com.backend.service.user.AdminService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.SuccessResponses;
 
-import java.util.Iterator;
-import java.util.Map;
 import java.util.UUID;
 
 public class MenuHolderAdmin extends MenuHolder {
@@ -29,6 +26,7 @@ public class MenuHolderAdmin extends MenuHolder {
         System.out.println("\uD83D\uDE97 Type 'c/cars' to manage cars.");
         System.out.println("\uD83D\uDE97 Type 'r/requests' to manage cars.");
         System.out.println("\uD83D\uDCE6 Type 'o/orders' to manage orders.");
+        System.out.println("\uD83D\uDC68\uD83C\uDFFB\u200D⚖\uFE0F Type 'cl/clients' to manage clients.");
         System.out.println("\uD83D\uDC69\uD83C\uDFFB\u200D\uD83D\uDCBC Type 'e/employees' to manage employees.");
         System.out.println("\uD83D\uDD10 Type 'l/logout' to logout from account.");
         System.out.println("\uD83D\uDD1A Type 'end' to quit the application.");
@@ -153,6 +151,38 @@ public class MenuHolderAdmin extends MenuHolder {
 
                 case "5":
                     cancelOrder();
+                    break;
+                case "back":
+                    return;
+                default:
+                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
+            }
+        }
+    }
+
+    public void handleClients (){
+        while (true) {
+            System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Employees Menu ===" + ConsoleColors.RESET);
+            System.out.println("1\uFE0F⃣  View all clients");
+            System.out.println("2\uFE0F⃣ Add a new client");
+            System.out.println("3\uFE0F⃣ Update an client");
+            System.out.println("4\uFE0F⃣ Remove an client");
+            System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
+            System.out.print("Enter your choice: ");
+            String choice = scanner.nextLine().trim().toLowerCase();
+
+            switch (choice) {
+                case "1":
+                    adminService.viewAllClients();
+                    break;
+                case "2":
+                    addClientConsole();
+                    break;
+                case "3":
+                    updateClientConsole();
+                    break;
+                case "4":
+                    removeClientConsole();
                     break;
                 case "back":
                     return;
@@ -327,7 +357,8 @@ public class MenuHolderAdmin extends MenuHolder {
 
     // orders
 
-    private void addOrderConsole(Order.TypeOrder typeOrder) {
+    @Override
+    protected void addOrderConsole(Order.TypeOrder typeOrder) {
 
         System.out.println("\uD83C\uDD95 Create a new order:");
         Car car = selectCar();
@@ -337,10 +368,10 @@ public class MenuHolderAdmin extends MenuHolder {
             car = selectCar();
         }
 
-        User user = selectUser();
+        User user = selectClient();
         while (user == null) {
             ErrorResponses.printCustomMessage("User selection failed.");
-            user = selectUser();
+            user = selectClient();
         }
 
         System.out.println("Enter a note for the order:");
@@ -442,7 +473,8 @@ public class MenuHolderAdmin extends MenuHolder {
         SuccessResponses.printCustomMessage("Order updated successfully.");
     }
 
-    private void cancelOrder(){
+    @Override
+    protected void cancelOrder(){
         System.out.println("Input please, id of order you want to cancel: ");
         String inputCancelId = scanner.nextLine().trim();
         Order orderCancel = adminService.findOrderById(UUID.fromString(inputCancelId));
@@ -453,20 +485,80 @@ public class MenuHolderAdmin extends MenuHolder {
     }
 
 
-    // employees
+    // clients
 
-    private void addEmployeeConsole() {
-        System.out.println("Enter username: ");
-        String userName = scanner.nextLine();
+    private void addClientConsole() {
+
+        String userName = getField("username");
 
         while (UserRepository.getInstance().findByUserName(userName) != null) {
             ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_USERNAME_ALREADY_EXIST);
-            System.out.println("Enter username: ");
-            userName = scanner.nextLine();
+            userName = getField("username");
         }
 
-        System.out.println("Enter password: ");
-        String password = scanner.nextLine();
+        String password = getField("password");
+        User.Role role = User.Role.CLIENT;
+        String name = getField("name");
+        String email = getField("email");
+        String phone = getField("phone");
+
+        User client = new User(userName, password, role, name, email, phone);
+        if (client!=null) adminService.addClient(client); {
+            SuccessResponses.printCustomMessage("Client added successfully. \n" + client);
+        }
+    }
+
+    private void updateClientConsole() {
+        System.out.println("Enter username of the client to update: ");
+        String userName = scanner.nextLine();
+
+        if (UserRepository.getInstance().findByUserName(userName)==null) {
+            ErrorResponses.printCustomMessage("Client not found.");
+            return;
+        }
+
+        String password = getNewField("password");
+        String name = getNewField("name");
+        String email = getNewField("email");
+        String phone = getNewField("phone");
+
+        User existingClient = UserRepository.getInstance().findByUserName(userName);
+        User updatedEmployee = new User(
+                userName,
+                password.isEmpty() ? existingClient.getPassword() : password,
+                existingClient.getRole(),
+                name.isEmpty() ? existingClient.getName() : name,
+                email.isEmpty() ? existingClient.getEmail() : email,
+                phone.isEmpty() ? existingClient.getPhone() : phone
+        );
+
+        if (adminService.updateClient(userName, updatedEmployee)) {
+            SuccessResponses.printCustomMessage("Client updated successfully.");
+        }
+    }
+
+    private void removeClientConsole() {
+        System.out.println("Enter username of the client to remove: ");
+        String userName = scanner.nextLine();
+
+        if (adminService.removeClient(userName)) {
+            SuccessResponses.printCustomMessage("Employee removed successfully.");
+        }
+    }
+
+
+    // employees
+
+    private void addEmployeeConsole() {
+
+        String userName = getField("username");
+
+        while (UserRepository.getInstance().findByUserName(userName) != null) {
+            ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_USERNAME_ALREADY_EXIST);
+            userName = getField("username");
+        }
+
+        String password = getField("password");
 
         System.out.println("Enter role (ADMIN/MANAGER): ");
 
@@ -480,14 +572,9 @@ public class MenuHolderAdmin extends MenuHolder {
             }
         }
 
-        System.out.println("Enter name: ");
-        String name = scanner.nextLine();
-
-        System.out.println("Enter email: ");
-        String email = scanner.nextLine();
-
-        System.out.println("Enter phone: ");
-        String phone = scanner.nextLine();
+        String name = getField("name");
+        String email = getField("email");
+        String phone = getField("phone");
 
         User employee = new User(userName, password, role, name, email, phone);
         if (adminService.addEmployee(employee)) {
@@ -504,17 +591,10 @@ public class MenuHolderAdmin extends MenuHolder {
             return;
         }
 
-        System.out.println("Enter new password (leave blank to keep unchanged): ");
-        String password = scanner.nextLine();
-
-        System.out.println("Enter new name (leave blank to keep unchanged): ");
-        String name = scanner.nextLine();
-
-        System.out.println("Enter new email (leave blank to keep unchanged): ");
-        String email = scanner.nextLine();
-
-        System.out.println("Enter new phone (leave blank to keep unchanged): ");
-        String phone = scanner.nextLine();
+        String password = getNewField("password");
+        String name = getNewField("name");
+        String email = getNewField("email");
+        String phone = getNewField("phone");
 
         User existingEmployee = UserRepository.getInstance().findByUserName(userName);
         User updatedEmployee = new User(
@@ -540,35 +620,20 @@ public class MenuHolderAdmin extends MenuHolder {
         }
     }
 
-    private Car selectCar() {
-        System.out.println("Available cars:");
-        adminService.viewAllCars();
-        System.out.println("Enter the ID of the car you want to order:");
-        String carIdStr = scanner.nextLine();
-        UUID carId;
-        try {
-            carId = UUID.fromString(carIdStr);
-        } catch (IllegalArgumentException e) {
-            ErrorResponses.printCustomMessage("Invalid car ID format.");
-            return null;
-        }
-        return CarRepository.getInstance().findById(carId);
-    }
-
-    private User selectUser() {
-        System.out.println("Available users:");
+    private User selectClient() {
+        System.out.println("Available clients:");
         adminService.viewAllClients();
-        System.out.println("Enter the ID of the user:");
-        String userIdStr = scanner.nextLine();
-        UUID userId;
-        try {
-            userId = UUID.fromString(userIdStr);
-        } catch (IllegalArgumentException e) {
-            ErrorResponses.printCustomMessage("Invalid user ID format.");
-            return null;
-        }
-        return UserRepository.getInstance().findById(userId);
-    }
+        System.out.println("Enter the username of the client:");
+        String userUsernameStr = scanner.nextLine();
 
+        User user = UserRepository.getInstance().findByUserName(userUsernameStr);
+
+        if (user==null){
+            System.out.println(ConsoleColors.YELLOW_BOLD + "Client not found." + ConsoleColors.RESET);
+            return null;
+        } else {
+            return user;
+        }
+    }
 
 }

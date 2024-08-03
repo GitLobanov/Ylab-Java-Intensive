@@ -1,4 +1,4 @@
-package com.backend.util.menu;
+package com.backend.view;
 
 public class MenuHolderClient {
 }

@@ -24,6 +24,14 @@ public class AdminService extends EmployeeAbstractService {
         }
     }
 
+    public void viewAllClients () {
+        for (User user : UserRepository.getInstance().findAll().values()) {
+            if (user.getRole() == User.Role.CLIENT) {
+                System.out.println(ConsoleColors.PURPLE_BOLD + user + ConsoleColors.RESET);
+            }
+        }
+    }
+
     // Add employee
     public boolean addEmployee(User employee) {
         return  UserRepository.getInstance().save(employee);

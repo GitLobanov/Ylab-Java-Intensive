@@ -1,21 +1,11 @@
 package com.backend.controller;
 
-import com.backend.model.Car;
-import com.backend.model.Order;
-import com.backend.model.User;
-import com.backend.repository.CarRepository;
-import com.backend.repository.OrderRepository;
-import com.backend.repository.UserRepository;
-import com.backend.service.user.AdminService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
-import com.backend.util.menu.MenuHolder;
-import com.backend.util.menu.MenuHolderAdmin;
+import com.backend.view.MenuHolderAdmin;
 
-import java.util.Random;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class AdminController {
 
@@ -45,6 +35,10 @@ public class AdminController {
                 case "o":
                 case "orders":
                     menuHolderAdmin.handleOrders();
+                    break;
+                case "cl":
+                case "clients":
+                    menuHolderAdmin.handleClients();
                     break;
                 case "e":
                 case "employees":
