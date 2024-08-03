@@ -54,4 +54,14 @@ public class OrderRepository implements CrudRepository<Order> {
     public Map<UUID, Order> findAll() {
         return orders;
     }
+
+    public Map<UUID, Order> findByType(Order.TypeOrder typeOrder) {
+        Map<UUID, Order> result = new HashMap<>();
+        for (Order order : orders.values()) {
+            if (order.getType() == typeOrder) {
+                result.put(order.getId(), order);
+            }
+        }
+        return result;
+    }
 }

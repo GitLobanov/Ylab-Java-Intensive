@@ -2,6 +2,7 @@ package com.backend.controller;
 
 import com.backend.model.User;
 import com.backend.service.user.LoginRegisterService;
+import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
 
@@ -15,6 +16,7 @@ public class LoginRegisterController {
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
+            System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
             System.out.println("\uD83E\uDD14 What you want my friend? (register/login/end):");
             String command = scanner.nextLine();
             switch (command.toLowerCase()) {
@@ -65,10 +67,13 @@ public class LoginRegisterController {
     }
 
     private boolean handleLogin(Scanner scanner, Session session) {
-        System.out.println("\uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBC Please, yours username:");
-        String userName = scanner.nextLine();
-        System.out.println("\uD83D\uDD12 And password:");
-        String password = scanner.nextLine();
+//        System.out.println("\uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBC Please, yours username:");
+//        String userName = scanner.nextLine();
+//        System.out.println("\uD83D\uDD12 And password:");
+//        String password = scanner.nextLine();
+
+        String userName = "john_adman";
+        String password = "123";
 
         User user = loginRegisterService.login(userName, password);
         if (user != null) {

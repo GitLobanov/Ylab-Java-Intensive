@@ -6,6 +6,7 @@ import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
+import com.backend.util.ConsoleColors;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public abstract class UserAbstractService {
     public boolean updateOrder(Order order) {
         return OrderRepository.getInstance().update(order);
     }
-    public abstract Map<UUID,Order> viewMyOrders();
+
     public Order findOrderById(UUID id) {
         return OrderRepository.getInstance().findById(id);
     }
@@ -37,7 +38,7 @@ public abstract class UserAbstractService {
     public void viewAllCars() {
         Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAll().entrySet().iterator();
         while (iterator.hasNext()) {
-            System.out.println(iterator.next().getValue());
+            System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
         }
     }
 
@@ -169,8 +170,6 @@ public abstract class UserAbstractService {
         return query;
 
     }
-
-    public abstract Map<UUID,Order> searchOrders(String query);
 
     // Аудит действий пользователя
     public abstract Map<UUID,ActionLog> viewMyActionLog();

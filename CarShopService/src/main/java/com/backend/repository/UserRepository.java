@@ -33,7 +33,7 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public boolean update(User user) {
-        return false;
+        return users.put(user.getId(), user) != null;
     }
 
     @Override
@@ -46,11 +46,24 @@ public class UserRepository implements CrudRepository<User> {
         return users.get(uid);
     }
 
-    public User findByUserName(String userName, String password) {
+    public User findByUserNameAndPassword(String userName, String password) {
         Iterator<Map.Entry<UUID, User>> iterator = users.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<UUID, User> entry = iterator.next();
             if (entry.getValue().getUserName().equals(userName) && entry.getValue().getPassword().equals(password)) {
+                return entry.getValue();
+            }
+        }
+
+        return null;
+    }
+
+
+    public User findByUserName(String userName) {
+        Iterator<Map.Entry<UUID, User>> iterator = users.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, User> entry = iterator.next();
+            if (entry.getValue().getUserName().equals(userName)) {
                 return entry.getValue();
             }
         }

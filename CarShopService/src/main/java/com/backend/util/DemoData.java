@@ -1,8 +1,10 @@
 package com.backend.util;
 
 import com.backend.model.Car;
+import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.CarRepository;
+import com.backend.repository.OrderRepository;
 import com.backend.repository.UserRepository;
 
 public class DemoData {
@@ -17,8 +19,11 @@ public class DemoData {
         UserRepository.getInstance().save(manager);
         UserRepository.getInstance().save(admin);
 
-        CarRepository.getInstance().save(new Car("Toyota", "Camry", 2020, 20000.00, "New", "White", true));
-        CarRepository.getInstance().save(new Car("Honda", "Civic", 2019, 18000.00, "Used", "Black", true));
+        Car c1 = new Car("Toyota", "Camry", 2020, 20000.00, "New", "White", true);
+        Car c2 = new Car("Honda", "Civic", 2019, 18000.00, "Used", "Black", true);
+
+        CarRepository.getInstance().save(c1);
+        CarRepository.getInstance().save(c2);
         CarRepository.getInstance().save(new Car("Ford", "Mustang", 2021, 30000.00, "New", "Red", true));
         CarRepository.getInstance().save(new Car("Chevrolet", "Malibu", 2018, 16000.00, "Used", "Blue", false));
         CarRepository.getInstance().save(new Car("BMW", "X5", 2022, 50000.00, "New", "Silver", true));
@@ -28,6 +33,9 @@ public class DemoData {
         CarRepository.getInstance().save(new Car("Subaru", "Outback", 2019, 22000.00, "Used", "Brown", true));
         CarRepository.getInstance().save(new Car("Volkswagen", "Golf", 2022, 25000.00, "New", "Purple", true));
 
+
+        OrderRepository.getInstance().save(new Order(c1, client, Order.TypeOrder.BUYING, "Something to note 1"));
+        OrderRepository.getInstance().save(new Order(c2, client, Order.TypeOrder.BUYING, "Something to note 2"));
 
     }
 

@@ -44,7 +44,11 @@ public class ErrorResponses {
     }
 
     public static void printRandom (List list) {
-        System.out.println("⚠\uFE0F "+list.get(new Random().nextInt(list.size()-1)));
+        System.out.println(ConsoleColors.YELLOW_BOLD + "⚠\uFE0F " + list.get(new Random().nextInt(list.size()-1)).toString() + ConsoleColors.RESET);
+    }
+
+    public static void printCustomMessage (String message){
+        System.out.println(ConsoleColors.YELLOW_BOLD + "⚠\uFE0F " + message + ConsoleColors.RESET);
     }
 
 }

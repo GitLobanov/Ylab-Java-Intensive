@@ -36,10 +36,6 @@ public class ManagerService extends EmployeeAbstractService {
         return false;
     }
 
-    @Override
-    public void viewAllOrders() {
-//        return orderRepository.findAll();
-    }
 
     @Override
     public boolean updateOrderStatus(Order order, Order.OrderStatus status) {
@@ -51,7 +47,6 @@ public class ManagerService extends EmployeeAbstractService {
         return false;
     }
 
-    @Override
     public Map<UUID,User> viewMyClients() {
         return userRepository.findAll();
     }
@@ -61,7 +56,6 @@ public class ManagerService extends EmployeeAbstractService {
         return false;
     }
 
-    @Override
     public Map<UUID,Order> viewMyOrders() {
         return orderRepository.findAll();
     }

@@ -25,7 +25,6 @@ public class ClientService extends UserAbstractService {
         return false;
     }
 
-    @Override
     public Map<UUID,Order> viewMyOrders() {
         return orderRepository.findAll();
     }
@@ -33,11 +32,6 @@ public class ClientService extends UserAbstractService {
     @Override
     public Map<UUID, Car> searchCars(String query) {
         return carRepository.findAll();
-    }
-
-    @Override
-    public Map<UUID, Order> searchOrders(String query) {
-        return orderRepository.findAll();
     }
 
     @Override

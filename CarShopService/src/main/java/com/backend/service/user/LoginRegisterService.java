@@ -3,9 +3,6 @@ package com.backend.service.user;
 import com.backend.model.User;
 import com.backend.repository.UserRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class LoginRegisterService {
 
 
@@ -18,7 +15,7 @@ public class LoginRegisterService {
     }
 
     public User login(String userName, String password) {
-        User user = UserRepository.getInstance().findByUserName(userName, password);
+        User user = UserRepository.getInstance().findByUserNameAndPassword(userName, password);
         if (user != null) {
             return user;
         }
