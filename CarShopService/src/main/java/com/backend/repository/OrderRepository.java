@@ -32,7 +32,7 @@ public class OrderRepository implements CrudRepository<Order> {
 
     @Override
     public boolean save(Order order) {
-        return false;
+        return orders.put(order.getId(), order) != null;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class OrderRepository implements CrudRepository<Order> {
 
     @Override
     public Order findById(UUID uid) {
-        return null;
+        return orders.get(uid);
     }
 
     @Override

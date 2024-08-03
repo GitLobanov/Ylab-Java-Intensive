@@ -37,8 +37,8 @@ public class ManagerService extends EmployeeAbstractService {
     }
 
     @Override
-    public Map<UUID, Order> viewAllOrders() {
-        return orderRepository.findAll();
+    public void viewAllOrders() {
+//        return orderRepository.findAll();
     }
 
     @Override
@@ -54,16 +54,6 @@ public class ManagerService extends EmployeeAbstractService {
     @Override
     public Map<UUID,User> viewMyClients() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public boolean addEmployee(User employee) {
-        return false;
-    }
-
-    @Override
-    public boolean updateEmployee(User employee) {
-        return false;
     }
 
     @Override

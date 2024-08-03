@@ -4,21 +4,25 @@ import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
-import com.backend.repository.ActionLogRepository;
 import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
-import com.backend.repository.UserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class UserAbstractService {
 
-
-
     // Обработка заказов
-    public abstract boolean createOrder(Order order);
+    public boolean createOrder(Order order) {
+        return OrderRepository.getInstance().save(order);
+    }
+    public boolean updateOrder(Order order) {
+        return OrderRepository.getInstance().update(order);
+    }
     public abstract Map<UUID,Order> viewMyOrders();
+    public Order findOrderById(UUID id) {
+        return OrderRepository.getInstance().findById(id);
+    }
 
     // Просмотр информации
     public String getContactInfo(User user) {
@@ -31,9 +35,9 @@ public abstract class UserAbstractService {
     }
 
     public void viewAllCars() {
-        Iterator iterator = CarRepository.getInstance().findAll().entrySet().iterator();
+        Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAll().entrySet().iterator();
         while (iterator.hasNext()) {
-            System.out.println(iterator.next());
+            System.out.println(iterator.next().getValue());
         }
     }
 

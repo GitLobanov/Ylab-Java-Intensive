@@ -43,7 +43,7 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public User findById(UUID uid) {
-        return null;
+        return users.get(uid);
     }
 
     public User findByUserName(String userName, String password) {

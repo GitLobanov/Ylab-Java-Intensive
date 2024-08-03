@@ -1,9 +1,12 @@
 package com.backend.controller;
 
 import com.backend.model.Car;
+import com.backend.model.Order;
+import com.backend.model.User;
+import com.backend.repository.CarRepository;
+import com.backend.repository.OrderRepository;
+import com.backend.repository.UserRepository;
 import com.backend.service.user.AdminService;
-import com.backend.service.user.ClientService;
-import com.backend.service.user.ManagerService;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
 
@@ -18,7 +21,8 @@ public class AdminController {
     private AdminService adminService = new AdminService();
 
     public void start () {
-        System.out.println("Hello, " + Session.getInstance().getUser().getName());
+        System.out.println("Admen is HERE!");
+        System.out.println("Hello, " + Session.getInstance().getUser().getName() + " \uD83D\uDC51");
         while (true) {
             showMainMenu();
             String command = scanner.nextLine().trim().toLowerCase();
@@ -27,37 +31,37 @@ public class AdminController {
                     handleCars();
                     break;
                 case "orders":
-//                    handleOrders();
+                    handleOrders();
                     break;
                 case "employees":
 //                    handleEmployees();
                     break;
-                case "exit":
+                case "end":
                     Session.getInstance().setStage(Session.Stage.EXIT);
                     return;
                 default:
-                    String message = ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND.get(new Random().nextInt(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND.size()));
-                    System.out.println(message);
+                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
             }
         }
     }
 
     private void showMainMenu() {
         System.out.println("\n=== Main Menu ===");
-        System.out.println("Type 'cars' to manage cars.");
-        System.out.println("Type 'orders' to manage orders.");
-        System.out.println("Type 'employees' to manage employees.");
-        System.out.println("Type 'exit' to quit the application.");
+        System.out.println("\uD83D\uDE97 Type 'cars' to manage cars.");
+        System.out.println("\uD83D\uDCE6 Type 'orders' to manage orders.");
+        System.out.println("\uD83D\uDC69\uD83C\uDFFB\u200D\uD83D\uDCBC Type 'employees' to manage employees.");
+        System.out.println("\uD83D\uDD10 Type 'logout' to logout from account.");
+        System.out.println("\uD83D\uDD1A Type 'end' to quit the application.");
         System.out.print("Enter your choice: ");
     }
 
     private void handleCars() {
         System.out.println("\n=== Cars Menu ===");
-        System.out.println("1. View all cars");
-        System.out.println("2. Add a new car");
-        System.out.println("3. Update a car");
-        System.out.println("4. Delete a car");
-        System.out.println("Type 'back' to return to the main menu.");
+        System.out.println("1️⃣ View all cars");
+        System.out.println("2️⃣ Add a new car");
+        System.out.println("3️⃣ Update a car");
+        System.out.println("4️⃣ Delete a car");
+        System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
         System.out.print("Enter your choice: ");
         String choice = scanner.nextLine().trim().toLowerCase();
 
@@ -65,8 +69,8 @@ public class AdminController {
             case "1":
                 adminService.viewAllCars();
                 break;
-            case "2":
 
+            case "2":
                 System.out.println("color: ");
                 String color = scanner.nextLine().trim();
                 System.out.println("availability: ");
@@ -89,8 +93,8 @@ public class AdminController {
 
                 System.out.println("Woo! We have new car!");
                 break;
-            case "3":
 
+            case "3":
                 System.out.println("Input please, id of car you want to update: ");
                 String inputUpdateId = scanner.nextLine().trim();
                 Car carForUpdate = adminService.findCarById(UUID.fromString(inputUpdateId));
@@ -98,7 +102,7 @@ public class AdminController {
                 System.out.println("You sure, what do you want update this car :");
                 System.out.println(carForUpdate.toString());
 
-                if (!comfirm()) break;
+                if (!confirm()) break;
 
 
                 System.out.println("Input info about car (if you don't wanna update some fields, just leave they empty):");
@@ -151,6 +155,7 @@ public class AdminController {
 
                 System.out.println("Yep! Updated!");
                 break;
+
             case "4":
                 System.out.println("Input please, id of car you want to delete: ");
                 String inputDeleteId = scanner.nextLine().trim();
@@ -159,8 +164,61 @@ public class AdminController {
                 System.out.println("You sure, what do you want delete this car :");
                 System.out.println(carForDeleting.toString());
 
-                if (comfirm()) adminService.deleteCar(carForDeleting);
+                if (confirm()) adminService.deleteCar(carForDeleting);
 
+                break;
+
+            case "back":
+                return;
+
+            default:
+                System.out.println("Invalid choice. Returning to main menu.");
+        }
+    }
+
+    private void handleOrders() {
+        System.out.println("\n=== Orders Menu ===");
+        System.out.println("1️⃣ View all orders");
+        System.out.println("2️⃣ Create a new order");
+        System.out.println("3️⃣ Update an order");
+        System.out.println("4️⃣ Cancel an order");
+        System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
+        System.out.print("Enter your choice: ");
+        String choice = scanner.nextLine().trim().toLowerCase();
+
+        switch (choice) {
+            case "1":
+                adminService.viewAllOrders();
+                break;
+            case "2":
+                Order order = createOrder();
+                if (order != null) {
+                    System.out.println("Order created successfully: " + order);
+                } else {
+                    System.out.println("Order creation failed.");
+                }
+                adminService.createOrder(order);
+                break;
+
+            case "3":
+                adminService.viewAllOrders();
+                System.out.println("Input please, id of order you want to update: ");
+                String inputDeleteId = scanner.nextLine().trim();
+                Order orderUpdate = adminService.findOrderById(UUID.fromString(inputDeleteId));
+                System.out.println("You sure, what do you want update this:");
+                System.out.println(orderUpdate);
+                if (!confirm()) break;
+                updateOrder(orderUpdate);
+                break;
+
+            case "4":
+                System.out.println("Input please, id of order you want to cancel: ");
+                String inputCancelId = scanner.nextLine().trim();
+                Order orderCancel = adminService.findOrderById(UUID.fromString(inputCancelId));
+                System.out.println("You sure, what do you want cancel this:");
+                System.out.println(orderCancel);
+                if (!confirm()) break;
+                adminService.cancelOrder(orderCancel);
                 break;
             case "back":
                 return;
@@ -169,53 +227,6 @@ public class AdminController {
         }
     }
 
-    private boolean comfirm() {
-        while (true) {
-            System.out.println("Input yes/y or not/n");
-            String answer = scanner.nextLine().trim();
-            if (answer.equals("yes") || answer.equals("y")) {
-                System.out.println("Okay, as you wish my friend. Buy, buy lovely car...");
-                return true;
-            } else if (answer.equals("no") || answer.equals("n")) {
-                System.out.println("Okay, keep this car");
-                return false;
-            } else {
-                System.out.println(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND.get(new Random().nextInt(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND.size()-1)));
-            }
-        }
-
-    }
-
-//    private void handleOrders() {
-//        System.out.println("\n=== Orders Menu ===");
-//        System.out.println("1. View all orders");
-//        System.out.println("2. Create a new order");
-//        System.out.println("3. Update an order");
-//        System.out.println("4. Cancel an order");
-//        System.out.println("Type 'back' to return to the main menu.");
-//        System.out.print("Enter your choice: ");
-//        String choice = scanner.nextLine().trim().toLowerCase();
-//
-//        switch (choice) {
-//            case "1":
-//                viewAllOrders();
-//                break;
-//            case "2":
-//                createOrder();
-//                break;
-//            case "3":
-//                updateOrder();
-//                break;
-//            case "4":
-//                cancelOrder();
-//                break;
-//            case "back":
-//                return;
-//            default:
-//                System.out.println("Invalid choice. Returning to main menu.");
-//        }
-//    }
-//
 //    private void handleEmployees() {
 //        System.out.println("\n=== Employees Menu ===");
 //        System.out.println("1. View all employees");
@@ -245,5 +256,156 @@ public class AdminController {
 //                System.out.println("Invalid choice. Returning to main menu.");
 //        }
 //    }
+
+    private Order createOrder() {
+        System.out.println("Create a new order:");
+
+        // Select car
+        Car car = selectCar();
+        if (car == null) {
+            System.out.println("Car selection failed.");
+            return null;
+        }
+
+        // Select user
+        User user = selectUser();
+        if (user == null) {
+            System.out.println("User selection failed.");
+            return null;
+        }
+
+        // Enter a note
+        System.out.println("Enter a note for the order:");
+        String note = scanner.nextLine();
+
+        // Create and return the order
+        return new Order(car, user, Order.TypeOrder.BUYING, note);
+    }
+
+    private void updateOrder(Order order) {
+
+        if (order == null) {
+            System.out.println("Order not found.");
+            return;
+        }
+
+        System.out.println("Updating order: " + order);
+
+        // Update car
+        System.out.println("Current car: " + order.getCar());
+        System.out.println("Enter new car ID or press Enter to skip:");
+        String carIdStr = scanner.nextLine();
+        if (!carIdStr.isEmpty()) {
+            UUID carId;
+            try {
+                carId = UUID.fromString(carIdStr);
+                Car newCar = adminService.findCarById(carId);
+                if (newCar != null) {
+                    order.setCar(newCar);
+                } else {
+                    System.out.println("Car not found.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid car ID format.");
+            }
+        }
+
+        // Update type of order
+        System.out.println("Current type of order: " + order.getType());
+        System.out.println("Enter new type of order or press Enter to skip:");
+        for (Order.TypeOrder type : Order.TypeOrder.values()) {
+            System.out.println(type.ordinal() + ": " + type);
+        }
+        String typeIndexStr = scanner.nextLine();
+        if (!typeIndexStr.isEmpty()) {
+            try {
+                int typeIndex = Integer.parseInt(typeIndexStr);
+                if (typeIndex >= 0 && typeIndex < Order.TypeOrder.values().length) {
+                    order.setType(Order.TypeOrder.values()[typeIndex]);
+                } else {
+                    System.out.println("Invalid type of order.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid type of order format.");
+            }
+        }
+
+        // Update note
+        System.out.println("Current note: " + order.getNote());
+        System.out.println("Enter new note or press Enter to skip:");
+        String note = scanner.nextLine();
+        if (!note.isEmpty()) {
+            order.setNote(note);
+        }
+
+        // Update status
+        System.out.println("Current status of order: " + order.getStatus());
+        System.out.println("Enter new status of order or press Enter to skip:");
+        for (Order.OrderStatus status : Order.OrderStatus.values()) {
+            System.out.println(status.ordinal() + ": " + status);
+        }
+        String statusIndexStr = scanner.nextLine();
+        if (!statusIndexStr.isEmpty()) {
+            try {
+                int statusIndex = Integer.parseInt(statusIndexStr);
+                if (statusIndex >= 0 && statusIndex < Order.OrderStatus.values().length) {
+                    order.setStatus(Order.OrderStatus.values()[statusIndex]);
+                } else {
+                    System.out.println("Invalid status of order.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid status of order format.");
+            }
+        }
+
+        adminService.updateOrder(order);
+    }
+
+    private Car selectCar() {
+        System.out.println("Available cars:");
+        adminService.viewAllCars();
+        System.out.println("Enter the ID of the car you want to order:");
+        String carIdStr = scanner.nextLine();
+        UUID carId;
+        try {
+            carId = UUID.fromString(carIdStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid car ID format.");
+            return null;
+        }
+        return CarRepository.getInstance().findById(carId);
+    }
+
+    private User selectUser() {
+        System.out.println("Available users:");
+        adminService.viewAllClients();
+        System.out.println("Enter the ID of the user:");
+        String userIdStr = scanner.nextLine();
+        UUID userId;
+        try {
+            userId = UUID.fromString(userIdStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid user ID format.");
+            return null;
+        }
+        return UserRepository.getInstance().findById(userId);
+    }
+
+
+    private boolean confirm() {
+        while (true) {
+            System.out.println("Input yes/y or not/n");
+            String answer = scanner.nextLine().trim();
+            if (answer.equals("yes") || answer.equals("y")) {
+                System.out.println("Okay, as you wish my friend. Buy, buy lovely car...");
+                return true;
+            } else if (answer.equals("no") || answer.equals("n")) {
+                System.out.println("Okay, keep this car");
+                return false;
+            } else {
+                ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
+            }
+        }
+    }
 
 }

@@ -30,16 +30,16 @@ public class Car {
         setAvailability(availability);
     }
 
-    @Override
-    public String toString() {
-        return "Car{" +
-                "brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", year=" + year +
-                ", price=" + price +
-                ", condition='" + condition + '\'' +
-                ", color='" + color + '\'' +
-                ", availability=" + availability +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Car{" +
+//                "brand='" + brand + '\'' +
+//                ", model='" + model + '\'' +
+//                ", year=" + year +
+//                ", price=" + price +
+//                ", condition='" + condition + '\'' +
+//                ", color='" + color + '\'' +
+//                ", availability=" + availability +
+//                '}';
+//    }
 }

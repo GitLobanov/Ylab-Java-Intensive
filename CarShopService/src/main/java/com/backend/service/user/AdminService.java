@@ -10,10 +10,7 @@ import com.backend.repository.OrderRepository;
 import com.backend.repository.UserRepository;
 import com.backend.service.user.parent.EmployeeAbstractService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AdminService extends EmployeeAbstractService {
@@ -39,40 +36,16 @@ public class AdminService extends EmployeeAbstractService {
     }
 
     @Override
-    public Map<UUID,Order> viewAllOrders() {
-        return OrderRepository.getInstance().findAll();
-    }
-
-    @Override
-    public boolean updateOrderStatus(Order order, Order.OrderStatus status) {
-        order.setStatus(status);
-        return OrderRepository.getInstance().update(order);
-    }
-
-    @Override
-    public boolean cancelOrder(Order order) {
-        order.setStatus(Order.OrderStatus.CANCELLED);
-        return OrderRepository.getInstance().update(order);
-    }
-
-    @Override
     public Map<UUID,User> viewMyClients() {
         return UserRepository.getInstance().findAll();
     }
 
-    @Override
     public boolean addEmployee(User employee) {
         return  UserRepository.getInstance().save(employee);
     }
 
-    @Override
     public boolean updateEmployee(User employee) {
         return UserRepository.getInstance().save(employee);
-    }
-
-    @Override
-    public boolean createOrder(Order order) {
-        return OrderRepository.getInstance().save(order);
     }
 
     @Override
@@ -89,6 +62,5 @@ public class AdminService extends EmployeeAbstractService {
     public Map<UUID, ActionLog> viewMyActionLog() {
         return ActionLogRepository.getInstance().findAll();
     }
-
 
 }

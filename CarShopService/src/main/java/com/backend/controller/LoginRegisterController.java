@@ -15,7 +15,7 @@ public class LoginRegisterController {
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("What you want my friend? (register/login/exit):");
+            System.out.println("\uD83E\uDD14 What you want my friend? (register/login/end):");
             String command = scanner.nextLine();
             switch (command.toLowerCase()) {
                 case "register":
@@ -24,7 +24,7 @@ public class LoginRegisterController {
                 case "login":
                     if (handleLogin(scanner, Session.getInstance())) return;
                     break;
-                case "exit":
+                case "end":
                     Session.getInstance().setStage(Session.Stage.EXIT);
                     return;
                 default:
@@ -35,17 +35,17 @@ public class LoginRegisterController {
     }
 
     private boolean handleRegister(Scanner scanner) {
-        System.out.println("Input unique username:");
+        System.out.println("\uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBC Input unique username:");
         String userName = scanner.nextLine();
-        System.out.println("What's your name (Second_name Name):");
+        System.out.println("\uD83D\uDC4B What's your name (Second_name Name):");
         String name = scanner.nextLine();
-        System.out.println("Yours email:");
+        System.out.println("✉️ Yours email:");
         String email = scanner.nextLine();
-        System.out.println("Yours number phone (7..):");
+        System.out.println("\uD83D\uDCF2 Yours number phone (7..):");
         String phone = scanner.nextLine();
-        System.out.println("Input password:");
+        System.out.println("\uD83D\uDD12 Input password:");
         String password = scanner.nextLine();
-        System.out.println("Input role (ADMIN/USER/MANAGER):");
+        System.out.println("Input role (\uD83D\uDC51 ADMIN/\uD83D\uDC65 CLIENT/\uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBC MANAGER):");
         String roleStr = scanner.nextLine();
         User.Role role = User.Role.valueOf(roleStr.toUpperCase());
 
@@ -65,9 +65,9 @@ public class LoginRegisterController {
     }
 
     private boolean handleLogin(Scanner scanner, Session session) {
-        System.out.println("Please, yours username:");
+        System.out.println("\uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDCBC Please, yours username:");
         String userName = scanner.nextLine();
-        System.out.println("And password:");
+        System.out.println("\uD83D\uDD12 And password:");
         String password = scanner.nextLine();
 
         User user = loginRegisterService.login(userName, password);

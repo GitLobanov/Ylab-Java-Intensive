@@ -2,6 +2,7 @@ package com.backend.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ErrorResponses {
 
@@ -40,6 +41,10 @@ public class ErrorResponses {
         RESPONSES_TO_USERNAME_OR_PASSWORD_INCORRECT.add("Looks like you’ve entered the wrong username or password. Maybe you were aiming for a top-secret code?");
         RESPONSES_TO_USERNAME_OR_PASSWORD_INCORRECT.add("Uh-oh! Your login credentials seem to be playing hide and seek. Check and try one more time!");
         RESPONSES_TO_USERNAME_OR_PASSWORD_INCORRECT.add("Error: The username or password you entered is incorrect. Maybe you were thinking of a different universe’s credentials?");
+    }
+
+    public static void printRandom (List list) {
+        System.out.println("⚠\uFE0F "+list.get(new Random().nextInt(list.size()-1)));
     }
 
 }
