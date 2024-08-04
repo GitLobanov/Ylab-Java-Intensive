@@ -29,7 +29,12 @@ public class CarRepository implements CrudRepository<Car> {
 
     @Override
     public boolean save(Car car) {
-        return Objects.equals(cars.put(car.getId(), car), car);
+        if (car != null) {
+            cars.put(car.getId(), car);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

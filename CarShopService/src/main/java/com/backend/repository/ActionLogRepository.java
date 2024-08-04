@@ -4,6 +4,7 @@ import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.User;
 import com.backend.repository.parent.CrudRepository;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 public class ActionLogRepository implements CrudRepository<ActionLog> {
 
+    @Setter
     private static ActionLogRepository instance;
     private final Map<UUID, ActionLog> logs;
 
@@ -33,7 +35,12 @@ public class ActionLogRepository implements CrudRepository<ActionLog> {
 
     @Override
     public boolean save(ActionLog actionLog) {
-        return logs.put(actionLog.getId(), actionLog) != null;
+        if (actionLog != null) {
+            logs.put(actionLog.getId(), actionLog);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

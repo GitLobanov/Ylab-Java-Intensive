@@ -1,7 +1,6 @@
-package com.backend.view;
+package com.backend.util;
 
 import com.backend.model.ActionLog;
-import com.backend.util.SuccessResponses;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,6 +23,10 @@ public class ActionLogExporter {
                     .append("Message: ").append(log.getMessage()).append("\n\n");
         }
 
+        createAndWriteFile (nameFile, content);
+    }
+
+    public static void createAndWriteFile (String nameFile, StringBuilder content) {
         File file = new File(nameFile+".txt");
         try {
             if (file.createNewFile()) {

@@ -1,11 +1,13 @@
 package com.backend.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
 public class Order {
 
     private UUID id;
@@ -38,7 +40,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order: "+ getId() + " {" +
-                "\ncar= [" + car.getId() + ", " + car.getModel() + ", " + car.getBrand() + "]" +
+                "\ncar= ["+ car.getModel() + ", " + car.getBrand() + "]" +
                 "\nclient= [" + client.getUserName() + ", " + client.getName() + "]" +
                 "\norderDateTime=" + orderDateTime +
                 ", status=" + status +

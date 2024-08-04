@@ -36,6 +36,12 @@ public class Session {
         return this.active;
     }
 
+    public void reset() {
+        this.user = null;
+        this.active = false;
+        this.stage = Stage.HAVE_TO_LOGIN;
+    }
+
     @Getter
     @Setter
     private Stage stage = Stage.HAVE_TO_LOGIN;

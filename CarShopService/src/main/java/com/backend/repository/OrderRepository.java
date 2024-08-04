@@ -3,6 +3,7 @@ package com.backend.repository;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.parent.CrudRepository;
+import lombok.Setter;
 
 import java.rmi.server.UID;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 public class OrderRepository implements CrudRepository<Order> {
 
+    @Setter
     private static OrderRepository instance;
     private final Map<UUID, Order> orders;
 
@@ -32,7 +34,13 @@ public class OrderRepository implements CrudRepository<Order> {
 
     @Override
     public boolean save(Order order) {
-        return orders.put(order.getId(), order) != null;
+        if (order != null) {
+            orders.put(order.getId(), order);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     @Override

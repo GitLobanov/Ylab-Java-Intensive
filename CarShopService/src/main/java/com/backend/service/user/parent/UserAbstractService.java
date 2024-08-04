@@ -11,14 +11,11 @@ import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
 import com.backend.util.SuccessResponses;
-import com.backend.view.ActionLogExporter;
+import com.backend.util.ActionLogExporter;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class UserAbstractService {

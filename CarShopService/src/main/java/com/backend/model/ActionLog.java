@@ -2,6 +2,7 @@ package com.backend.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 public class ActionLog {
 
     private UUID id;

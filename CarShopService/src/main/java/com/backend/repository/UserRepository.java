@@ -2,11 +2,13 @@ package com.backend.repository;
 
 import com.backend.model.User;
 import com.backend.repository.parent.CrudRepository;
+import lombok.Setter;
 
 import java.util.*;
 
 public class UserRepository implements CrudRepository<User> {
 
+    @Setter
     private static UserRepository instance;
     private final Map<UUID, User> users;
 
@@ -26,9 +28,15 @@ public class UserRepository implements CrudRepository<User> {
         return instance;
     }
 
+
     @Override
     public boolean save(User user) {
-        return Objects.equals(users.put(user.getId(), user), user);
+        if (user != null) {
+            users.put(user.getId(), user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
