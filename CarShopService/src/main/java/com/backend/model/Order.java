@@ -15,6 +15,7 @@ public class Order {
     private OrderStatus status;
     private TypeOrder type;
     private String note;
+    private User manager;
 
     public enum OrderStatus {
         PENDING, COMPLETED, CANCELLED
@@ -34,4 +35,15 @@ public class Order {
         setNote(note);
     }
 
+    @Override
+    public String toString() {
+        return "Order: "+ getId() + " {" +
+                "\ncar= [" + car.getId() + ", " + car.getModel() + ", " + car.getBrand() + "]" +
+                "\nclient= [" + client.getUserName() + ", " + client.getName() + "]" +
+                "\norderDateTime=" + orderDateTime +
+                ", status=" + status +
+                ", type=" + type +
+                ", note='" + note + '\'' +
+                '}';
+    }
 }

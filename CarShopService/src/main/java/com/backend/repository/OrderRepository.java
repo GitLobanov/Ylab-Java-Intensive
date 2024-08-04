@@ -64,4 +64,27 @@ public class OrderRepository implements CrudRepository<Order> {
         }
         return result;
     }
+
+
+    public Map<UUID, Order> findByClient(User client) {
+        Map<UUID, Order> result = new HashMap<>();
+        for (Order order : orders.values()) {
+            if (order.getClient() == client) {
+                result.put(order.getId(), order);
+            }
+        }
+        return result;
+    }
+
+
+    public Map<UUID, Order> findByManager(User manager) {
+        Map<UUID, Order> result = new HashMap<>();
+        for (Order order : orders.values()) {
+            if (order.getManager() == manager) {
+                result.put(order.getId(), order);
+            }
+        }
+        return result;
+    }
+
 }

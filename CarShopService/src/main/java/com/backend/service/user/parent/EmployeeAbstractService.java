@@ -1,5 +1,6 @@
 package com.backend.service.user.parent;
 
+import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
@@ -11,6 +12,8 @@ import com.backend.util.ErrorResponses;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class EmployeeAbstractService extends UserAbstractService {
 
@@ -30,10 +33,9 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
     }
 
     public void viewAllBuyingOrders (){
+        log(ActionLog.ActionType.CREATE, "Created order");
         Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.BUYING).entrySet().iterator();
-        while (iterator.hasNext()) {
-            System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
-        }
+        displaySearchResultOrder(iterator);
     }
 
     public void viewAllServiceOrders() {
@@ -43,9 +45,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
             ErrorResponses.printCustomMessage("Hmm, sorry I cannot find any requests");
         }
 
-        while (iterator.hasNext()) {
-            System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
-        }
+        displaySearchResultOrder(iterator);
     }
 
     public void searchOrders(String query) {
@@ -108,21 +108,11 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
         Iterator<Map.Entry<UUID, Order>> iterator = result.entrySet().iterator();
 
-        if (!iterator.hasNext()) {
-            ErrorResponses.printCustomMessage("What did you choose? I can't find anything at all");
-        }
+        displaySearchResultOrder(iterator);
 
-        if (iterator.hasNext()) {
-            System.out.println("Fond: ");
-        }
-
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next().getValue());
-        }
     }
 
     public String formingQuerySearchOrders (Order.TypeOrder typeOrder){
-        Scanner scanner = new Scanner(System.in);
         StringBuilder queryBuilder = new StringBuilder();
 
         System.out.println("Enter filter criteria for orders. Press Enter to skip a filter.");
@@ -169,12 +159,6 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         return OrderRepository.getInstance().update(order);
     }
 
-    public boolean cancelOrder(Order order) {
-        order.setStatus(Order.OrderStatus.CANCELLED);
-        return OrderRepository.getInstance().update(order);
-    }
-
-    // Просмотр информации о клиентах и сотрудниках
     public void viewAllClients () {
         Iterator<Map.Entry<UUID, User>> iterator = UserRepository.getInstance().findAll().entrySet().iterator();
         while (iterator.hasNext()) {
@@ -210,6 +194,84 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
             System.out.println(ConsoleColors.YELLOW_BOLD + "User role must be ADMIN or MANAGER." + ConsoleColors.RESET);
             return false;
         }
+    }
+
+    public String formingQuerySearchClients (){
+        System.out.println("\nEnter search criteria for clients. Press Enter to skip a filter.");
+
+        StringBuilder queryBuilder = new StringBuilder();
+
+        System.out.print("Name (contains): ");
+        String name = scanner.nextLine().trim();
+        if (!name.isEmpty()) queryBuilder.append("name:").append(name).append(";");
+
+        System.out.print("Username (contains): ");
+        String username = scanner.nextLine().trim();
+        if (!username.isEmpty()) queryBuilder.append("username:").append(username).append(";");
+
+        System.out.print("Phone (contains): ");
+        String phone = scanner.nextLine().trim();
+        if (!phone.isEmpty()) queryBuilder.append("phone:").append(phone).append(";");
+
+        System.out.print("Email (contains): ");
+        String email = scanner.nextLine().trim();
+        if (!email.isEmpty()) queryBuilder.append("email:").append(email).append(";");
+
+        System.out.print("Amount of orders (from): ");
+        String amountOfOrders = scanner.nextLine().trim();
+        if (!amountOfOrders.isEmpty()) queryBuilder.append("amountOfOrders:").append(amountOfOrders).append(";");
+
+        System.out.print("Amount of service requests (from): ");
+        String amountOfServiceRequests = scanner.nextLine().trim();
+        if (!amountOfServiceRequests.isEmpty())
+            queryBuilder.append("amountOfServiceRequests:").append(amountOfServiceRequests).append(";");
+
+        return queryBuilder.toString();
+    }
+
+    public void searchClients(String query) {
+        Map<String, String> filters = new HashMap<>();
+        String[] criteria = query.split(";");
+        for (String criterion : criteria) {
+            String[] parts = criterion.split(":");
+            if (parts.length == 2) {
+                filters.put(parts[0].trim(), parts[1].trim());
+            }
+        }
+
+        List<Predicate<User>> predicates = new ArrayList<>();
+
+        filters.forEach((key, value) -> {
+            switch (key) {
+                case "name":
+                    predicates.add(user -> user.getName().toLowerCase().contains(value.toLowerCase()));
+                    break;
+                case "username":
+                    predicates.add(user -> user.getUserName().toLowerCase().contains(value.toLowerCase()));
+                    break;
+                case "phone":
+                    predicates.add(user -> user.getPhone().toLowerCase().contains(value.toLowerCase()));
+                    break;
+                case "email":
+                    predicates.add(user -> user.getEmail().toLowerCase().contains(value.toLowerCase()));
+                    break;
+                case "amountOfOrders":
+                    int orderCount = Integer.parseInt(value);
+                    predicates.add(user -> getClientOrderCount(user) >= orderCount);
+                    break;
+                case "amountOfServiceRequests":
+                    int serviceCount = Integer.parseInt(value);
+                    predicates.add(user -> getClientServiceRequestCount(user) >= serviceCount);
+                    break;
+            }
+        });
+
+        Iterator<Map.Entry<UUID, User>> iterator = UserRepository.getInstance().findAll().entrySet().stream()
+                .filter(entry -> entry.getValue().getRole() == User.Role.CLIENT)
+                .filter(entry -> predicates.stream().reduce(x -> true, Predicate::and).test(entry.getValue()))
+                .iterator();
+
+        displaySearchResultUser(iterator);
     }
 
 }

@@ -38,7 +38,7 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public boolean delete(User user) {
-        return false;
+        return users.remove(user.getId()) != null;
     }
 
     @Override

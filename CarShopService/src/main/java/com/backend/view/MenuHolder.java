@@ -13,10 +13,8 @@ import java.util.UUID;
 public abstract class MenuHolder {
 
     static final Scanner scanner = new Scanner(System.in);
-    abstract void showMainMenu();
-    abstract void handleCars();
-    abstract void addOrderConsole(Order.TypeOrder typeOrder);
-    abstract void cancelOrder();
+    public abstract void showMainMenu();
+    public abstract void handleLogging();
 
     public Car selectCar() {
         System.out.println("Available cars:");
@@ -50,21 +48,26 @@ public abstract class MenuHolder {
         return value;
     }
 
-    boolean confirm() {
+    boolean confirm(String message) {
         while (true) {
             System.out.println("Input yes/y or not/n");
             String answer = scanner.nextLine().trim();
             if (answer.equals("yes") || answer.equals("y")) {
-                System.out.println("✅  Okay, as you wish my friend...");
-                SuccessResponses.printCustomMessage("Car deleted!");
+                SuccessResponses.printCustomMessage("Okay, as you wish my friend...");
+                SuccessResponses.printCustomMessage(message);
                 return true;
             } else if (answer.equals("no") || answer.equals("n")) {
-                System.out.println("\uD83E\uDD1D Okay, keep this");
+                SuccessResponses.printCustomMessage("\uD83E\uDD1D Okay, keep this");
                 return false;
             } else {
                 ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
             }
         }
+    }
+
+    boolean checkForExit(String message) {
+        if (message.equals("exit")) return false;
+        return false;
     }
 
 }

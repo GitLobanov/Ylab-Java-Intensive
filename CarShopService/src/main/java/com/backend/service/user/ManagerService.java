@@ -10,16 +10,12 @@ import com.backend.repository.OrderRepository;
 import com.backend.repository.UserRepository;
 import com.backend.service.user.parent.EmployeeAbstractService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class ManagerService extends EmployeeAbstractService {
-
-    private UserRepository userRepository = new UserRepository();
-    private CarRepository carRepository = new CarRepository();
-    private OrderRepository orderRepository = new OrderRepository();
-    private ActionLogRepository actionLogRepository = new ActionLogRepository();
 
     @Override
     public boolean addCar(Car car) {
@@ -47,22 +43,47 @@ public class ManagerService extends EmployeeAbstractService {
         return false;
     }
 
-    public Map<UUID,User> viewMyClients() {
-        return userRepository.findAll();
+    public void viewMyClients(User manager) {
+
+        Map<UUID,Order> orders = OrderRepository.getInstance().findByManager(manager);
+        Map<UUID,User> clients = new HashMap<>();
+
+        for (Order order : orders.values()) {
+            clients.put(order.getClient().getId(), order.getClient());
+        }
+
+        displaySearchResultUser(clients.entrySet().iterator());
+
     }
 
     @Override
-    public boolean createOrder(Order order) {
+    public boolean addOrder(Order order) {
         return false;
     }
 
-    public Map<UUID,Order> viewMyOrders() {
-        return orderRepository.findAll();
+    public void viewMyTakenOrders(User manager) {
+        Map<UUID,Order> orders = OrderRepository.getInstance().findByManager(manager);
+        Map<UUID,Order> buyingOrders = new HashMap<>();
+
+        for (Order order : orders.values()) {
+            if (order.getType() == Order.TypeOrder.BUYING) {
+                buyingOrders.put(order.getId(), order);
+            }
+        }
+
+        displaySearchResultOrder(buyingOrders.entrySet().iterator());
     }
 
+    public void viewMyTakenRequests(User manager) {
+        Map<UUID,Order> orders = OrderRepository.getInstance().findByManager(manager);
+        Map<UUID,Order> serviceRequests = new HashMap<>();
 
-    @Override
-    public Map<UUID,ActionLog> viewMyActionLog() {
-        return actionLogRepository.findAll();
+        for (Order order : orders.values()) {
+            if (order.getType() == Order.TypeOrder.SERVICE) {
+                serviceRequests.put(order.getId(), order);
+            }
+        }
+
+        displaySearchResultOrder(serviceRequests.entrySet().iterator());
     }
 }

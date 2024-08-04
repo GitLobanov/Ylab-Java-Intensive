@@ -44,6 +44,11 @@ public class AdminController {
                 case "employees":
                    menuHolderAdmin.handleEmployees();
                     break;
+
+                case "a":
+                case "actions":
+                    menuHolderAdmin.handleLogging();
+                    break;
                 case "l":
                 case "logout":
                     System.out.println("Exiting from account...");

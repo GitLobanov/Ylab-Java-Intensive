@@ -10,7 +10,10 @@ import com.backend.service.user.parent.EmployeeAbstractService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AdminService extends EmployeeAbstractService {
 
@@ -44,14 +47,7 @@ public class AdminService extends EmployeeAbstractService {
             return false;
         }
         User employee = UserRepository.getInstance().findByUserName(userName);
-        if (employee.getRole() == User.Role.ADMIN || employee.getRole() == User.Role.MANAGER) {
-            updatedEmployee.setRole(employee.getRole()); // Ensure role remains the same
-            UserRepository.getInstance().update(updatedEmployee);
-            return true;
-        } else {
-            System.out.println(ConsoleColors.YELLOW_BOLD + "User role must be ADMIN or MANAGER." + ConsoleColors.RESET);
-            return false;
-        }
+        return UserRepository.getInstance().update(updatedEmployee);
     }
 
     // Remove employee
@@ -61,18 +57,106 @@ public class AdminService extends EmployeeAbstractService {
             return false;
         }
         User employee = UserRepository.getInstance().findByUserName(userName);
-        if (employee.getRole() == User.Role.ADMIN || employee.getRole() == User.Role.MANAGER) {
-            UserRepository.getInstance().delete(employee);
-            return true;
-        } else {
-            System.out.println(ConsoleColors.YELLOW_BOLD + "User role must be ADMIN or MANAGER." + ConsoleColors.RESET);
-            return false;
-        }
+        return UserRepository.getInstance().delete(employee);
     }
 
-    @Override
-    public Map<UUID, ActionLog> viewMyActionLog() {
-        return ActionLogRepository.getInstance().findAll();
+    public void searchActionLog(String query) {
+        Map<UUID, ActionLog> logs = ActionLogRepository.getInstance().findAll();
+        String[] params = query.split(";");
+
+        for (String param : params) {
+            String[] keyValue = param.split(":");
+
+            if (keyValue.length < 2) {
+                continue;
+            }
+
+            String key = keyValue[0];
+            String value = keyValue[1];
+
+            switch (key) {
+                case "actionType":
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionType().toString().equalsIgnoreCase(value))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                case "user":
+                    logs = logs.values().stream()
+                            .filter(log -> log.getUser().getUserName().equalsIgnoreCase(value))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                case "actionDateTimeFrom<actionDateTime<actionDateTimeTo":
+                    String[] dateTimeRange = value.split("<actionDateTime<");
+                    LocalDateTime dateTimeFrom = LocalDateTime.parse(dateTimeRange[0], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    LocalDateTime dateTimeTo = LocalDateTime.parse(dateTimeRange[1], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionDateTime().isAfter(dateTimeFrom) && log.getActionDateTime().isBefore(dateTimeTo))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                case "actionDateTimeFrom<actionDateTime":
+                    LocalDateTime dateTimeOnlyFrom = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionDateTime().isAfter(dateTimeOnlyFrom))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                case "actionDateTime<actionDateTimeTo":
+                    LocalDateTime dateTimeOnlyTo = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionDateTime().isBefore(dateTimeOnlyTo))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        Iterator<Map.Entry<UUID, ActionLog>> iterator = logs.entrySet().iterator();
+        displaySearchResultActionLog(iterator);
+
+
+    }
+
+    public String formingQuerySearchActionLogs() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Input parameters (if field doesn't need leave it blank)");
+
+        System.out.println("Action Type (CREATE/UPDATE/DELETE/LOGIN/LOGOUT): ");
+        String actionType = scanner.nextLine().trim();
+
+        System.out.println("User (username): ");
+        String user = scanner.nextLine().trim();
+
+        System.out.println("Action DateTime From (yyyy-MM-dd HH:mm:ss): ");
+        String dateTimeFrom = scanner.nextLine().trim();
+
+        System.out.println("Action DateTime To (yyyy-MM-dd HH:mm:ss): ");
+        String dateTimeTo = scanner.nextLine().trim();
+
+        // Создание строки запроса
+        StringBuilder queryBuilder = new StringBuilder();
+
+        if (!actionType.isEmpty()) {
+            queryBuilder.append("actionType:").append(actionType).append(";");
+        }
+
+        if (!user.isEmpty()) {
+            queryBuilder.append("user:").append(user).append(";");
+        }
+
+        if (!dateTimeFrom.isEmpty() && !dateTimeTo.isEmpty()) {
+            queryBuilder.append("actionDateTimeFrom<actionDateTime<actionDateTimeTo:")
+                    .append(dateTimeFrom).append("<actionDateTime<").append(dateTimeTo).append(";");
+        } else if (!dateTimeFrom.isEmpty()) {
+            queryBuilder.append("actionDateTimeFrom<actionDateTime:").append(dateTimeFrom).append(";");
+        } else if (!dateTimeTo.isEmpty()) {
+            queryBuilder.append("actionDateTime<actionDateTimeTo:").append(dateTimeTo).append(";");
+        }
+
+        // Удаление последнего символа ';' если строка не пустая
+        String query = queryBuilder.length() > 0 ? queryBuilder.substring(0, queryBuilder.length() - 1) : "";
+
+        return query;
     }
 
 }

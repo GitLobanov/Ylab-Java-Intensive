@@ -2,8 +2,10 @@ package com.backend.repository;
 
 import com.backend.model.ActionLog;
 import com.backend.model.Car;
+import com.backend.model.User;
 import com.backend.repository.parent.CrudRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -31,26 +33,36 @@ public class ActionLogRepository implements CrudRepository<ActionLog> {
 
     @Override
     public boolean save(ActionLog actionLog) {
-        return false;
+        return logs.put(actionLog.getId(), actionLog) != null;
     }
 
     @Override
     public boolean update(ActionLog actionLog) {
-        return false;
+        return logs.put(actionLog.getId(), actionLog) != null;
     }
 
     @Override
     public boolean delete(ActionLog actionLog) {
-        return false;
+        return logs.remove(actionLog.getId(), actionLog);
     }
 
     @Override
     public ActionLog findById(UUID uid) {
-        return null;
+        return logs.get(uid);
     }
 
     @Override
     public Map<UUID, ActionLog> findAll() {
         return logs;
+    }
+
+    public Map<UUID, ActionLog> findByUser(User user) {
+        Map<UUID, ActionLog> result = new HashMap<>();
+        for (ActionLog actionLog : logs.values()) {
+            if (actionLog.getUser().equals(user)) {
+                result.put(actionLog.getId(), actionLog);
+            }
+        }
+        return result;
     }
 }

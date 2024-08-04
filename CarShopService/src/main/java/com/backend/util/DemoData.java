@@ -11,11 +11,15 @@ public class DemoData {
 
     public void loadData () {
 
-        User client = new User("john_doe", "123", User.Role.CLIENT, "John Doe", "john.doe@example.com", "123-456-7890");
+        User client = new User("john_doe", "123", User.Role.CLIENT, "John", "john.doe@gmail.com", "123-456-7890");
+        User client1 = new User("john_niko", "123", User.Role.CLIENT, "John Doe", "john.doe@mail.com", "123-456-7890");
+        User client2 = new User("jo_bo", "123", User.Role.CLIENT, "John Jabro", "john.doe@yndex.com", "123-456-7890");
         User manager = new User("john_man", "123", User.Role.MANAGER, "John Doe", "john.doe@example.com", "123-456-7890");
         User admin = new User("john_adman", "123", User.Role.ADMIN, "John Doe", "john.doe@example.com", "123-456-7890");
 
         UserRepository.getInstance().save(client);
+        UserRepository.getInstance().save(client1);
+        UserRepository.getInstance().save(client2);
         UserRepository.getInstance().save(manager);
         UserRepository.getInstance().save(admin);
 
@@ -36,6 +40,10 @@ public class DemoData {
 
         OrderRepository.getInstance().save(new Order(c1, client, Order.TypeOrder.BUYING, "Something to note 1"));
         OrderRepository.getInstance().save(new Order(c2, client, Order.TypeOrder.BUYING, "Something to note 2"));
+        OrderRepository.getInstance().save(new Order(c1, client1, Order.TypeOrder.BUYING, "Something to note 2"));
+        OrderRepository.getInstance().save(new Order(c2, client2, Order.TypeOrder.BUYING, "Something to note 2"));
+        OrderRepository.getInstance().save(new Order(c1, client1, Order.TypeOrder.SERVICE, "Something to note 2"));
+        OrderRepository.getInstance().save(new Order(c2, client2, Order.TypeOrder.SERVICE, "Something to note 2"));
 
     }
 

@@ -4,28 +4,67 @@ import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
+import com.backend.repository.ActionLogRepository;
 import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
 import com.backend.util.ConsoleColors;
+import com.backend.util.ErrorResponses;
+import com.backend.util.Session;
+import com.backend.util.SuccessResponses;
+import com.backend.view.ActionLogExporter;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class UserAbstractService {
 
-    // Обработка заказов
-    public boolean createOrder(Order order) {
+    Scanner scanner = new Scanner(System.in);
+
+    public boolean addOrder(Order order) {
+        log(ActionLog.ActionType.CREATE, "Created order");
+        checkCarForAvailability(order);
         return OrderRepository.getInstance().save(order);
     }
+
     public boolean updateOrder(Order order) {
+        log(ActionLog.ActionType.CREATE, "Updated order");
+        checkCarForAvailability(order);
         return OrderRepository.getInstance().update(order);
+    }
+
+    private void checkCarForAvailability(Order order) {
+        if (order.getType() == Order.TypeOrder.BUYING && order.getStatus() == Order.OrderStatus.COMPLETED) {
+            Car car = order.getCar();
+            car.setAvailability(false);
+            CarRepository.getInstance().save(car);
+        }
     }
 
     public Order findOrderById(UUID id) {
         return OrderRepository.getInstance().findById(id);
     }
 
-    // Просмотр информации
+    public Map<UUID, Order> findOrderByClientAndTypeOrder(User user, Order.TypeOrder typeOrder) {
+        Map<UUID, Order> result = OrderRepository.getInstance().findByClient(user);
+        for (Order order : result.values()) {
+            if (order.getType() == typeOrder) {
+                result.put(order.getId(), order);
+            }
+        }
+        return result;
+    }
+
+    public boolean cancelOrder(Order order) {
+        log(ActionLog.ActionType.CREATE, "Canceled order");
+        order.setStatus(Order.OrderStatus.CANCELLED);
+        return OrderRepository.getInstance().update(order);
+    }
+
     public String getContactInfo(User user) {
         StringBuilder info = new StringBuilder();
         info.append(user.getName() + ":");
@@ -36,15 +75,16 @@ public abstract class UserAbstractService {
     }
 
     public static void viewAllCars() {
-        Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAll().entrySet().iterator();
-        while (iterator.hasNext()) {
-            System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
-        }
+        log(ActionLog.ActionType.CREATE, "View all cars");
+        Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAllAvailableCars().entrySet().iterator();
+        displaySearchResultCar(iterator);
     }
 
     public void searchCars(String query) {
 
-        Map<UUID, Car> cars = CarRepository.getInstance().findAll();
+        log(ActionLog.ActionType.CREATE, "Search cars");
+
+        Map<UUID, Car> cars = CarRepository.getInstance().findAllAvailableCars();
         String[] params = query.split(";");
 
         for (String param : params) {
@@ -131,10 +171,7 @@ public abstract class UserAbstractService {
         }
 
         Iterator<Map.Entry<UUID, Car>> iterator = cars.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<UUID, Car> car = iterator.next();
-            System.out.println(car.getValue());
-        }
+        displaySearchResultCar(iterator);
     }
     // forming query: brand:toyota;color:white;priceFrom<price<priceTo;model:xr200;yearFrom<2000<yearTo;availability:true
     public String formingQuerySearchCars (){
@@ -208,7 +245,171 @@ public abstract class UserAbstractService {
 
     }
 
-    // Аудит действий пользователя
-    public abstract Map<UUID,ActionLog> viewMyActionLog();
+    public void viewMyActionLog(User user) {
+        Map<UUID,ActionLog> actionLogMap = ActionLogRepository.getInstance().findByUser(user);
+        displaySearchResultActionLog(actionLogMap.entrySet().iterator());
+    }
+
+
+    public static void displaySearchResultUser(Iterator<Map.Entry<UUID, User>> iterator) {
+        if (!iterator.hasNext()) {
+            ErrorResponses.printCustomMessage("Sorry. I can't find anything at all");
+        } else {
+            System.out.println("\nFound: ");
+            while (iterator.hasNext()) {
+                System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
+                System.out.println("[-------------------------------------------------------]");
+            }
+        }
+    }
+
+
+    public static void displaySearchResultActionLog(Iterator<Map.Entry<UUID, ActionLog>> iterator) {
+        if (!iterator.hasNext()) {
+            ErrorResponses.printCustomMessage("Sorry. I can't find anything at all");
+        } else {
+            System.out.println("\nFound: ");
+            while (iterator.hasNext()) {
+                System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
+                System.out.println("[-------------------------------------------------------]");
+            }
+        }
+    }
+
+    public static void displaySearchResultCar(Iterator<Map.Entry<UUID, Car>> iterator) {
+        if (!iterator.hasNext()) {
+            ErrorResponses.printCustomMessage("Sorry. I can't find any car at all");
+        } else {
+            System.out.println("\nFound: ");
+            while (iterator.hasNext()) {
+                System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
+                System.out.println("[-------------------------------------------------------]");
+            }
+        }
+    }
+
+    public static void displaySearchResultOrder(Iterator<Map.Entry<UUID, Order>> iterator) {
+        if (!iterator.hasNext()) {
+            ErrorResponses.printCustomMessage("Hmm. Here is nothing!");
+        } else {
+            System.out.println("\nFound: ");
+            while (iterator.hasNext()) {
+                System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
+                System.out.println("[-------------------------------------------------------]");
+            }
+        }
+    }
+
+    public int getClientOrderCount(User client) {
+        return findOrderByClientAndTypeOrder(client, Order.TypeOrder.BUYING).size();
+    }
+
+    public int getClientServiceRequestCount(User client) {
+        return findOrderByClientAndTypeOrder(client, Order.TypeOrder.SERVICE).size();
+    }
+
+    public void searchMyActionLog(String query, User user) {
+        Map<UUID, ActionLog> logs = ActionLogRepository.getInstance().findByUser(user);
+        String[] params = query.split(";");
+
+        for (String param : params) {
+            String[] keyValue = param.split(":");
+
+            if (keyValue.length < 2) {
+                continue;
+            }
+
+            String key = keyValue[0];
+            String value = keyValue[1];
+
+            switch (key) {
+                case "actionType":
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionType().toString().equalsIgnoreCase(value))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                case "actionDateTimeFrom<actionDateTime<actionDateTimeTo":
+                    String[] dateTimeRange = value.split("<actionDateTime<");
+                    LocalDateTime dateTimeFrom = LocalDateTime.parse(dateTimeRange[0], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    LocalDateTime dateTimeTo = LocalDateTime.parse(dateTimeRange[1], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionDateTime().isAfter(dateTimeFrom) && log.getActionDateTime().isBefore(dateTimeTo))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                case "actionDateTimeFrom<actionDateTime":
+                    LocalDateTime dateTimeOnlyFrom = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionDateTime().isAfter(dateTimeOnlyFrom))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                case "actionDateTime<actionDateTimeTo":
+                    LocalDateTime dateTimeOnlyTo = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    logs = logs.values().stream()
+                            .filter(log -> log.getActionDateTime().isBefore(dateTimeOnlyTo))
+                            .collect(Collectors.toMap(ActionLog::getId, log -> log));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        Iterator<Map.Entry<UUID, ActionLog>> iterator = logs.entrySet().iterator();
+        displaySearchResultActionLog(iterator);
+
+        askUnloadActionLogToTXT(logs);
+    }
+
+    public String formingQuerySearchMyActionLogs() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Input parameters (if field doesn't need leave it blank)");
+
+        System.out.println("Action Type (CREATE/UPDATE/DELETE/LOGIN/LOGOUT): ");
+        String actionType = scanner.nextLine().trim();
+
+        System.out.println("Action DateTime From (yyyy-MM-dd HH:mm:ss): ");
+        String dateTimeFrom = scanner.nextLine().trim();
+
+        System.out.println("Action DateTime To (yyyy-MM-dd HH:mm:ss): ");
+        String dateTimeTo = scanner.nextLine().trim();
+
+        StringBuilder queryBuilder = new StringBuilder();
+
+        if (!actionType.isEmpty()) {
+            queryBuilder.append("actionType:").append(actionType).append(";");
+        }
+
+        if (!dateTimeFrom.isEmpty() && !dateTimeTo.isEmpty()) {
+            queryBuilder.append("actionDateTimeFrom<actionDateTime<actionDateTimeTo:")
+                    .append(dateTimeFrom).append("<actionDateTime<").append(dateTimeTo).append(";");
+        } else if (!dateTimeFrom.isEmpty()) {
+            queryBuilder.append("actionDateTimeFrom<actionDateTime:").append(dateTimeFrom).append(";");
+        } else if (!dateTimeTo.isEmpty()) {
+            queryBuilder.append("actionDateTime<actionDateTimeTo:").append(dateTimeTo).append(";");
+        }
+
+        String query = queryBuilder.length() > 0 ? queryBuilder.substring(0, queryBuilder.length() - 1) : "";
+
+        return query;
+    }
+
+    public static void log(ActionLog.ActionType type, String message){
+        ActionLogRepository.getInstance().save(new ActionLog(Session.getInstance().getUser(), type, message));
+    }
+
+
+    public void askUnloadActionLogToTXT (Map<UUID, ActionLog> actionLogs) {
+        System.out.println("Do you want unload log to txt yes/y or not/n");
+        String answer = scanner.nextLine().trim();
+        if (answer.equals("yes") || answer.equals("y")) {
+            SuccessResponses.printCustomMessage("Log unload in txt file");
+
+            ActionLogExporter.exportToTextFile(actionLogs);
+        } else if (answer.equals("no") || answer.equals("n")) {
+            SuccessResponses.printCustomMessage("\uD83E\uDD1D Okay, as you wish");
+        } else {
+            ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
+        }
+    }
 
 }

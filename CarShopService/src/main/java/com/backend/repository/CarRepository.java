@@ -51,4 +51,18 @@ public class CarRepository implements CrudRepository<Car> {
     public Map<UUID,Car> findAll() {
         return cars;
     }
+
+
+    public Map<UUID,Car> findAllAvailableCars() {
+        Map<UUID,Car> availableCars = new HashMap<>();
+        Iterator<Map.Entry<UUID,Car>> iterator = cars.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID,Car> entry = iterator.next();
+            Car car = entry.getValue();
+            if (car.isAvailability()) {
+                availableCars.put(car.getId(), car);
+            }
+        }
+        return availableCars;
+    }
 }
