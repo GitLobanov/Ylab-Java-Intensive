@@ -78,6 +78,18 @@ public abstract class UserAbstractService {
         displaySearchResultCar(iterator);
     }
 
+    public static void viewNotOrderedCars() {
+        log(ActionLog.ActionType.VIEW, "View not ordered cars");
+        Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAllAvailableCars().entrySet().iterator();
+        Map<UUID, Car> map = new HashMap<>();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, Car> car = iterator.next();
+            if (OrderRepository.getInstance().findByCar(car.getValue()) == null) map.put(car.getKey(), car.getValue());
+        }
+
+        displaySearchResultCar(iterator);
+    }
+
     public void searchCars(String query) {
 
         log(ActionLog.ActionType.VIEW, "Search cars");

@@ -18,7 +18,7 @@ public abstract class MenuHolder {
 
     public Car selectCar() {
         System.out.println("Available cars:");
-        UserAbstractService.viewAllCars();
+        UserAbstractService.viewNotOrderedCars();
         System.out.println("Enter the ID of the car you want to order:");
         String carIdStr = scanner.nextLine();
         UUID carId;

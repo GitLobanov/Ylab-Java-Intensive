@@ -1,5 +1,6 @@
 package com.backend.repository;
 
+import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.parent.CrudRepository;
@@ -78,6 +79,16 @@ public class OrderRepository implements CrudRepository<Order> {
         Map<UUID, Order> result = new HashMap<>();
         for (Order order : orders.values()) {
             if (order.getClient() == client) {
+                result.put(order.getId(), order);
+            }
+        }
+        return result;
+    }
+
+    public Map<UUID, Order> findByCar(Car car) {
+        Map<UUID, Order> result = new HashMap<>();
+        for (Order order : orders.values()) {
+            if (order.getCar() == car) {
                 result.put(order.getId(), order);
             }
         }
