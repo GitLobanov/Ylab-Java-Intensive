@@ -1,5 +1,7 @@
 package com.backend.controller;
 
+import com.backend.model.ActionLog;
+import com.backend.service.user.parent.UserAbstractService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
@@ -53,6 +55,7 @@ public class AdminController {
                 case "logout":
                     System.out.println("Exiting from account...");
                     Session.getInstance().setStage(Session.Stage.HAVE_TO_LOGIN);
+                    UserAbstractService.log(ActionLog.ActionType.LOGOUT, "");
                     return;
                 case "end":
                     Session.getInstance().setStage(Session.Stage.EXIT);

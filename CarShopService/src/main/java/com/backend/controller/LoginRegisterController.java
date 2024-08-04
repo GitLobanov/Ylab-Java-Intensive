@@ -1,7 +1,9 @@
 package com.backend.controller;
 
+import com.backend.model.ActionLog;
 import com.backend.model.User;
 import com.backend.service.user.LoginRegisterService;
+import com.backend.service.user.parent.UserAbstractService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
@@ -95,6 +97,8 @@ public class LoginRegisterController {
             }
 
             SuccessResponses.printCustomMessage("You have successfully logged in.");
+
+            UserAbstractService.log(ActionLog.ActionType.LOGIN, "");
 
             return true;
         } else {

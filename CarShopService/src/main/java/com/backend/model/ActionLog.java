@@ -20,7 +20,7 @@ public class ActionLog {
     private String message;
 
     public enum ActionType {
-        CREATE, UPDATE, DELETE, LOGIN, LOGOUT
+        CREATE, UPDATE, DELETE, CANCEL, VIEW, LOGIN, LOGOUT
     }
 
     public ActionLog(User user, ActionType actionType, String message) {
@@ -29,5 +29,15 @@ public class ActionLog {
         setActionType(actionType);
         setActionDateTime(LocalDateTime.now());
         setMessage(message);
+    }
+
+    @Override
+    public String toString() {
+        return "ActionLog{" +
+                "user=" + user.getUserName() +
+                ", actionType= [" + actionType +
+                "], actionDateTime=" + actionDateTime +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

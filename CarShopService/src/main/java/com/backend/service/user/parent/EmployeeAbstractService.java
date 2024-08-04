@@ -18,12 +18,15 @@ import java.util.stream.Collectors;
 public abstract class EmployeeAbstractService extends UserAbstractService {
 
     public boolean addCar(Car car) {
+        log(ActionLog.ActionType.CREATE, "Created car");
         return CarRepository.getInstance().save(car);
     }
     public boolean updateCar(Car car) {
+        log(ActionLog.ActionType.CREATE, "Updated car");
         return CarRepository.getInstance().update(car);
     }
     public boolean deleteCar(Car car) {
+        log(ActionLog.ActionType.DELETE, "Deleted car");
         return CarRepository.getInstance().delete(car);
     }
 
@@ -33,12 +36,13 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
     }
 
     public void viewAllBuyingOrders (){
-        log(ActionLog.ActionType.CREATE, "Created order");
+        log(ActionLog.ActionType.VIEW, "View buying orders");
         Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.BUYING).entrySet().iterator();
         displaySearchResultOrder(iterator);
     }
 
     public void viewAllServiceOrders() {
+        log(ActionLog.ActionType.VIEW, "View service orders");
         Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.SERVICE).entrySet().iterator();
 
         if (!iterator.hasNext()) {
@@ -49,6 +53,8 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
     }
 
     public void searchOrders(String query) {
+        log(ActionLog.ActionType.VIEW, "Search orders");
+
         Map<UUID, Order> result = new HashMap<>();
 
         String[] filters = query.split(";");
@@ -154,12 +160,9 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         return queryBuilder.toString();
     }
 
-    public boolean updateOrderStatus(Order order, Order.OrderStatus status) {
-        order.setStatus(status);
-        return OrderRepository.getInstance().update(order);
-    }
-
     public void viewAllClients () {
+        log(ActionLog.ActionType.VIEW, "View all clients");
+
         Iterator<Map.Entry<UUID, User>> iterator = UserRepository.getInstance().findAll().entrySet().iterator();
         while (iterator.hasNext()) {
             System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
@@ -171,6 +174,8 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
     }
 
     public boolean updateClient(String userName, User updatedClient) {
+        log(ActionLog.ActionType.UPDATE, "Update order");
+
         if (UserRepository.getInstance().findByUserName(userName)==null) {
             ErrorResponses.printCustomMessage("Client not found");
             return false;
@@ -181,6 +186,8 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
     }
 
     public boolean removeClient(String userName) {
+        log(ActionLog.ActionType.DELETE, "Delete client");
+
         if (UserRepository.getInstance().findByUserName(userName)==null){
             ErrorResponses.printCustomMessage("Client not found.");
             return false;
@@ -230,6 +237,8 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
     }
 
     public void searchClients(String query) {
+        log(ActionLog.ActionType.VIEW, "Search clients");
+
         Map<String, String> filters = new HashMap<>();
         String[] criteria = query.split(";");
         for (String criterion : criteria) {

@@ -6,43 +6,46 @@ import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
 import com.backend.view.MenuHolderAdmin;
-import com.backend.view.MenuHolderClient;
+import com.backend.view.MenuHolderManager;
 
 import java.util.Scanner;
 
-public class ClientController {
+public class ManagerController {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    private MenuHolderClient menuHolderClient;
+    private MenuHolderManager menuHolderManager;
 
-    public ClientController (){
-        menuHolderClient = new MenuHolderClient();
+    public ManagerController (){
+        menuHolderManager = new MenuHolderManager();
     }
 
     public void start () {
-        System.out.println(ConsoleColors.BLUE_BOLD + "\nWelcome my dear friend!");
-        System.out.println("Client: " + Session.getInstance().getUser().getUserName() + ConsoleColors.RESET);
+        System.out.println("Hello, " + Session.getInstance().getUser().getName() + ConsoleColors.RESET);
         while (true) {
-            menuHolderClient.showMainMenu();
+            menuHolderManager.showMainMenu();
             String command = scanner.nextLine().trim().toLowerCase();
             switch (command) {
                 case "c":
                 case "cars":
-                    menuHolderClient.handleCars();
+                    menuHolderManager.handleCars();
                     break;
                 case "r":
                 case "requests":
-                    menuHolderClient.handleServiceRequests();
+                    menuHolderManager.handleServiceRequests();
                     break;
                 case "o":
                 case "orders":
-                    menuHolderClient.handleOrders();
+                    menuHolderManager.handleOrders();
+                    break;
+                case "cl":
+                case "clients":
+                    menuHolderManager.handleClients();
                     break;
 
                 case "a":
                 case "actions":
-                    menuHolderClient.handleLogging();
+                    menuHolderManager.handleLogging();
                     break;
                 case "l":
                 case "logout":

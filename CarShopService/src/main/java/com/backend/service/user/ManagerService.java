@@ -32,12 +32,6 @@ public class ManagerService extends EmployeeAbstractService {
         return false;
     }
 
-
-    @Override
-    public boolean updateOrderStatus(Order order, Order.OrderStatus status) {
-        return false;
-    }
-
     @Override
     public boolean cancelOrder(Order order) {
         return false;

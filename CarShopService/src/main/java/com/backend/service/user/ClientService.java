@@ -22,6 +22,8 @@ public class ClientService extends UserAbstractService {
     }
 
     public void viewMyCars(User client) {
+        log(ActionLog.ActionType.VIEW, "View own cars");
+
         Map<UUID, Order> orders = OrderRepository.getInstance().findByClient(client);
         Map<UUID, Car> cars = new HashMap<>();
 
@@ -35,6 +37,7 @@ public class ClientService extends UserAbstractService {
     }
 
     public void viewMyRequests(User client) {
+        log(ActionLog.ActionType.VIEW, "View own requests");
         Map<UUID,Order> myRequests = OrderRepository.getInstance().findByClient(client);
         myRequests = myRequests.entrySet().stream()
                 .filter(entry -> entry.getValue().getType() == Order.TypeOrder.SERVICE)
@@ -44,6 +47,7 @@ public class ClientService extends UserAbstractService {
 
 
     public void viewMyOrders(User client) {
+        log(ActionLog.ActionType.VIEW, "View own orders");
         Map<UUID,Order> myRequests = OrderRepository.getInstance().findByClient(client);
         myRequests = myRequests.entrySet().stream()
                 .filter(entry -> entry.getValue().getType() == Order.TypeOrder.BUYING)

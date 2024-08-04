@@ -20,6 +20,7 @@ public class AdminService extends EmployeeAbstractService {
 
     // View all employees
     public void viewAllEmployees() {
+        log(ActionLog.ActionType.VIEW, "View all employees");
         for (User user : UserRepository.getInstance().findAll().values()) {
             if (user.getRole() == User.Role.ADMIN || user.getRole() == User.Role.MANAGER) {
                 System.out.println(ConsoleColors.PURPLE_BOLD + user + ConsoleColors.RESET);
@@ -28,6 +29,8 @@ public class AdminService extends EmployeeAbstractService {
     }
 
     public void viewAllClients () {
+        log(ActionLog.ActionType.VIEW, "View all clients");
+
         for (User user : UserRepository.getInstance().findAll().values()) {
             if (user.getRole() == User.Role.CLIENT) {
                 System.out.println(ConsoleColors.PURPLE_BOLD + user + ConsoleColors.RESET);
@@ -35,18 +38,17 @@ public class AdminService extends EmployeeAbstractService {
         }
     }
 
-    // Add employee
     public boolean addEmployee(User employee) {
+        log(ActionLog.ActionType.CREATE, "Created employee: " + employee.getUserName());
         return  UserRepository.getInstance().save(employee);
     }
 
-    // Update employee
-    public boolean updateEmployee(String userName, User updatedEmployee) {
-        if (UserRepository.getInstance().findByUserName(userName)==null) {
+    public boolean updateEmployee(User updatedEmployee) {
+        if (updatedEmployee==null) {
             System.out.println(ConsoleColors.YELLOW_BOLD + "Employee not found." + ConsoleColors.RESET);
             return false;
         }
-        User employee = UserRepository.getInstance().findByUserName(userName);
+        log(ActionLog.ActionType.UPDATE, "Updated employee: " + updatedEmployee.getUserName());
         return UserRepository.getInstance().update(updatedEmployee);
     }
 
@@ -57,6 +59,7 @@ public class AdminService extends EmployeeAbstractService {
             return false;
         }
         User employee = UserRepository.getInstance().findByUserName(userName);
+        log(ActionLog.ActionType.DELETE, "Deleted employee: " + employee.getUserName());
         return UserRepository.getInstance().delete(employee);
     }
 

@@ -28,6 +28,7 @@ public class MenuHolderClient extends MenuHolder{
         System.out.println("\uD83D\uDE97 Type 'c/cars' to cars menu.");
         System.out.println("\uD83D\uDE97 Type 'r/requests' to requests menu.");
         System.out.println("\uD83D\uDCE6 Type 'o/orders' to orders menu.");
+        System.out.println("\uD83D\uDDC3\uFE0F Type 'a/actions' to manage actions.");
         System.out.println("\uD83D\uDD10 Type 'l/logout' to logout from account.");
         System.out.println("\uD83D\uDD1A Type 'end' to quit the application.");
         System.out.print("Enter your choice: ");
@@ -35,7 +36,28 @@ public class MenuHolderClient extends MenuHolder{
 
     @Override
     public void handleLogging() {
+        while (true) {
+            System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Actions Menu ===" + ConsoleColors.RESET);
+            System.out.println("1\uFE0F⃣ View my actions");
+            System.out.println("2\uFE0F⃣ Filter actions");
+            System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
+            System.out.print("Enter your choice: ");
+            String choice = scanner.nextLine().trim().toLowerCase();
 
+            switch (choice) {
+                case "1":
+                    clientService.viewMyActionLog(Session.getInstance().getUser());
+                    break;
+                case "2":
+                    String query = clientService.formingQuerySearchMyActionLogs();
+                    clientService.searchMyActionLog(query, Session.getInstance().getUser());
+                    break;
+                case "back":
+                    return;
+                default:
+                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
+            }
+        }
     }
 
     public void handleCars() {

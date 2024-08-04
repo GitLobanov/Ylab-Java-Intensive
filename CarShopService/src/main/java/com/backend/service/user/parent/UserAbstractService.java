@@ -32,7 +32,7 @@ public abstract class UserAbstractService {
     }
 
     public boolean updateOrder(Order order) {
-        log(ActionLog.ActionType.CREATE, "Updated order");
+        log(ActionLog.ActionType.UPDATE, "Updated order");
         checkCarForAvailability(order);
         return OrderRepository.getInstance().update(order);
     }
@@ -50,6 +50,7 @@ public abstract class UserAbstractService {
     }
 
     public Map<UUID, Order> findOrderByClientAndTypeOrder(User user, Order.TypeOrder typeOrder) {
+        log(ActionLog.ActionType.VIEW, "Search client order");
         Map<UUID, Order> result = OrderRepository.getInstance().findByClient(user);
         for (Order order : result.values()) {
             if (order.getType() == typeOrder) {
@@ -60,7 +61,7 @@ public abstract class UserAbstractService {
     }
 
     public boolean cancelOrder(Order order) {
-        log(ActionLog.ActionType.CREATE, "Canceled order");
+        log(ActionLog.ActionType.CANCEL, "Canceled order");
         order.setStatus(Order.OrderStatus.CANCELLED);
         return OrderRepository.getInstance().update(order);
     }
@@ -75,14 +76,14 @@ public abstract class UserAbstractService {
     }
 
     public static void viewAllCars() {
-        log(ActionLog.ActionType.CREATE, "View all cars");
+        log(ActionLog.ActionType.VIEW, "View all cars");
         Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAllAvailableCars().entrySet().iterator();
         displaySearchResultCar(iterator);
     }
 
     public void searchCars(String query) {
 
-        log(ActionLog.ActionType.CREATE, "Search cars");
+        log(ActionLog.ActionType.VIEW, "Search cars");
 
         Map<UUID, Car> cars = CarRepository.getInstance().findAllAvailableCars();
         String[] params = query.split(";");
@@ -364,7 +365,7 @@ public abstract class UserAbstractService {
 
         System.out.println("Input parameters (if field doesn't need leave it blank)");
 
-        System.out.println("Action Type (CREATE/UPDATE/DELETE/LOGIN/LOGOUT): ");
+        System.out.println("Action Type (CREATE/UPDATE/DELETE/CANCEL/VIEW/LOGIN/LOGOUT): ");
         String actionType = scanner.nextLine().trim();
 
         System.out.println("Action DateTime From (yyyy-MM-dd HH:mm:ss): ");
@@ -403,8 +404,9 @@ public abstract class UserAbstractService {
         String answer = scanner.nextLine().trim();
         if (answer.equals("yes") || answer.equals("y")) {
             SuccessResponses.printCustomMessage("Log unload in txt file");
-
-            ActionLogExporter.exportToTextFile(actionLogs);
+            System.out.print("Name of file: ");
+            String nameFile = scanner.nextLine();
+            ActionLogExporter.exportToTextFile(actionLogs, nameFile);
         } else if (answer.equals("no") || answer.equals("n")) {
             SuccessResponses.printCustomMessage("\uD83E\uDD1D Okay, as you wish");
         } else {

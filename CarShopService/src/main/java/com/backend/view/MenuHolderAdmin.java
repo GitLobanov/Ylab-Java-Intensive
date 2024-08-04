@@ -29,7 +29,7 @@ public class MenuHolderAdmin extends MenuHolder {
         System.out.println("\uD83D\uDCE6 Type 'o/orders' to manage orders.");
         System.out.println("\uD83D\uDC68\uD83C\uDFFB\u200D⚖\uFE0F Type 'cl/clients' to manage clients.");
         System.out.println("\uD83D\uDC69\uD83C\uDFFB\u200D\uD83D\uDCBC Type 'e/employees' to manage employees.");
-        System.out.println("\uD83D\uDDC3\uFE0F Type 'a/actions' to manage employees.");
+        System.out.println("\uD83D\uDDC3\uFE0F Type 'a/actions' to manage actions.");
         System.out.println("\uD83D\uDD10 Type 'l/logout' to logout from account.");
         System.out.println("\uD83D\uDD1A Type 'end' to quit the application.");
         System.out.print("Enter your choice: ");
@@ -234,7 +234,8 @@ public class MenuHolderAdmin extends MenuHolder {
         while (true) {
             System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Actions Menu ===" + ConsoleColors.RESET);
             System.out.println("1\uFE0F⃣ View my actions");
-            System.out.println("2\uFE0F⃣ Filter actions");
+            System.out.println("2\uFE0F⃣ Filter my actions");
+            System.out.println("3\uFE0F⃣ Filter all actions");
             System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
             System.out.print("Enter your choice: ");
             String choice = scanner.nextLine().trim().toLowerCase();
@@ -247,27 +248,9 @@ public class MenuHolderAdmin extends MenuHolder {
                     String query = adminService.formingQuerySearchMyActionLogs();
                     adminService.searchMyActionLog(query, Session.getInstance().getUser());
                     break;
-                case "back":
-                    return;
-                default:
-                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
-            }
-        }
-    }
-
-    public void handleAdminLogging() {
-        while (true) {
-            System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Admin logging Menu ===" + ConsoleColors.RESET);
-            System.out.println("1\uFE0F⃣ Filter logging");
-            System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
-            System.out.print("Enter your choice: ");
-            String choice = scanner.nextLine().trim().toLowerCase();
-
-            switch (choice) {
-                case "1":
-                    String query = adminService.formingQuerySearchActionLogs();
-                    adminService.searchActionLog(query);
-                    break;
+                case "3":
+                    String queryAllUsers = adminService.formingQuerySearchActionLogs();
+                    adminService.searchActionLog(queryAllUsers);
                 case "back":
                     return;
                 default:
@@ -281,21 +264,14 @@ public class MenuHolderAdmin extends MenuHolder {
     public void addCarConsole() {
         System.out.println("\uD83C\uDD95 Create a new car");
 
-        System.out.println("color: ");
-        String color = scanner.nextLine().trim();
-        System.out.println("availability: ");
-        String availabilityInput = scanner.nextLine().trim();
+        String color = getField("Color: ");
+        String availabilityInput = getField("Availability (true/yes or false/no) ");
         boolean availability = availabilityInput.equals("yes") || availabilityInput.equals("true");
-        System.out.println("model: ");
-        String model = scanner.nextLine().trim();
-        System.out.println("brand: ");
-        String brand = scanner.nextLine().trim();
-        System.out.println("year: ");
-        int year = Integer.parseInt(scanner.nextLine().trim());
-        System.out.println("price: ");
-        double price = Double.parseDouble(scanner.nextLine().trim());
-        System.out.println("condition: ");
-        String condition = scanner.nextLine().trim();
+        String model = getField("Model: ");
+        String brand = getField("Brand: ");
+        int year = Integer.parseInt(getField("Year: "));
+        double price = Double.parseDouble(getField("price"));
+        String condition = getField("Condition (new/old): ");
 
         Car car = new Car(brand, model, year, price, condition, color, availability);
 
@@ -367,10 +343,11 @@ public class MenuHolderAdmin extends MenuHolder {
 
 
     public void deleteCarConsole() {
-        System.out.println("Input please, id of car you want to delete: ");
-        String inputDeleteId = scanner.nextLine().trim();
-        Car carForDeleting = adminService.findCarById(UUID.fromString(inputDeleteId));
-
+        Car carForDeleting = selectCar();
+        if (carForDeleting == null) {
+            ErrorResponses.printCustomMessage("I don't have that car");
+            return;
+        }
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want delete this car :");
         System.out.println(carForDeleting.toString() + ConsoleColors.RESET);
 
@@ -674,7 +651,7 @@ public class MenuHolderAdmin extends MenuHolder {
         );
         updatedEmployee.setId(existingEmployee.getId());
 
-        if (adminService.updateEmployee(userName, updatedEmployee)) {
+        if (adminService.updateEmployee(updatedEmployee)) {
             SuccessResponses.printCustomMessage("Employee updated successfully.");
         }
     }
