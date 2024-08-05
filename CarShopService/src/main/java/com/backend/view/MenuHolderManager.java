@@ -251,21 +251,14 @@ public class MenuHolderManager extends MenuHolder{
     public void addCarConsole() {
         System.out.println("\uD83C\uDD95 Create a new car");
 
-        System.out.println("color: ");
-        String color = scanner.nextLine().trim();
-        System.out.println("availability: ");
-        String availabilityInput = scanner.nextLine().trim();
+        String color = getField("Color: ");
+        String availabilityInput = getField("Availability (yes/no): ");
         boolean availability = availabilityInput.equals("yes") || availabilityInput.equals("true");
-        System.out.println("model: ");
-        String model = scanner.nextLine().trim();
-        System.out.println("brand: ");
-        String brand = scanner.nextLine().trim();
-        System.out.println("year: ");
-        int year = Integer.parseInt(scanner.nextLine().trim());
-        System.out.println("price: ");
-        double price = Double.parseDouble(scanner.nextLine().trim());
-        System.out.println("condition: ");
-        String condition = scanner.nextLine().trim();
+        String model = getField("Model: ");
+        String brand = getField("Brand: ");
+        int year = Integer.parseInt(getField("Year (yyyy): "));
+        double price = Double.parseDouble(getField("Price: "));
+        String condition = getField("Condition: ");
 
         Car car = new Car(brand, model, year, price, condition, color, availability);
 
@@ -276,9 +269,7 @@ public class MenuHolderManager extends MenuHolder{
     public void updateCarConsole() {
         System.out.println("\uD83C\uDD99 Update a car");
 
-        System.out.println("Input please, id of car you want to update: ");
-        String inputUpdateId = scanner.nextLine().trim();
-        Car carForUpdate = managerService.findCarById(UUID.fromString(inputUpdateId));
+        Car carForUpdate = selectCar();
 
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want update this car :");
         System.out.println(carForUpdate.toString() + ConsoleColors.RESET);

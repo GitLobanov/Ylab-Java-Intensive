@@ -18,9 +18,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Abstract service class providing common functionalities for user-related operations.
+ */
 public abstract class UserAbstractService {
 
     Scanner scanner = new Scanner(System.in);
+
+    /**
+     * Adds a new order to the repository.
+     *
+     * @param order the order to be added
+     * @return true if the order is successfully added, false otherwise
+     */
 
     public boolean addOrder(Order order) {
         log(ActionLog.ActionType.CREATE, "Created order");
@@ -28,23 +38,37 @@ public abstract class UserAbstractService {
         return OrderRepository.getInstance().save(order);
     }
 
+    /**
+     * Updates an existing order in the repository.
+     *
+     * @param order the order to be updated
+     * @return true if the order is successfully updated, false otherwise
+     */
+
     public boolean updateOrder(Order order) {
         log(ActionLog.ActionType.UPDATE, "Updated order");
         checkCarForAvailability(order);
         return OrderRepository.getInstance().update(order);
     }
 
-    private void checkCarForAvailability(Order order) {
-        if (order.getType() == Order.TypeOrder.BUYING && order.getStatus() == Order.OrderStatus.COMPLETED) {
-            Car car = order.getCar();
-            car.setAvailability(false);
-            CarRepository.getInstance().save(car);
-        }
-    }
+    /**
+     * Finds an order by its ID.
+     *
+     * @param id the ID of the order
+     * @return the order if found, null otherwise
+     */
 
     public Order findOrderById(UUID id) {
         return OrderRepository.getInstance().findById(id);
     }
+
+    /**
+     * Finds orders by client and order type.
+     *
+     * @param user      the user who placed the orders
+     * @param typeOrder the type of orders to find
+     * @return a map of orders matching the criteria
+     */
 
     public Map<UUID, Order> findOrderByClientAndTypeOrder(User user, Order.TypeOrder typeOrder) {
         log(ActionLog.ActionType.VIEW, "Search client order");
@@ -57,26 +81,46 @@ public abstract class UserAbstractService {
         return result;
     }
 
+    /**
+     * Cancels an order.
+     *
+     * @param order the order to be cancelled
+     * @return true if the order is successfully cancelled, false otherwise
+     */
+
     public boolean cancelOrder(Order order) {
         log(ActionLog.ActionType.CANCEL, "Canceled order");
         order.setStatus(Order.OrderStatus.CANCELLED);
         return OrderRepository.getInstance().update(order);
     }
 
-    public String getContactInfo(User user) {
-        StringBuilder info = new StringBuilder();
-        info.append(user.getName() + ":");
-        info.append(user.getPhone() + " / ");
-        info.append(user.getEmail());
-
-        return info.toString();
-    }
+    /**
+     * Displays all available cars.
+     */
 
     public static void viewAllCars() {
         log(ActionLog.ActionType.VIEW, "View all cars");
         Iterator<Map.Entry<UUID, Car>> iterator = CarRepository.getInstance().findAllAvailableCars().entrySet().iterator();
         displaySearchResultCar(iterator);
     }
+
+    /**
+     * Checks the availability of the car associated with the given order.
+     *
+     * @param order the order to be checked
+     */
+
+    private void checkCarForAvailability(Order order) {
+        if (order.getType() == Order.TypeOrder.BUYING && order.getStatus() == Order.OrderStatus.COMPLETED) {
+            Car car = order.getCar();
+            car.setAvailability(false);
+            CarRepository.getInstance().save(car);
+        }
+    }
+
+    /**
+     * Displays cars that are not ordered.
+     */
 
     public static void viewNotOrderedCars() {
         log(ActionLog.ActionType.VIEW, "View not ordered cars");
@@ -89,6 +133,12 @@ public abstract class UserAbstractService {
 
         displaySearchResultCar(iterator);
     }
+
+    /**
+     * Searches for cars based on the provided query.
+     *
+     * @param query the search query
+     */
 
     public void searchCars(String query) {
 
@@ -183,6 +233,14 @@ public abstract class UserAbstractService {
         Iterator<Map.Entry<UUID, Car>> iterator = cars.entrySet().iterator();
         displaySearchResultCar(iterator);
     }
+
+
+    /**
+     * Forms a query string for searching cars based on user input.
+     *
+     * @return the query string
+     */
+
     // forming query: brand:toyota;color:white;priceFrom<price<priceTo;model:xr200;yearFrom<2000<yearTo;availability:true
     public String formingQuerySearchCars (){
         Scanner scanner = new Scanner(System.in);
@@ -255,11 +313,22 @@ public abstract class UserAbstractService {
 
     }
 
+    /**
+     * Displays action log of user
+     *
+     * @param user the user for search logs
+     */
+
     public void viewMyActionLog(User user) {
         Map<UUID,ActionLog> actionLogMap = ActionLogRepository.getInstance().findByUser(user);
         displaySearchResultActionLog(actionLogMap.entrySet().iterator());
     }
 
+    /**
+     * Displays search results for users.
+     *
+     * @param iterator the iterator over the search results
+     */
 
     public static void displaySearchResultUser(Iterator<Map.Entry<UUID, User>> iterator) {
         if (!iterator.hasNext()) {
@@ -272,6 +341,12 @@ public abstract class UserAbstractService {
             }
         }
     }
+
+    /**
+     * Displays search results for action log.
+     *
+     * @param iterator the iterator over the search results
+     */
 
 
     public static void displaySearchResultActionLog(Iterator<Map.Entry<UUID, ActionLog>> iterator) {
@@ -286,6 +361,12 @@ public abstract class UserAbstractService {
         }
     }
 
+    /**
+     * Displays search results for cars.
+     *
+     * @param iterator the iterator over the search results
+     */
+
     public static void displaySearchResultCar(Iterator<Map.Entry<UUID, Car>> iterator) {
         if (!iterator.hasNext()) {
             ErrorResponses.printCustomMessage("Sorry. I can't find any car at all");
@@ -297,6 +378,12 @@ public abstract class UserAbstractService {
             }
         }
     }
+
+    /**
+     * Displays search results for orders.
+     *
+     * @param iterator the iterator over the search results
+     */
 
     public static void displaySearchResultOrder(Iterator<Map.Entry<UUID, Order>> iterator) {
         if (!iterator.hasNext()) {
@@ -310,13 +397,32 @@ public abstract class UserAbstractService {
         }
     }
 
+    /**
+     * Get clint's count of orders
+     *
+     * @param client the client for search by
+     */
+
     public int getClientOrderCount(User client) {
         return findOrderByClientAndTypeOrder(client, Order.TypeOrder.BUYING).size();
     }
 
+    /**
+     * Get clint's count of requests
+     *
+     * @param client the client for search by
+     */
+
     public int getClientServiceRequestCount(User client) {
         return findOrderByClientAndTypeOrder(client, Order.TypeOrder.SERVICE).size();
     }
+
+    /**
+     * Searching user's action log
+     *
+     * @param user the user for search by
+     * @param query the query for specific filter
+     */
 
     public void searchMyActionLog(String query, User user) {
         Map<UUID, ActionLog> logs = ActionLogRepository.getInstance().findByUser(user);
@@ -369,6 +475,10 @@ public abstract class UserAbstractService {
         askUnloadActionLogToTXT(logs);
     }
 
+    /**
+     * Forming query from user's input in console
+     */
+
     public String formingQuerySearchMyActionLogs() {
         Scanner scanner = new Scanner(System.in);
 
@@ -403,10 +513,22 @@ public abstract class UserAbstractService {
         return query;
     }
 
-    public static void log(ActionLog.ActionType type, String message){
-        ActionLogRepository.getInstance().save(new ActionLog(Session.getInstance().getUser(), type, message));
+    /**
+     * Logs an action performed by the user.
+     *
+     * @param actionType the type of action performed
+     * @param message a message of the action
+     */
+
+    public static void log(ActionLog.ActionType actionType, String message){
+        ActionLogRepository.getInstance().save(new ActionLog(Session.getInstance().getUser(), actionType, message));
     }
 
+    /**
+     * Unload data from action log to file txt
+     *
+     * @param actionLogs the data logs of user's action
+     */
 
     public void askUnloadActionLogToTXT (Map<UUID, ActionLog> actionLogs) {
         System.out.println("Do you want unload log to txt yes/y or not/n");

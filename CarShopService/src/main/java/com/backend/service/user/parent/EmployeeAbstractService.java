@@ -13,33 +13,76 @@ import com.backend.util.ErrorResponses;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
+/**
+ * Abstract service class for managing employees.
+ * Provides methods for managing cars and orders, as well as for viewing and searching clients.
+ */
 
 public abstract class EmployeeAbstractService extends UserAbstractService {
+
+    /**
+     * Adds a car to the repository.
+     *
+     * @param car the car to be added
+     * @return true if the car is successfully added, false otherwise
+     */
 
     public boolean addCar(Car car) {
         log(ActionLog.ActionType.CREATE, "Created car");
         return CarRepository.getInstance().save(car);
     }
+
+    /**
+     * Updates a car in the repository.
+     *
+     * @param car the car to be updated
+     * @return true if the car is successfully updated, false otherwise
+     */
+
     public boolean updateCar(Car car) {
         log(ActionLog.ActionType.CREATE, "Updated car");
         return CarRepository.getInstance().update(car);
     }
+
+    /**
+     * Deletes a car from the repository.
+     *
+     * @param car the car to be deleted
+     * @return true if the car is successfully deleted, false otherwise
+     */
+
     public boolean deleteCar(Car car) {
         log(ActionLog.ActionType.DELETE, "Deleted car");
         return CarRepository.getInstance().delete(car);
     }
+
+    /**
+     * Finds a car by its ID.
+     *
+     * @param id the ID of the car to find
+     * @return the car with the specified ID, or null if no car is found
+     */
 
     public Car findCarById(UUID id) {
         Car car = CarRepository.getInstance().findById(id);
         return car;
     }
 
+    /**
+     * Views all buying orders.
+     */
+
+
     public void viewAllBuyingOrders (){
         log(ActionLog.ActionType.VIEW, "View buying orders");
         Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.BUYING).entrySet().iterator();
         displaySearchResultOrder(iterator);
     }
+
+    /**
+     * Views all service orders.
+     */
 
     public void viewAllServiceOrders() {
         log(ActionLog.ActionType.VIEW, "View service orders");
@@ -51,6 +94,13 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
         displaySearchResultOrder(iterator);
     }
+
+
+    /**
+     * Searches orders based on a query.
+     *
+     * @param query the search query
+     */
 
     public void searchOrders(String query) {
         log(ActionLog.ActionType.VIEW, "Search orders");
@@ -118,6 +168,13 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
     }
 
+    /**
+     * Forms a query string for searching orders based on specified criteria.
+     *
+     * @param typeOrder the type of order (BUYING or SERVICE)
+     * @return the formatted query string
+     */
+
     public String formingQuerySearchOrders (Order.TypeOrder typeOrder){
         StringBuilder queryBuilder = new StringBuilder();
 
@@ -160,6 +217,10 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         return queryBuilder.toString();
     }
 
+    /**
+     * Views all clients.
+     */
+
     public void viewAllClients () {
         log(ActionLog.ActionType.VIEW, "View all clients");
 
@@ -169,9 +230,24 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         }
     }
 
+    /**
+     * Adds a client to the repository.
+     *
+     * @param client the client to be added
+     * @return true if the client is successfully added, false otherwise
+     */
+
     public boolean addClient(User client) {
         return UserRepository.getInstance().save(client);
     }
+
+    /**
+     * Updates a client's information.
+     *
+     * @param userName the username of the client to be updated
+     * @param updatedClient the updated client information
+     * @return true if the client is successfully updated, false otherwise
+     */
 
     public boolean updateClient(String userName, User updatedClient) {
         log(ActionLog.ActionType.UPDATE, "Update order");
@@ -184,6 +260,13 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
             return true;
         }
     }
+
+    /**
+     * Removes a client from the repository.
+     *
+     * @param userName the username of the client to be removed
+     * @return true if the client is successfully removed, false otherwise
+     */
 
     public boolean removeClient(String userName) {
         log(ActionLog.ActionType.DELETE, "Delete client");
@@ -202,6 +285,12 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
             return false;
         }
     }
+
+    /**
+     * Forms a query string for searching clients based on specified criteria.
+     *
+     * @return the formatted query string
+     */
 
     public String formingQuerySearchClients (){
         System.out.println("\nEnter search criteria for clients. Press Enter to skip a filter.");
@@ -235,6 +324,12 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
         return queryBuilder.toString();
     }
+
+    /**
+     * Searches clients based on a query.
+     *
+     * @param query the search query
+     */
 
     public void searchClients(String query) {
         log(ActionLog.ActionType.VIEW, "Search clients");
