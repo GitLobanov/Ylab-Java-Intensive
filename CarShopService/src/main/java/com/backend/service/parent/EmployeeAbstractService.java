@@ -1,4 +1,4 @@
-package com.backend.service.user.parent;
+package com.backend.service.parent;
 
 import com.backend.model.ActionLog;
 import com.backend.model.Car;

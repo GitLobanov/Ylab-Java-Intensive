@@ -7,17 +7,14 @@ import com.backend.model.User;
 import com.backend.repository.ActionLogRepository;
 import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
-import com.backend.repository.UserRepository;
-import com.backend.service.user.ClientService;
+import com.backend.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

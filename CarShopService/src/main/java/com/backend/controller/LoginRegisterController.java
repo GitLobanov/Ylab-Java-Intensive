@@ -2,8 +2,8 @@ package com.backend.controller;
 
 import com.backend.model.ActionLog;
 import com.backend.model.User;
-import com.backend.service.user.LoginRegisterService;
-import com.backend.service.user.parent.UserAbstractService;
+import com.backend.service.LoginRegisterService;
+import com.backend.service.parent.UserAbstractService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;

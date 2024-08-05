@@ -2,14 +2,11 @@ package com.backend.services;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
-import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
-import com.backend.repository.UserRepository;
-import com.backend.service.user.ManagerService;
+import com.backend.service.ManagerService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

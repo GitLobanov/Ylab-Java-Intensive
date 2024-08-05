@@ -1,10 +1,10 @@
-package com.backend.service.user;
+package com.backend.service;
 
 import com.backend.model.ActionLog;
 import com.backend.model.User;
 import com.backend.repository.ActionLogRepository;
 import com.backend.repository.UserRepository;
-import com.backend.service.user.parent.EmployeeAbstractService;
+import com.backend.service.parent.EmployeeAbstractService;
 import com.backend.util.ConsoleColors;
 
 import java.time.LocalDateTime;
