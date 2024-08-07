@@ -468,11 +468,6 @@ public abstract class UserAbstractService {
                     break;
             }
         }
-
-        Iterator<Map.Entry<UUID, ActionLog>> iterator = logs.entrySet().iterator();
-        displaySearchResultActionLog(iterator);
-
-        askUnloadActionLogToTXT(logs);
     }
 
     /**

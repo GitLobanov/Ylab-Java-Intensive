@@ -16,11 +16,12 @@ public class ActionLogExporter {
 
         for (Map.Entry<UUID, ActionLog> entry : actionLogs.entrySet()) {
             ActionLog log = entry.getValue();
-            content.append("ID: ").append(log.getId()).append("\n")
-                    .append("User: ").append(log.getUser().getUserName()).append("\n")
-                    .append("Action Type: ").append(log.getActionType()).append("\n")
-                    .append("Action DateTime: ").append(log.getActionDateTime()).append("\n")
-                    .append("Message: ").append(log.getMessage()).append("\n\n");
+            content.append(log+"/n");
+//            content.append("ID: ").append(log.getId()).append("\n")
+//                    .append("User: ").append(log.getUser().getUserName()).append("\n")
+//                    .append("Action Type: ").append(log.getActionType()).append("\n")
+//                    .append("Action DateTime: ").append(log.getActionDateTime()).append("\n")
+//                    .append("Message: ").append(log.getMessage()).append("\n\n");
         }
 
         createAndWriteFile (nameFile, content);

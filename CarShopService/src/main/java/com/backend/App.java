@@ -4,13 +4,13 @@ import com.backend.controller.AdminController;
 import com.backend.controller.ClientController;
 import com.backend.controller.LoginRegisterController;
 import com.backend.controller.ManagerController;
-import com.backend.util.DemoData;
+import com.backend.util.PreInitialisation;
 import com.backend.util.Session;
 
 public class App
 {
 
-    private static final DemoData demoData = new DemoData();
+    private static final PreInitialisation PRE_INITIALISATION = new PreInitialisation();
 
 
     public static void main( String[] args )
@@ -20,7 +20,7 @@ public class App
         ClientController clientController = new ClientController();
         ManagerController managerController = new ManagerController();
 
-        demoData.loadData();
+        PRE_INITIALISATION.loadData();
         Session.getInstance().activate();
 
         Session session = Session.getInstance();

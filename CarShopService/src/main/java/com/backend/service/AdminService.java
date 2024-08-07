@@ -156,7 +156,7 @@ public class AdminService extends EmployeeAbstractService {
         Iterator<Map.Entry<UUID, ActionLog>> iterator = logs.entrySet().iterator();
         displaySearchResultActionLog(iterator);
 
-
+        askUnloadActionLogToTXT(logs);
     }
 
     /**

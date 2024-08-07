@@ -7,7 +7,7 @@ import com.backend.repository.CarRepository;
 import com.backend.repository.OrderRepository;
 import com.backend.repository.UserRepository;
 
-public class DemoData {
+public class PreInitialisation {
 
     public void loadData () {
 
