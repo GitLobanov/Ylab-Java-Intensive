@@ -23,26 +23,23 @@ public class App
         demoData.loadData();
         Session.getInstance().activate();
 
-        while (Session.getInstance().isActive()){
+        Session session = Session.getInstance();
+        session.activate();
 
-            if (Session.getInstance().getStage() == Session.Stage.HAVE_TO_LOGIN) {
-                loginRegisterController.start();
+        while (session.isActive()) {
 
-            } else if(Session.getInstance().getStage() == Session.Stage.ADMIN) {
-                adminController.start();
-
-            } else if(Session.getInstance().getStage() == Session.Stage.MANAGER) {
-                managerController.start();
-
-            } else if(Session.getInstance().getStage() == Session.Stage.CLIENT) {
-                clientController.start();
-
-            } else if (Session.getInstance().getStage() == Session.Stage.EXIT) {
-                System.out.println("Exit from system... not, again?");
-                return;
+            switch (Session.getInstance().getStage()) {
+                case HAVE_TO_LOGIN -> loginRegisterController.start();
+                case ADMIN -> adminController.start();
+                case CLIENT -> clientController.start();
+                case MANAGER -> managerController.start();
+                case EXIT -> {
+                    System.out.println("Exit from system... not, again?");
+                    return;
+                }
             }
-        }
 
+        }
     }
 
 
