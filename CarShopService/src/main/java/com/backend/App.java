@@ -10,7 +10,7 @@ import com.backend.util.Session;
 public class App
 {
 
-    private static DemoData demoData = new DemoData();
+    private static final DemoData demoData = new DemoData();
 
 
     public static void main( String[] args )
