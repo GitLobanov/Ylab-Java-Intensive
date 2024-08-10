@@ -1,0 +1,1 @@
+ActionLog{user=john_adman, actionType= [LOGIN], actionDateTime=2024-08-07T11:00:14.586245800, message=''}ActionLog{user=john_adman, actionType= [VIEW], actionDateTime=2024-08-07T11:00:24.685291700, message='View all clients'}ActionLog{user=john_adman, actionType= [VIEW], actionDateTime=2024-08-07T11:00:17.588065500, message='View all cars'}

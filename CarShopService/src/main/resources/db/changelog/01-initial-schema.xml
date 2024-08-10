@@ -1,0 +1,111 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="postgres">
+        <createTable tableName="car">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="brand" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="color" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="availability" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="order">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="car" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="orderDateTime" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manager" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="user">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="userName" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="postgres">
+        <!-- Append foreign key for field 'car' (Car) -->
+        <addForeignKeyConstraint baseTableName="order"
+                                 baseColumnNames="car"
+                                 constraintName="fk_order_car"
+                                 referencedTableName="car"
+                                 referencedColumnNames="id"/>
+
+        <!-- Append foreign key for field 'client' (User) -->
+        <addForeignKeyConstraint baseTableName="order"
+                                 baseColumnNames="client"
+                                 constraintName="fk_order_client"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+
+        <!-- Append foreign key for field 'manager' (User) -->
+        <addForeignKeyConstraint baseTableName="order"
+                                 baseColumnNames="manager"
+                                 constraintName="fk_order_manager"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+
+</databaseChangeLog>

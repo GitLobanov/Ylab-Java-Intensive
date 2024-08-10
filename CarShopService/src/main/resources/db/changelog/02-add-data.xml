@@ -1,0 +1,453 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="3" author="postgres">
+<!--user-->
+        <insert tableName="user">
+            <column name="id" value="1"/>
+            <column name="userName" value="johndoe"/>
+            <column name="password" value="123"/>
+            <column name="role" value="MANAGER"/>
+            <column name="name" value="John Doe"/>
+            <column name="email" value="johndoe@example.com"/>
+            <column name="phone" value="+1234567890"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="2"/>
+            <column name="userName" value="janedoe"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="Jane Doe"/>
+            <column name="email" value="janedoe@example.com"/>
+            <column name="phone" value="+1234567891"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="3"/>
+            <column name="userName" value="adminuser"/>
+            <column name="password" value="adminpass"/>
+            <column name="role" value="ADMIN"/>
+            <column name="name" value="Admin User"/>
+            <column name="email" value="admin@example.com"/>
+            <column name="phone" value="+1234567892"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="4"/>
+            <column name="userName" value="michaelj"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="Michael Johnson"/>
+            <column name="email" value="michaelj@example.com"/>
+            <column name="phone" value="+1234567893"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="5"/>
+            <column name="userName" value="emilyr"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="Emily Rose"/>
+            <column name="email" value="emilyr@example.com"/>
+            <column name="phone" value="+1234567894"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="6"/>
+            <column name="userName" value="williamk"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="William King"/>
+            <column name="email" value="williamk@example.com"/>
+            <column name="phone" value="+1234567895"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="7"/>
+            <column name="userName" value="oliviat"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="Olivia Taylor"/>
+            <column name="email" value="oliviat@example.com"/>
+            <column name="phone" value="+1234567896"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="8"/>
+            <column name="userName" value="jamesb"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="James Brown"/>
+            <column name="email" value="jamesb@example.com"/>
+            <column name="phone" value="+1234567897"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="9"/>
+            <column name="userName" value="sophial"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="Sophia Lee"/>
+            <column name="email" value="sophial@example.com"/>
+            <column name="phone" value="+1234567898"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="10"/>
+            <column name="userName" value="danielp"/>
+            <column name="password" value="password123"/>
+            <column name="role" value="USER"/>
+            <column name="name" value="Daniel Parker"/>
+            <column name="email" value="danielp@example.com"/>
+            <column name="phone" value="+1234567899"/>
+        </insert>
+
+    </changeSet>
+<!--car-->
+    <changeSet id="4" author="postgres">
+
+        <insert tableName="car">
+            <column name="id" value="1"/>
+            <column name="brand" value="Toyota"/>
+            <column name="model" value="Camry"/>
+            <column name="year" value="2018"/>
+            <column name="price" value="20000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="White"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="2"/>
+            <column name="brand" value="Honda"/>
+            <column name="model" value="Accord"/>
+            <column name="year" value="2019"/>
+            <column name="price" value="22000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Black"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="3"/>
+            <column name="brand" value="Ford"/>
+            <column name="model" value="Mustang"/>
+            <column name="year" value="2020"/>
+            <column name="price" value="30000"/>
+            <column name="condition" value="New"/>
+            <column name="color" value="Red"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="4"/>
+            <column name="brand" value="Chevrolet"/>
+            <column name="model" value="Malibu"/>
+            <column name="year" value="2017"/>
+            <column name="price" value="18000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Blue"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="5"/>
+            <column name="brand" value="BMW"/>
+            <column name="model" value="3 Series"/>
+            <column name="year" value="2016"/>
+            <column name="price" value="25000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Black"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="6"/>
+            <column name="brand" value="Mercedes-Benz"/>
+            <column name="model" value="C-Class"/>
+            <column name="year" value="2015"/>
+            <column name="price" value="27000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Silver"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="7"/>
+            <column name="brand" value="Audi"/>
+            <column name="model" value="A4"/>
+            <column name="year" value="2018"/>
+            <column name="price" value="28000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="White"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="8"/>
+            <column name="brand" value="Volkswagen"/>
+            <column name="model" value="Passat"/>
+            <column name="year" value="2019"/>
+            <column name="price" value="20000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Gray"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="9"/>
+            <column name="brand" value="Tesla"/>
+            <column name="model" value="Model 3"/>
+            <column name="year" value="2020"/>
+            <column name="price" value="35000"/>
+            <column name="condition" value="New"/>
+            <column name="color" value="Red"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="10"/>
+            <column name="brand" value="Nissan"/>
+            <column name="model" value="Altima"/>
+            <column name="year" value="2017"/>
+            <column name="price" value="19000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Blue"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="11"/>
+            <column name="brand" value="Mazda"/>
+            <column name="model" value="Mazda6"/>
+            <column name="year" value="2016"/>
+            <column name="price" value="17000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="White"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="12"/>
+            <column name="brand" value="Hyundai"/>
+            <column name="model" value="Sonata"/>
+            <column name="year" value="2015"/>
+            <column name="price" value="16000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Silver"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="13"/>
+            <column name="brand" value="Kia"/>
+            <column name="model" value="Optima"/>
+            <column name="year" value="2014"/>
+            <column name="price" value="15000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Black"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="14"/>
+            <column name="brand" value="Subaru"/>
+            <column name="model" value="Legacy"/>
+            <column name="year" value="2017"/>
+            <column name="price" value="20000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Blue"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="15"/>
+            <column name="brand" value="Lexus"/>
+            <column name="model" value="ES 350"/>
+            <column name="year" value="2018"/>
+            <column name="price" value="30000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="White"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="16"/>
+            <column name="brand" value="Volvo"/>
+            <column name="model" value="S60"/>
+            <column name="year" value="2019"/>
+            <column name="price" value="25000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Black"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="17"/>
+            <column name="brand" value="Acura"/>
+            <column name="model" value="TLX"/>
+            <column name="year" value="2020"/>
+            <column name="price" value="31000"/>
+            <column name="condition" value="New"/>
+            <column name="color" value="Red"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="18"/>
+            <column name="brand" value="Infiniti"/>
+            <column name="model" value="Q50"/>
+            <column name="year" value="2017"/>
+            <column name="price" value="27000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="White"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="19"/>
+            <column name="brand" value="Jaguar"/>
+            <column name="model" value="XE"/>
+            <column name="year" value="2018"/>
+            <column name="price" value="29000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Gray"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="20"/>
+            <column name="brand" value="Porsche"/>
+            <column name="model" value="Panamera"/>
+            <column name="year" value="2019"/>
+            <column name="price" value="80000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Black"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="21"/>
+            <column name="brand" value="Maserati"/>
+            <column name="model" value="Ghibli"/>
+            <column name="year" value="2020"/>
+            <column name="price" value="75000"/>
+            <column name="condition" value="New"/>
+            <column name="color" value="Red"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="22"/>
+            <column name="brand" value="Alfa Romeo"/>
+            <column name="model" value="Giulia"/>
+            <column name="year" value="2018"/>
+            <column name="price" value="32000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Blue"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="23"/>
+            <column name="brand" value="Genesis"/>
+            <column name="model" value="G70"/>
+            <column name="year" value="2019"/>
+            <column name="price" value="34000"/>
+            <column name="condition" value="Used"/>
+            <column name="color" value="Silver"/>
+            <column name="availability" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="id" value="24"/>
+            <column name="brand" value="Cadillac"/>
+            <column name="model" value="CT5"/>
+            <column name="year" value="2020"/>
+            <column name="price" value="45000"/>
+            <column name="condition" value="New"/>
+            <column name="color" value="Black"/>
+            <column name="availability" value="true"/>
+        </insert>
+
+    </changeSet>
+
+<!--order-->
+    <changeSet id="5" author="postgres">
+        <insert tableName="order">
+            <column name="id" value="1"/>
+            <column name="car" value="1"/>
+            <column name="client" value="2"/>
+            <column name="orderDateTime" value="2023-08-01"/>
+            <column name="status" value="Pending"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="First order"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="2"/>
+            <column name="car" value="2"/>
+            <column name="client" value="2"/>
+            <column name="orderDateTime" value="2023-08-02"/>
+            <column name="status" value="Completed"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Urgent"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="3"/>
+            <column name="car" value="3"/>
+            <column name="client" value="4"/>
+            <column name="orderDateTime" value="2023-08-03"/>
+            <column name="status" value="Cancelled"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Cancelled by client"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="4"/>
+            <column name="car" value="4"/>
+            <column name="client" value="4"/>
+            <column name="orderDateTime" value="2023-08-04"/>
+            <column name="status" value="Pending"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Special request"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="5"/>
+            <column name="car" value="5"/>
+            <column name="client" value="5"/>
+            <column name="orderDateTime" value="2023-08-05"/>
+            <column name="status" value="Completed"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Discount applied"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="6"/>
+            <column name="car" value="6"/>
+            <column name="client" value="6"/>
+            <column name="orderDateTime" value="2023-08-06"/>
+            <column name="status" value="Pending"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Gift included"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="7"/>
+            <column name="car" value="7"/>
+            <column name="client" value="7"/>
+            <column name="orderDateTime" value="2023-08-07"/>
+            <column name="status" value="Completed"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Special discount"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="8"/>
+            <column name="car" value="8"/>
+            <column name="client" value="8"/>
+            <column name="orderDateTime" value="2023-08-08"/>
+            <column name="status" value="Cancelled"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Changed mind"/>
+            <column name="manager" value="1"/>
+        </insert>
+        <insert tableName="order">
+            <column name="id" value="9"/>
+            <column name="car" value="9"/>
+            <column name="client" value="9"/>
+            <column name="orderDateTime" value="2023-08-09"/>
+            <column name="status" value="Pending"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="Payment pending"/>
+            <column name="manager" value="1"/>
+        </insert>
+
+        <insert tableName="order">
+            <column name="id" value="10"/>
+            <column name="car" value="10"/>
+            <column name="client" value="10"/>
+            <column name="orderDateTime" value="2023-08-10"/>
+            <column name="status" value="Completed"/>
+            <column name="type" value="BUYING"/>
+            <column name="note" value="VIP client"/>
+            <column name="manager" value="1"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>
