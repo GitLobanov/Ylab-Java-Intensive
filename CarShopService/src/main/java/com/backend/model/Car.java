@@ -7,7 +7,7 @@ import java.util.UUID;
 @Data
 public class Car {
 
-    private UUID id;
+    private int id;
     private String brand;
     private String model;
     private int year;
@@ -19,8 +19,8 @@ public class Car {
     public Car (){
     }
 
-    public Car (String brand, String model,int year, double price, String condition, String color, boolean availability){
-        setId(UUID.randomUUID());
+    public Car (int id, String brand, String model,int year, double price, String condition, String color, boolean availability){
+        setId(id);
         setBrand(brand);
         setModel(model);
         setYear(year);

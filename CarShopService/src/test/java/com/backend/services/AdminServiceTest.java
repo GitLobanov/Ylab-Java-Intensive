@@ -1,8 +1,7 @@
 package com.backend.services;
 
-import com.backend.repository.ActionLogRepository;
-import com.backend.repository.UserRepository;
-import com.backend.service.AdminService;
+import com.backend.repository.impl.ActionLogRepository;
+import com.backend.repository.impl.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

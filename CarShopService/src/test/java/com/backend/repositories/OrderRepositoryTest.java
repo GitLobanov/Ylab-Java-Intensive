@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.backend.model.Order;
 import com.backend.model.User;
-import com.backend.repository.OrderRepository;
+import com.backend.repository.impl.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

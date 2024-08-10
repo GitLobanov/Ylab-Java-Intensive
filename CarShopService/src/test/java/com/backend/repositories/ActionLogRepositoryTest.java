@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.backend.model.ActionLog;
 import com.backend.model.User;
-import com.backend.repository.ActionLogRepository;
+import com.backend.repository.impl.ActionLogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

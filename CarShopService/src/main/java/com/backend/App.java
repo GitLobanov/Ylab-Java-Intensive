@@ -1,5 +1,8 @@
 package com.backend;
 
+import com.backend.model.User;
+import com.backend.repository.impl.UserRepository;
+import com.backend.util.MigrateLiquibase;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -23,6 +26,16 @@ public class App
 
     public static void main( String[] args )
     {
+
+//        MigrateLiquibase migrateLiquibase = new MigrateLiquibase();
+//        migrateLiquibase.migrate();
+
+        UserRepository userRepository = new UserRepository();
+
+        User user = userRepository.findById(1);
+        System.out.println(user);
+
+        userRepository.findAll().forEach(System.out::println);
 
 //        LoginRegisterController loginRegisterController = new LoginRegisterController();
 //        AdminController adminController = new AdminController();

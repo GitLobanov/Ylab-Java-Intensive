@@ -3,7 +3,7 @@ package com.backend.repositories;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.backend.model.User;
-import com.backend.repository.UserRepository;
+import com.backend.repository.impl.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

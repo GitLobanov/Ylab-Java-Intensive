@@ -10,21 +10,16 @@ import java.util.UUID;
 @NoArgsConstructor
 public class User {
 
-    private UUID id;
+    private int id;
     private String userName;
     private String password;
-    private Role role;
+    private String role;
     private String name;
-    // contact info
     private String email;
     private String phone;
 
-    public enum Role {
-        ADMIN, CLIENT, MANAGER
-    }
-
-    public User (String userName, String password, Role role, String name, String email, String phone){
-        setId(UUID.randomUUID());
+    public User (int id, String userName, String password, String role, String name, String email, String phone){
+        setId(id);
         setUserName(userName);
         setPassword(password);
         setRole(role);

@@ -4,10 +4,9 @@ import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
-import com.backend.repository.ActionLogRepository;
-import com.backend.repository.CarRepository;
-import com.backend.repository.OrderRepository;
-import com.backend.service.ClientService;
+import com.backend.repository.impl.ActionLogRepository;
+import com.backend.repository.impl.CarRepository;
+import com.backend.repository.impl.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

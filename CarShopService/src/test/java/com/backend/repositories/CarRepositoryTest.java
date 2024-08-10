@@ -3,7 +3,7 @@ package com.backend.repositories;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.backend.model.Car;
-import com.backend.repository.CarRepository;
+import com.backend.repository.impl.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

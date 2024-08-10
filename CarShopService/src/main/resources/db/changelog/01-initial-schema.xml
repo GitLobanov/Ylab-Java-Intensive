@@ -5,8 +5,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="1" author="postgres">
-        <createTable tableName="car">
-            <column name="id" type="int" autoIncrement="true">
+        <sql>CREATE SCHEMA main;</sql>
+    </changeSet>
+
+    <changeSet id="2" author="postgres">
+
+        <createTable tableName="car"  schemaName="main">
+            <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="brand" type="varchar(255)">
@@ -32,8 +37,8 @@
             </column>
         </createTable>
 
-        <createTable tableName="order">
-            <column name="id" type="int" autoIncrement="true">
+        <createTable tableName="order"  schemaName="main">
+            <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="car" type="int">
@@ -59,8 +64,8 @@
             </column>
         </createTable>
 
-        <createTable tableName="user">
-            <column name="id" type="int" autoIncrement="true">
+        <createTable tableName="user"  schemaName="main">
+            <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="userName" type="varchar(250)">
@@ -82,30 +87,84 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+
+        <createTable tableName="action"  schemaName="main">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 
-    <changeSet id="2" author="postgres">
+    <changeSet id="3" author="postgres">
         <!-- Append foreign key for field 'car' (Car) -->
         <addForeignKeyConstraint baseTableName="order"
                                  baseColumnNames="car"
                                  constraintName="fk_order_car"
                                  referencedTableName="car"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
 
         <!-- Append foreign key for field 'client' (User) -->
         <addForeignKeyConstraint baseTableName="order"
                                  baseColumnNames="client"
                                  constraintName="fk_order_client"
                                  referencedTableName="user"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
 
         <!-- Append foreign key for field 'manager' (User) -->
         <addForeignKeyConstraint baseTableName="order"
                                  baseColumnNames="manager"
                                  constraintName="fk_order_manager"
                                  referencedTableName="user"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
+
+        <!-- Append foreign key for field 'action.user' (User) -->
+        <addForeignKeyConstraint baseTableName="action"
+                                 baseColumnNames="user"
+                                 constraintName="fk_action_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
     </changeSet>
+
+    <changeSet id="4" author="postgres">
+        <createSequence sequenceName="order_id_seq"
+                        startValue="1"
+                        schemaName="main"
+                        incrementBy="1"/>
+        <createSequence sequenceName="user_id_seq"
+                        startValue="1"
+                        schemaName="main"
+                        incrementBy="1"/>
+        <createSequence sequenceName="car_id_seq"
+                        startValue="1"
+                        schemaName="main"
+                        incrementBy="1"/>
+        <createSequence sequenceName="action_id_seq"
+                        startValue="1"
+                        incrementBy="1"/>
+    </changeSet>
+
+
 
 
 </databaseChangeLog>
