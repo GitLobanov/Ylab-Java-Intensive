@@ -1,4 +1,4 @@
 ### Данные для входа
 
-![image](https://github.com/user-attachments/assets/22f9f529-61e7-4cff-a9bf-36a712f5fe06)
+![image](https://github.com/user-attachments/assets/65852bf6-ceb4-498b-b25b-2c10b2f8f1e7)
 
