@@ -20,31 +20,30 @@ public class MigrateLiquibase {
 
     private static final String PATH_TO_LIQUIBASE_PROPERTIES = "properties/liquibase.properties";
 
-    public void  migrate (){
-
+    public void migrate () {
         Properties properties = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(PATH_TO_LIQUIBASE_PROPERTIES)) {
-            // Load the properties file
+
             properties.load(input);
 
-            // Get properties
+
             String url = properties.getProperty("url");
             String username = properties.getProperty("username");
             String password = properties.getProperty("password");
             String driver = properties.getProperty("driver");
             String changeLogFile = properties.getProperty("changeLogFile");
 
-            // Load the JDBC driver
+
             Class.forName(driver);
 
-            // Establish JDBC connection
+
             try (Connection connection = DriverManager.getConnection(url, username, password)) {
-                // Set up Liquibase
+
                 Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
                 ResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor();
                 Liquibase liquibase = new Liquibase(changeLogFile, resourceAccessor, database);
 
-                // Run Liquibase update
+
                 liquibase.update("");
 
                 System.out.println("Liquibase update executed successfully.");
