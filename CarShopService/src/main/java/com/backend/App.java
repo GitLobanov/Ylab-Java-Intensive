@@ -4,8 +4,6 @@ import com.backend.controller.AdminController;
 import com.backend.controller.ClientController;
 import com.backend.controller.LoginRegisterController;
 import com.backend.controller.ManagerController;
-import com.backend.model.User;
-import com.backend.repository.impl.UserRepository;
 import com.backend.util.MigrateLiquibase;
 import com.backend.util.Session;
 

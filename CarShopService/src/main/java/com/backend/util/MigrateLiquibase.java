@@ -18,12 +18,12 @@ import java.util.Properties;
 
 public class MigrateLiquibase {
 
-    private static final String PATH_TO_LIQUIBASE_PROPERTIES = "src/main/resources/properties/liquibase.properties";
+    private static final String PATH_TO_LIQUIBASE_PROPERTIES = "properties/liquibase.properties";
 
     public void  migrate (){
 
         Properties properties = new Properties();
-        try (InputStream input = new FileInputStream(PATH_TO_LIQUIBASE_PROPERTIES)) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(PATH_TO_LIQUIBASE_PROPERTIES)) {
             // Load the properties file
             properties.load(input);
 

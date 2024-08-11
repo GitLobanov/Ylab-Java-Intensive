@@ -21,11 +21,11 @@ import java.util.Properties;
 
 public class DatabaseManager {
 
-    private static final String PATH_TO_DB_PROPERTIES = "src/main/resources/properties/db.properties";
+    private static final String PATH_TO_DB_PROPERTIES = "properties/db.properties";
     private static HikariDataSource dataSource;
 
     public DatabaseManager() {
-        try (InputStream input = new FileInputStream(PATH_TO_DB_PROPERTIES)) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(PATH_TO_DB_PROPERTIES)) {
             Properties properties = new Properties();
             properties.load(input);
             HikariConfig config = new HikariConfig();

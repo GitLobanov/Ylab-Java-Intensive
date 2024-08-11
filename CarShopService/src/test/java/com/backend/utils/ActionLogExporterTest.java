@@ -12,16 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ActionLogExporterTest  {
 
     private Path tempDir;
-    private Map<UUID, ActionLog> actionLogs;
+    private List<ActionLog> actionLogs;
 
     @BeforeEach
     public void setUp() throws IOException {
@@ -29,12 +27,12 @@ public class ActionLogExporterTest  {
         tempDir = Files.createTempDirectory("testDir");
 
         // Инициализация тестовых данных
-        actionLogs = new HashMap<>();
-        User testUser = new User("testUser", "password", User.Role.CLIENT, "Test User", "test@example.com", "1234567890");
+        actionLogs = new ArrayList<>();
+        User testUser = new User(0, "testUser", "password", User.Role.CLIENT, "Test User", "test@example.com", "1234567890");
 
-        actionLogs.put(UUID.randomUUID(), new ActionLog(testUser, ActionLog.ActionType.CREATE, "Created a new entry"));
-        actionLogs.put(UUID.randomUUID(), new ActionLog(testUser, ActionLog.ActionType.UPDATE, "Updated an entry"));
-        actionLogs.put(UUID.randomUUID(), new ActionLog(testUser, ActionLog.ActionType.DELETE, "Deleted an entry"));
+        actionLogs.add(new ActionLog(testUser, ActionLog.ActionType.CREATE, "Created a new entry"));
+        actionLogs.add(new ActionLog(testUser, ActionLog.ActionType.UPDATE, "Updated an entry"));
+        actionLogs.add(new ActionLog(testUser, ActionLog.ActionType.DELETE, "Deleted an entry"));
     }
 
     @AfterEach

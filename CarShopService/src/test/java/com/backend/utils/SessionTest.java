@@ -41,7 +41,7 @@ public class SessionTest {
     @Test
     @DisplayName("Checking instance's set and get user")
     public void testSetAndGetUser() {
-        User user = new User("testUser", "password", User.Role.CLIENT, "Test User", "test@example.com", "1234567890");
+        User user = new User(0, "testUser", "password", User.Role.CLIENT, "Test User", "test@example.com", "1234567890");
         session.setUser(user);
         assertEquals(user, session.getUser(), "User should be set and retrieved correctly");
     }

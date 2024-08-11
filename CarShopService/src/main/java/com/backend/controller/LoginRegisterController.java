@@ -21,7 +21,12 @@ public class LoginRegisterController {
         while (true) {
             System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
             System.out.print("\uD83E\uDD14 What you want my friend? (register/login/end): ");
-            String command = scanner.nextLine();
+            String command;
+            if (scanner.hasNextLine()) {
+                command = scanner.nextLine();
+            } else {
+                continue;
+            }
             switch (command.toLowerCase()) {
                 case "register":
                     if (handleRegister(scanner)) return;
@@ -29,7 +34,7 @@ public class LoginRegisterController {
                 case "login":
                     if (handleLogin(scanner)) return;
                     break;
-                case "end":
+                case "exit":
                     Session.getInstance().setStage(Session.Stage.EXIT);
                     return;
                 default:

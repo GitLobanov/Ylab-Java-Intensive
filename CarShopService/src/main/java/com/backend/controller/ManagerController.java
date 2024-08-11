@@ -51,7 +51,7 @@ public class ManagerController {
                     System.out.println("Exiting from account...");
                     Session.getInstance().setStage(Session.Stage.HAVE_TO_LOGIN);
                     return;
-                case "end":
+                case "exit":
                     Session.getInstance().setStage(Session.Stage.EXIT);
                     return;
                 default:

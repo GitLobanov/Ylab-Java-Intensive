@@ -29,7 +29,7 @@ public class MenuHolderManager extends MenuHolder{
         System.out.println("\uD83D\uDC68\uD83C\uDFFB\u200D⚖\uFE0F Type 'cl/clients' to manage clients.");
         System.out.println("\uD83D\uDDC3\uFE0F Type 'a/actions' to manage actions.");
         System.out.println("\uD83D\uDD10 Type 'l/logout' to logout from account.");
-        System.out.println("\uD83D\uDD1A Type 'end' to quit the application.");
+        System.out.println("\uD83D\uDD1A Type 'exit' to quit the application.");
         System.out.print("Enter your choice: ");
     }
 
