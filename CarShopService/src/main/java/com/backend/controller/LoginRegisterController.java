@@ -20,7 +20,7 @@ public class LoginRegisterController {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
-            System.out.print("\uD83E\uDD14 What you want my friend? (register/login/end): ");
+            System.out.print("\uD83E\uDD14 What you want my friend? (register/login/exit): ");
             String command;
             if (scanner.hasNextLine()) {
                 command = scanner.nextLine();
