@@ -16,13 +16,6 @@ public class LoginRegisterService {
         return true;
     }
 
-    /**
-     * Logs in a user by checking the provided username and password against the repository.
-     *
-     * @param userName the username of the user trying to log in
-     * @param password the password of the user trying to log in
-     * @return the {@code User} object if the login is successful, {@code null} if the username and password do not match
-     */
 
     public User login(String userName, String password) {
         User user = userRepository.findByUserNameAndPassword(userName, password);

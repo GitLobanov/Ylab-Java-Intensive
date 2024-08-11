@@ -4,22 +4,18 @@ import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
-import com.backend.repository.interfaces.CrudRepository;
-import lombok.Setter;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class OrderRepository extends BaseRepository<Order> {
 
     @Override
     public boolean save(Order order) {
-        String sql = "insert into main.order values(?,?,?,?,?,?,?)";
-        return execute(sql, order.getId(), order.getCar().getId(), order.getClient().getId(), order.getOrderDateTime(),
+        String sql = "insert into main.order values(DEFAULT,?,?,?,?,?,?)";
+        return execute(sql, order.getId(), order.getCar().getId(), order.getClient().getId(), order.getOrderDate(),
                 order.getStatus(), order.getType(), order.getNote(), order.getManager().getId());
     }
 
@@ -27,7 +23,7 @@ public class OrderRepository extends BaseRepository<Order> {
     public boolean update(Order order) {
         String sql = "UPDATE main.order SET car = ?, client = ?, orderDateTime = ?, " +
                 "status = ?, type = ?, note = ?, manager = ? WHERE id = ?";
-        return execute(sql, order.getCar().getId(), order.getClient().getId(), order.getOrderDateTime(),
+        return execute(sql, order.getCar().getId(), order.getClient().getId(), order.getOrderDate(),
                 order.getStatus(), order.getType(), order.getNote(), order.getManager().getId(), order.getId());
     }
 
@@ -80,7 +76,7 @@ public class OrderRepository extends BaseRepository<Order> {
         Car car = carRepository.findById(rs.getInt("car"));
         User client = userRepository.findById(rs.getInt("client"));
         User manager = userRepository.findById(rs.getInt("manager"));
-        String orderDateTime = rs.getString("orderDateTime");
+        Date orderDateTime = Date.valueOf(rs.getString("orderDateTime"));
         Order.OrderStatus status = Order.OrderStatus.valueOf(rs.getString("status").toUpperCase());
         Order.TypeOrder type = Order.TypeOrder.valueOf(rs.getString("type").toUpperCase());
         String note = rs.getString("note");

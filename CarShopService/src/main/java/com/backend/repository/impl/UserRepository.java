@@ -16,15 +16,15 @@ public class UserRepository extends BaseRepository<User> {
 
     @Override
     public boolean save(User user) {
-        String sql = "insert into main.user values(?,?,?,?,?,?,?)";
-        return execute(sql, user.getId(), user.getUserName(), user.getPassword(),
+        String sql = "insert into main.user values(DEFAULT,?,?,?,?,?,?)";
+        return execute(sql, user.getId(), user.getUsername(), user.getPassword(),
                 user.getRole(), user.getName(), user.getEmail(), user.getPhone());
     }
 
     @Override
     public boolean update(User user) {
-        String sql = "UPDATE main.user SET userName = ?, password = ?, role = ?, name = ?, email = ?, phone = ? WHERE id = ?";
-        return execute(sql, user.getUserName(), user.getPassword(),
+        String sql = "UPDATE main.user SET username = ?, password = ?, role = ?, name = ?, email = ?, phone = ? WHERE id = ?";
+        return execute(sql, user.getUsername(), user.getPassword(),
                 user.getRole(), user.getName(), user.getEmail(), user.getPhone(), user.getId());
     }
 
@@ -47,13 +47,13 @@ public class UserRepository extends BaseRepository<User> {
     }
 
     public User findByUserNameAndPassword(String userName, String password) {
-        String sql = "SELECT * FROM main.user WHERE userName = ? AND password = ?";
+        String sql = "select * from main.user where username = ? and password = ?";
         return findBy(sql, userName, password).get(0);
     }
 
 
     public User findByUserName(String userName) {
-        String sql = "SELECT * FROM main.user WHERE userName = ?";
+        String sql = "SELECT * FROM main.user WHERE username = ?";
         return findBy(sql, userName).get(0);
     }
 

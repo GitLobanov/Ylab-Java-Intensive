@@ -12,7 +12,7 @@ import java.util.UUID;
 public class User {
 
     private int id;
-    private String userName;
+    private String username;
     private String password;
     private Role role;
     private String name;
@@ -23,9 +23,9 @@ public class User {
         ADMIN, CLIENT, MANAGER
     }
 
-    public User (int id, String userName, String password, Role role, String name, String email, String phone){
+    public User (int id, String username, String password, Role role, String name, String email, String phone){
         setId(id);
-        setUserName(userName);
+        setUsername(username);
         setPassword(password);
         setRole(role);
         setName(name);
@@ -36,7 +36,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userName='" + userName + '\'' +
+                "userName='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +

@@ -2,6 +2,7 @@ package com.backend.view;
 
 import com.backend.model.Car;
 import com.backend.model.Order;
+import com.backend.service.CarService;
 import com.backend.service.impl.ClientService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
@@ -13,10 +14,12 @@ import java.util.UUID;
 public class MenuHolderClient extends MenuHolder{
 
     private ClientService clientService;
+    private CarService carService;
 
 
     public MenuHolderClient() {
         clientService = new ClientService();
+        carService = new CarService();
     }
 
     @Override
@@ -134,7 +137,7 @@ public class MenuHolderClient extends MenuHolder{
         System.out.println("Enter a note for the order:");
         String note = scanner.nextLine();
 
-        Order order = new Order(car, Session.getInstance().getUser(), Order.TypeOrder.SERVICE, note);
+        Order order = new Order(0, car, Session.getInstance().getUser(), Order.TypeOrder.SERVICE, note);
 
         clientService.addOrder(order);
 
@@ -146,20 +149,20 @@ public class MenuHolderClient extends MenuHolder{
         clientService.viewMyCars(Session.getInstance().getUser());
         System.out.println("Enter the ID of the car you want to order:");
         String carIdStr = scanner.nextLine();
-        UUID carId;
+        int carId;
         try {
-            carId = UUID.fromString(carIdStr);
-        } catch (IllegalArgumentException e) {
+            carId = Integer.parseInt(carIdStr);
+        } catch (ClassCastException e) {
             ErrorResponses.printCustomMessage("Invalid car ID format.");
             return null;
         }
-        return CarRepository.getInstance().findById(carId);
+        return carService.getCarById(carId);
     }
 
     private void cancelRequest(){
         System.out.println("Input please, id of request you want to cancel: ");
         String inputCancelId = scanner.nextLine().trim();
-        Order orderCancel = clientService.findOrderById(UUID.fromString(inputCancelId));
+        Order orderCancel = clientService.findOrderById(Integer.parseInt(inputCancelId));
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want cancel this:");
         System.out.println(orderCancel + ConsoleColors.RESET);
         if (!confirm("Request canceled.")) return;
@@ -209,7 +212,7 @@ public class MenuHolderClient extends MenuHolder{
         System.out.println("Enter a note for the order:");
         String note = scanner.nextLine();
 
-        Order order = new Order(car, Session.getInstance().getUser(), Order.TypeOrder.BUYING, note);
+        Order order = new Order(0, car, Session.getInstance().getUser(), Order.TypeOrder.BUYING, note);
 
         clientService.addOrder(order);
 
@@ -219,7 +222,7 @@ public class MenuHolderClient extends MenuHolder{
     private void cancelOrder() {
         System.out.println("Input please, id of order you want to cancel: ");
         String inputCancelId = scanner.nextLine().trim();
-        Order orderCancel = clientService.findOrderById(UUID.fromString(inputCancelId));
+        Order orderCancel = clientService.findOrderById(Integer.parseInt(inputCancelId));
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want cancel this:");
         System.out.println(orderCancel + ConsoleColors.RESET);
         if (!confirm("Request canceled.")) return;

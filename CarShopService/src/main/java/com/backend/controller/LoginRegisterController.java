@@ -98,8 +98,6 @@ public class LoginRegisterController {
 
             SuccessResponses.printCustomMessage("You have successfully logged in.");
 
-            UserAbstractService.log(ActionLog.ActionType.LOGIN, "");
-
             return true;
         } else {
             String message = ErrorResponses.RESPONSES_TO_USERNAME_OR_PASSWORD_INCORRECT.get(new Random().nextInt(ErrorResponses.RESPONSES_TO_USERNAME_OR_PASSWORD_INCORRECT.size())-1);

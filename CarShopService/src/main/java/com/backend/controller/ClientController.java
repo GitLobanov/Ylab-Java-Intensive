@@ -21,7 +21,7 @@ public class ClientController {
 
     public void start () {
         System.out.println(ConsoleColors.BLUE_BOLD + "\nWelcome my dear friend!");
-        System.out.println("Client: " + Session.getInstance().getUser().getUserName() + ConsoleColors.RESET);
+        System.out.println("Client: " + Session.getInstance().getUser().getUsername() + ConsoleColors.RESET);
         while (true) {
             menuHolderClient.showMainMenu();
             String command = scanner.nextLine().trim().toLowerCase();
@@ -47,7 +47,6 @@ public class ClientController {
                 case "logout":
                     System.out.println("Exiting from account...");
                     Session.getInstance().setStage(Session.Stage.HAVE_TO_LOGIN);
-                    UserAbstractService.log(ActionLog.ActionType.LOGOUT, "");
                     return;
                 case "end":
                     Session.getInstance().setStage(Session.Stage.EXIT);

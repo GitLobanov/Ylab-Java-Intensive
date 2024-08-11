@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 
 public abstract class UserAbstractService {
 
-    Scanner scanner = new Scanner(System.in);
-    UserRepository userRepository = new UserRepository();
-    CarRepository carRepository = new CarRepository();
-    OrderRepository orderRepository = new OrderRepository();
-    ActionLogRepository actionLogRepository = new ActionLogRepository();
+    protected Scanner scanner = new Scanner(System.in);
+    protected UserRepository userRepository = new UserRepository();
+    protected CarRepository carRepository = new CarRepository();
+    protected OrderRepository orderRepository = new OrderRepository();
+    protected ActionLogRepository actionLogRepository = new ActionLogRepository();
 
     public boolean addOrder(Order order) {
         log(ActionLog.ActionType.CREATE, "Created order");
@@ -71,7 +71,7 @@ public abstract class UserAbstractService {
 
     public void viewAllCars() {
         log(ActionLog.ActionType.VIEW, "View all cars");
-        Iterator<Car> iterator = carRepository.findAllAvailableCars().iterator();
+        Iterator<Car> iterator = carRepository.findAll().iterator();
         displaySearchResultCar(iterator);
     }
 
@@ -82,20 +82,6 @@ public abstract class UserAbstractService {
             car.setAvailability(false);
             carRepository.save(car);
         }
-    }
-
-
-
-    public void viewNotOrderedCars() {
-        log(ActionLog.ActionType.VIEW, "View not ordered cars");
-        Iterator<Car> iterator = carRepository.findAllAvailableCars().iterator();
-        List<Car> list = new ArrayList<>();
-        while (iterator.hasNext()) {
-            Car car = iterator.next();
-            if (orderRepository.findByCar(car) == null) list.add(car);
-        }
-
-        displaySearchResultCar(iterator);
     }
 
 
@@ -325,13 +311,13 @@ public abstract class UserAbstractService {
 
 
 
-    public static void displaySearchResultOrder(Iterator<Map.Entry<UUID, Order>> iterator) {
+    public static void displaySearchResultOrder(Iterator<Order> iterator) {
         if (!iterator.hasNext()) {
             ErrorResponses.printCustomMessage("Hmm. Here is nothing!");
         } else {
             System.out.println("\nFound: ");
             while (iterator.hasNext()) {
-                System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next().getValue() + ConsoleColors.RESET);
+                System.out.println(ConsoleColors.PURPLE_BOLD + iterator.next() + ConsoleColors.RESET);
                 System.out.println("[-------------------------------------------------------]");
             }
         }
@@ -442,7 +428,7 @@ public abstract class UserAbstractService {
 
 
 
-    public void askUnloadActionLogToTXT (Map<UUID, ActionLog> actionLogs) {
+    public void askUnloadActionLogToTXT (List<ActionLog> actionLogs) {
         System.out.println("Do you want unload log to txt yes/y or not/n");
         String answer = scanner.nextLine().trim();
         if (answer.equals("yes") || answer.equals("y")) {

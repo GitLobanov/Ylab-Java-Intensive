@@ -75,7 +75,7 @@ public abstract class BaseRepository <T> implements CrudRepository<T> {
     private void setParameters(PreparedStatement stmt, Object... params) throws SQLException{
         int i = 1;
         for (Object object : params) {
-            stmt.setObject(i++, params[i]);
+            stmt.setObject(i++, object);
         }
     }
 }

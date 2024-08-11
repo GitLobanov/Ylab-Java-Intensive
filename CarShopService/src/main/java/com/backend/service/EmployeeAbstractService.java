@@ -4,91 +4,49 @@ import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
-import com.backend.repository.impl.CarRepository;
-import com.backend.repository.impl.OrderRepository;
-import com.backend.repository.impl.UserRepository;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
 
-/**
- * Abstract service class for managing employees.
- * Provides methods for managing cars and orders, as well as for viewing and searching clients.
- */
-
 public abstract class EmployeeAbstractService extends UserAbstractService {
-
-    private UserRepository userRepository = new UserRepository();
-
-    /**
-     * Adds a car to the repository.
-     *
-     * @param car the car to be added
-     * @return true if the car is successfully added, false otherwise
-     */
 
     public boolean addCar(Car car) {
         log(ActionLog.ActionType.CREATE, "Created car");
-        return CarRepository.getInstance().save(car);
+        return carRepository.save(car);
     }
 
-    /**
-     * Updates a car in the repository.
-     *
-     * @param car the car to be updated
-     * @return true if the car is successfully updated, false otherwise
-     */
 
     public boolean updateCar(Car car) {
         log(ActionLog.ActionType.CREATE, "Updated car");
-        return CarRepository.getInstance().update(car);
+        return carRepository.update(car);
     }
-
-    /**
-     * Deletes a car from the repository.
-     *
-     * @param car the car to be deleted
-     * @return true if the car is successfully deleted, false otherwise
-     */
 
     public boolean deleteCar(Car car) {
         log(ActionLog.ActionType.DELETE, "Deleted car");
-        return CarRepository.getInstance().delete(car);
+        return carRepository.delete(car);
     }
 
-    /**
-     * Finds a car by its ID.
-     *
-     * @param id the ID of the car to find
-     * @return the car with the specified ID, or null if no car is found
-     */
 
-    public Car findCarById(UUID id) {
-        Car car = CarRepository.getInstance().findById(id);
+    public Car findCarById(int id) {
+        Car car = carRepository.findById(id);
         return car;
     }
-
-    /**
-     * Views all buying orders.
-     */
 
 
     public void viewAllBuyingOrders (){
         log(ActionLog.ActionType.VIEW, "View buying orders");
-        Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.BUYING).entrySet().iterator();
+        Iterator<Order> iterator = orderRepository.findByType(Order.TypeOrder.BUYING).iterator();
         displaySearchResultOrder(iterator);
     }
 
-    /**
-     * Views all service orders.
-     */
 
     public void viewAllServiceOrders() {
         log(ActionLog.ActionType.VIEW, "View service orders");
-        Iterator<Map.Entry<UUID, Order>> iterator = OrderRepository.getInstance().findByType(Order.TypeOrder.SERVICE).entrySet().iterator();
+        Iterator<Order> iterator = orderRepository.findByType(Order.TypeOrder.SERVICE).iterator();
 
         if (!iterator.hasNext()) {
             ErrorResponses.printCustomMessage("Hmm, sorry I cannot find any requests");
@@ -98,16 +56,11 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
     }
 
 
-    /**
-     * Searches orders based on a query.
-     *
-     * @param query the search query
-     */
 
     public void searchOrders(String query) {
         log(ActionLog.ActionType.VIEW, "Search orders");
 
-        Map<UUID, Order> result = new HashMap<>();
+        List<Order> result = new ArrayList<>();
 
         String[] filters = query.split(";");
         Map<String, String> filterMap = new HashMap<>();
@@ -119,15 +72,14 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
             }
         }
 
-        for (Map.Entry<UUID, Order> entry : OrderRepository.getInstance().findByType(Order.TypeOrder.BUYING).entrySet()) {
-            Order order = entry.getValue();
+        for (Order order : orderRepository.findByType(Order.TypeOrder.BUYING)) {
             boolean matches = true;
 
             if (filterMap.containsKey("brand") && !order.getCar().getBrand().equalsIgnoreCase(filterMap.get("brand"))) {
                 matches = false;
             }
 
-            if (filterMap.containsKey("client") && !order.getClient().getUserName().equalsIgnoreCase(filterMap.get("client"))) {
+            if (filterMap.containsKey("client") && !order.getClient().getUsername().equalsIgnoreCase(filterMap.get("client"))) {
                 matches = false;
             }
 
@@ -151,31 +103,24 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
                 matches = false;
             }
 
-            if (filterMap.containsKey("dateFrom") && order.getOrderDateTime().isBefore(LocalDateTime.parse(filterMap.get("dateFrom")))) {
+            if (filterMap.containsKey("dateFrom") && order.getOrderDate().toLocalDate().isBefore(LocalDate.parse(filterMap.get("dateFrom")))) {
                 matches = false;
             }
 
-            if (filterMap.containsKey("dateTo") && order.getOrderDateTime().isAfter(LocalDateTime.parse(filterMap.get("dateTo")))) {
+            if (filterMap.containsKey("dateTo") && order.getOrderDate().toLocalDate().isAfter(LocalDate.parse(filterMap.get("dateTo")))) {
                 matches = false;
             }
 
             if (matches) {
-                result.put(entry.getKey(), order);
+                result.add(order);
             }
         }
 
-        Iterator<Map.Entry<UUID, Order>> iterator = result.entrySet().iterator();
+        Iterator<Order> iterator = result.iterator();
 
         displaySearchResultOrder(iterator);
 
     }
-
-    /**
-     * Forms a query string for searching orders based on specified criteria.
-     *
-     * @param typeOrder the type of order (BUYING or SERVICE)
-     * @return the formatted query string
-     */
 
     public String formingQuerySearchOrders (Order.TypeOrder typeOrder){
         StringBuilder queryBuilder = new StringBuilder();
@@ -219,9 +164,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         return queryBuilder.toString();
     }
 
-    /**
-     * Views all clients.
-     */
+
 
     public void viewAllClients () {
         log(ActionLog.ActionType.VIEW, "View all clients");
@@ -232,24 +175,11 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         }
     }
 
-    /**
-     * Adds a client to the repository.
-     *
-     * @param client the client to be added
-     * @return true if the client is successfully added, false otherwise
-     */
 
     public boolean addClient(User client) {
         return userRepository.save(client);
     }
 
-    /**
-     * Updates a client's information.
-     *
-     * @param userName the username of the client to be updated
-     * @param updatedClient the updated client information
-     * @return true if the client is successfully updated, false otherwise
-     */
 
     public boolean updateClient(String userName, User updatedClient) {
         log(ActionLog.ActionType.UPDATE, "Update order");
@@ -263,12 +193,6 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         }
     }
 
-    /**
-     * Removes a client from the repository.
-     *
-     * @param userName the username of the client to be removed
-     * @return true if the client is successfully removed, false otherwise
-     */
 
     public boolean removeClient(String userName) {
         log(ActionLog.ActionType.DELETE, "Delete client");
@@ -288,11 +212,6 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         }
     }
 
-    /**
-     * Forms a query string for searching clients based on specified criteria.
-     *
-     * @return the formatted query string
-     */
 
     public String formingQuerySearchClients (){
         System.out.println("\nEnter search criteria for clients. Press Enter to skip a filter.");
@@ -327,11 +246,6 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
         return queryBuilder.toString();
     }
 
-    /**
-     * Searches clients based on a query.
-     *
-     * @param query the search query
-     */
 
     public void searchClients(String query) {
         log(ActionLog.ActionType.VIEW, "Search clients");
@@ -353,7 +267,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
                     predicates.add(user -> user.getName().toLowerCase().contains(value.toLowerCase()));
                     break;
                 case "username":
-                    predicates.add(user -> user.getUserName().toLowerCase().contains(value.toLowerCase()));
+                    predicates.add(user -> user.getUsername().toLowerCase().contains(value.toLowerCase()));
                     break;
                 case "phone":
                     predicates.add(user -> user.getPhone().toLowerCase().contains(value.toLowerCase()));

@@ -55,7 +55,6 @@ public class AdminController {
                 case "logout":
                     System.out.println("Exiting from account...");
                     Session.getInstance().setStage(Session.Stage.HAVE_TO_LOGIN);
-                    UserAbstractService.log(ActionLog.ActionType.LOGOUT, "");
                     return;
                 case "end":
                     Session.getInstance().setStage(Session.Stage.EXIT);

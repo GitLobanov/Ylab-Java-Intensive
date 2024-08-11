@@ -13,8 +13,9 @@ public class CarRepository extends BaseRepository<Car> {
 
     @Override
     public boolean save(Car car) {
-        String sql = "INSERT INTO main.car VALUES (?,?,?,?,?,?,?,?)";
-        return execute(sql, car);
+        String sql = "INSERT INTO  main.car VALUES (DEFAULT,?,?,?,?,?,?,?)";
+        return execute(sql, car.getBrand(), car.getModel(), car.getYear(),
+                car.getPrice(), car.getCondition(), car.getColor(), car.isAvailability());
     }
 
     @Override

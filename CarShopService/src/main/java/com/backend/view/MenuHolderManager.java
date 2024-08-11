@@ -259,7 +259,7 @@ public class MenuHolderManager extends MenuHolder{
         double price = Double.parseDouble(getField("Price: "));
         String condition = getField("Condition: ");
 
-        Car car = new Car(brand, model, year, price, condition, color, availability);
+        Car car = new Car(0, brand, model, year, price, condition, color, availability);
 
         managerService.addCar(car);
         SuccessResponses.printCustomMessage("Woo! We have new car!");
@@ -329,7 +329,7 @@ public class MenuHolderManager extends MenuHolder{
     public void deleteCarConsole() {
         System.out.println("Input please, id of car you want to delete: ");
         String inputDeleteId = scanner.nextLine().trim();
-        Car carForDeleting = managerService.findCarById(UUID.fromString(inputDeleteId));
+        Car carForDeleting = managerService.findCarById(Integer.parseInt(inputDeleteId));
 
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want delete this car :");
         System.out.println(carForDeleting.toString() + ConsoleColors.RESET);
@@ -358,7 +358,7 @@ public class MenuHolderManager extends MenuHolder{
         System.out.println("Enter a note for the request:");
         String note = scanner.nextLine();
 
-        Order order = new Order(car, user, Order.TypeOrder.SERVICE, note);
+        Order order = new Order(0, car, user, Order.TypeOrder.SERVICE, note);
 
         managerService.addOrder(order);
 
@@ -369,7 +369,7 @@ public class MenuHolderManager extends MenuHolder{
         System.out.println("\uD83C\uDD99 Taking request");
         System.out.println("Input please, id of request you want to take: ");
         String inputDeleteId = scanner.nextLine().trim();
-        Order requestForTake = managerService.findOrderById(UUID.fromString(inputDeleteId));
+        Order requestForTake = managerService.findOrderById(Integer.parseInt(inputDeleteId));
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want to take this:");
         System.out.println(requestForTake + ConsoleColors.RESET);
         if (!confirm("Request taken")) return;
@@ -381,7 +381,7 @@ public class MenuHolderManager extends MenuHolder{
         System.out.println("\uD83C\uDD99 Update request");
         System.out.println("Input please, id of order you want to update: ");
         String inputDeleteId = scanner.nextLine().trim();
-        Order requestUpdate = managerService.findOrderById(UUID.fromString(inputDeleteId));
+        Order requestUpdate = managerService.findOrderById(Integer.parseInt(inputDeleteId));
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want to update this:");
         System.out.println(requestUpdate + ConsoleColors.RESET);
         if (!confirm("Request updated")) return;
@@ -391,7 +391,7 @@ public class MenuHolderManager extends MenuHolder{
     private void cancelRequest() {
         System.out.println("Input please, id of request you want to cancel: ");
         String inputCancelId = scanner.nextLine().trim();
-        Order orderCancel = managerService.findOrderById(UUID.fromString(inputCancelId));
+        Order orderCancel = managerService.findOrderById(Integer.parseInt(inputCancelId));
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want cancel this:");
         System.out.println(orderCancel + ConsoleColors.RESET);
         if (!confirm("Request canceled.")) return;
@@ -419,7 +419,7 @@ public class MenuHolderManager extends MenuHolder{
         System.out.println("Enter a note for the order:");
         String note = scanner.nextLine();
 
-        Order order = new Order(car, user, typeOrder, note);
+        Order order = new Order(0, car, user, typeOrder, note);
 
         managerService.addOrder(order);
 
@@ -430,7 +430,7 @@ public class MenuHolderManager extends MenuHolder{
         System.out.println("\uD83C\uDD99 Taking order");
         System.out.println("Input please, id of order you want to take: ");
         String inputDeleteId = scanner.nextLine().trim();
-        Order orderForTake = managerService.findOrderById(UUID.fromString(inputDeleteId));
+        Order orderForTake = managerService.findOrderById(Integer.parseInt(inputDeleteId));
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want to take this:");
         System.out.println(orderForTake + ConsoleColors.RESET);
         if (!confirm("Order taken")) return;
@@ -446,7 +446,7 @@ public class MenuHolderManager extends MenuHolder{
             String inputDeleteId = scanner.nextLine().trim();
             if (checkForExit(inputDeleteId)) return;
             try {
-                order = managerService.findOrderById(UUID.fromString(inputDeleteId));
+                order = managerService.findOrderById(Integer.parseInt(inputDeleteId));
                 System.out.println();
             } catch (Exception e) {
                 ErrorResponses.printCustomMessage("Hey what's wrong with ID, I cannot find by request");
@@ -471,16 +471,16 @@ public class MenuHolderManager extends MenuHolder{
         System.out.println("Enter new car ID or press Enter to skip:");
         String carIdStr = scanner.nextLine();
         if (!carIdStr.isEmpty()) {
-            UUID carId;
+            int carId;
             try {
-                carId = UUID.fromString(carIdStr);
+                carId = Integer.parseInt(carIdStr);
                 Car newCar = managerService.findCarById(carId);
                 if (newCar != null) {
                     order.setCar(newCar);
                 } else {
                     ErrorResponses.printCustomMessage("Car selection failed.");
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (ClassCastException e) {
                 ErrorResponses.printCustomMessage("Invalid car ID format.");
             }
         }
@@ -543,7 +543,7 @@ public class MenuHolderManager extends MenuHolder{
     protected void cancelOrder(){
         System.out.println("Input please, id of order you want to cancel: ");
         String inputCancelId = scanner.nextLine().trim();
-        Order orderCancel = managerService.findOrderById(UUID.fromString(inputCancelId));
+        Order orderCancel = managerService.findOrderById(Integer.parseInt(inputCancelId));
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want cancel this:");
         System.out.println(orderCancel + ConsoleColors.RESET);
         if (!confirm("Order canceled!")) return;

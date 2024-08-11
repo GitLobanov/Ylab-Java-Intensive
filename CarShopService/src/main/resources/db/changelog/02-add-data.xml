@@ -8,7 +8,7 @@
 <!--user-->
         <insert tableName="user" schemaName="main">
             <column name="id" value="1"/>
-            <column name="userName" value="johndoe"/>
+            <column name="username" value="man"/>
             <column name="password" value="123"/>
             <column name="role" value="MANAGER"/>
             <column name="name" value="John Doe"/>
@@ -17,17 +17,17 @@
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="2"/>
-            <column name="userName" value="janedoe"/>
-            <column name="password" value="password123"/>
-            <column name="role" value="USER"/>
+            <column name="username" value="cl"/>
+            <column name="password" value="123"/>
+            <column name="role" value="CLIENT"/>
             <column name="name" value="Jane Doe"/>
             <column name="email" value="janedoe@example.com"/>
             <column name="phone" value="+1234567891"/>
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="3"/>
-            <column name="userName" value="adminuser"/>
-            <column name="password" value="adminpass"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="123"/>
             <column name="role" value="ADMIN"/>
             <column name="name" value="Admin User"/>
             <column name="email" value="admin@example.com"/>
@@ -35,52 +35,52 @@
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="4"/>
-            <column name="userName" value="michaelj"/>
+            <column name="username" value="michaelj"/>
             <column name="password" value="password123"/>
-            <column name="role" value="USER"/>
+            <column name="role" value="CLIENT"/>
             <column name="name" value="Michael Johnson"/>
             <column name="email" value="michaelj@example.com"/>
             <column name="phone" value="+1234567893"/>
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="5"/>
-            <column name="userName" value="emilyr"/>
+            <column name="username" value="emilyr"/>
             <column name="password" value="password123"/>
-            <column name="role" value="USER"/>
+            <column name="role" value="CLIENT"/>
             <column name="name" value="Emily Rose"/>
             <column name="email" value="emilyr@example.com"/>
             <column name="phone" value="+1234567894"/>
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="6"/>
-            <column name="userName" value="williamk"/>
+            <column name="username" value="williamk"/>
             <column name="password" value="password123"/>
-            <column name="role" value="USER"/>
+            <column name="role" value="CLIENT"/>
             <column name="name" value="William King"/>
             <column name="email" value="williamk@example.com"/>
             <column name="phone" value="+1234567895"/>
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="7"/>
-            <column name="userName" value="oliviat"/>
+            <column name="username" value="oliviat"/>
             <column name="password" value="password123"/>
-            <column name="role" value="USER"/>
+            <column name="role" value="CLIENT"/>
             <column name="name" value="Olivia Taylor"/>
             <column name="email" value="oliviat@example.com"/>
             <column name="phone" value="+1234567896"/>
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="8"/>
-            <column name="userName" value="jamesb"/>
+            <column name="username" value="jamesb"/>
             <column name="password" value="password123"/>
-            <column name="role" value="USER"/>
+            <column name="role" value="CLIENT"/>
             <column name="name" value="James Brown"/>
             <column name="email" value="jamesb@example.com"/>
             <column name="phone" value="+1234567897"/>
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="9"/>
-            <column name="userName" value="sophial"/>
+            <column name="username" value="sophial"/>
             <column name="password" value="password123"/>
             <column name="role" value="USER"/>
             <column name="name" value="Sophia Lee"/>
@@ -89,9 +89,9 @@
         </insert>
         <insert tableName="user" schemaName="main">
             <column name="id" value="10"/>
-            <column name="userName" value="danielp"/>
+            <column name="username" value="danielp"/>
             <column name="password" value="password123"/>
-            <column name="role" value="USER"/>
+            <column name="role" value="CLIENT"/>
             <column name="name" value="Daniel Parker"/>
             <column name="email" value="danielp@example.com"/>
             <column name="phone" value="+1234567899"/>

@@ -11,17 +11,15 @@ import java.util.*;
 
 public class ManagerService extends EmployeeAbstractService {
 
-    UserRepository userRepository = new UserRepository();
-
     public void viewMyClients(User manager) {
-//       List<Order> orders = OrderRepository.getInstance().findByManager(manager);
-//       List<User> clients = new ArrayList<>();
-//
-//        for (Order order : orders) {
-//            clients.add(order.getClient().getId(), order.getClient());
-//        }
-//
-//        displaySearchResultUser(clients.entrySet().iterator());
+       List<Order> orders = orderRepository.findByManager(manager);
+       List<User> clients = new ArrayList<>();
+
+        for (Order order : orders) {
+            clients.add(order.getClient().getId(), order.getClient());
+        }
+
+        displaySearchResultUser(clients.iterator());
     }
 
 
@@ -32,29 +30,29 @@ public class ManagerService extends EmployeeAbstractService {
 
 
     public void viewMyTakenOrders(User manager) {
-        Map<UUID, Order> orders = OrderRepository.getInstance().findByManager(manager);
-        Map<UUID, Order> buyingOrders = new HashMap<>();
+        List<Order> orders = orderRepository.findByManager(manager);
+        List<Order> buyingOrders = new ArrayList<>();
 
-        for (Order order : orders.values()) {
+        for (Order order : orders) {
             if (order.getType() == Order.TypeOrder.BUYING) {
-                buyingOrders.put(order.getId(), order);
+                buyingOrders.add(order);
             }
         }
 
-        displaySearchResultOrder(buyingOrders.entrySet().iterator());
+        displaySearchResultOrder(buyingOrders.iterator());
     }
 
 
     public void viewMyTakenRequests(User manager) {
-        Map<UUID, Order> orders = OrderRepository.getInstance().findByManager(manager);
-        Map<UUID, Order> serviceRequests = new HashMap<>();
+        List<Order> orders = orderRepository.findByManager(manager);
+        List<Order> serviceRequests = new ArrayList<>();
 
-        for (Order order : orders.values()) {
+        for (Order order : orders) {
             if (order.getType() == Order.TypeOrder.SERVICE) {
-                serviceRequests.put(order.getId(), order);
+                serviceRequests.add(order);
             }
         }
 
-        displaySearchResultOrder(serviceRequests.entrySet().iterator());
+        displaySearchResultOrder(serviceRequests.iterator());
     }
 }

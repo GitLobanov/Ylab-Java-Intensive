@@ -3,10 +3,12 @@ package com.backend.view;
 import com.backend.model.Car;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.UserRepository;
+import com.backend.service.CarService;
 import com.backend.service.UserAbstractService;
 import com.backend.util.ErrorResponses;
 import com.backend.util.SuccessResponses;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -18,9 +20,11 @@ public abstract class MenuHolder {
     protected UserRepository userRepository = new UserRepository();
     protected CarRepository carRepository = new CarRepository();
 
+    CarService carService = new CarService();
+
     public Car selectCar() {
         System.out.println("Available cars:");
-        UserAbstractService.viewNotOrderedCars();
+        List<Car> list = carService.getNotOrderedCars();
         System.out.println("Enter the ID of the car you want:");
         String carIdStr = scanner.nextLine();
         int carId;
@@ -70,6 +74,12 @@ public abstract class MenuHolder {
     boolean checkForExit(String message) {
         if (message.equals("exit")) return false;
         return false;
+    }
+
+    protected void printResult(List<? extends Object> list) {
+        for (Object entity : list) {
+            System.out.println(entity);
+        }
     }
 
 }

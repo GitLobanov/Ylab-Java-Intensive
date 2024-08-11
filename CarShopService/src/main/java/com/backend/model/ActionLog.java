@@ -36,7 +36,7 @@ public class ActionLog {
     @Override
     public String toString() {
         return "ActionLog{" +
-                "user=" + user.getUserName() +
+                "user=" + user.getUsername() +
                 ", actionType= [" + actionType +
                 "], actionDateTime=" + actionDateTime +
                 ", message='" + message + '\'' +
