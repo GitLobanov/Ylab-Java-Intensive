@@ -18,49 +18,72 @@ public class OrderRepository extends BaseRepository<Order> {
 
     @Override
     public boolean save(Order order) {
-        return false;
+        String sql = "insert into main.order values(?,?,?,?,?,?,?)";
+        return execute(sql, order.getId(), order.getCar().getId(), order.getClient().getId(), order.getOrderDateTime(),
+                order.getStatus(), order.getType(), order.getNote(), order.getManager().getId());
     }
 
     @Override
     public boolean update(Order order) {
-        return false;
+        String sql = "UPDATE main.order SET car = ?, client = ?, orderDateTime = ?, " +
+                "status = ?, type = ?, note = ?, manager = ? WHERE id = ?";
+        return execute(sql, order.getCar().getId(), order.getClient().getId(), order.getOrderDateTime(),
+                order.getStatus(), order.getType(), order.getNote(), order.getManager().getId(), order.getId());
     }
 
     @Override
     public boolean delete(Order order) {
-        return false;
+        String sql = "DELETE FROM main.order WHERE id = ?";
+        return execute(sql, order.getId());
     }
 
     @Override
     public Order findById(int id) {
-        return null;
+        String sql = "SELECT * FROM main.order WHERE id = ?";
+        return findById(sql, id);
     }
 
     @Override
     public List<Order> findAll() {
-        return null;
+        String sql = "SELECT * FROM main.order";
+        return findAll(sql);
     }
 
     public List<Order> findByType(Order.TypeOrder typeOrder) {
-        return null;
+        String sql = "SELECT * FROM main.user WHERE type = ?";
+        return findBy(sql, typeOrder.name());
     }
 
 
     public List<Order> findByClient(User client) {
-        return null;
+        String sql = "SELECT * FROM main.user WHERE client = ?";
+        return findBy(sql, client.getId());
     }
 
-    public Map<UUID, Order> findByCar(Car car) {
-        return null;
+    public List<Order> findByCar(Car car) {
+        String sql = "SELECT * FROM main.user WHERE car = ?";
+        return findBy(sql, car.getId());
     }
 
 
     public List<Order> findByManager(User manager) {
-        return null;
+        String sql = "SELECT * FROM main.user WHERE manager = ?";
+        return findBy(sql, manager.getId());
     }
 
     @Override
     protected Order mapRowToEntity(ResultSet rs) throws SQLException {
-        return null;
+        CarRepository carRepository = new CarRepository();
+        UserRepository userRepository = new UserRepository();
+
+        int id = rs.getInt("id");
+        Car car = carRepository.findById(rs.getInt("car"));
+        User client = userRepository.findById(rs.getInt("client"));
+        User manager = userRepository.findById(rs.getInt("manager"));
+        String orderDateTime = rs.getString("orderDateTime");
+        Order.OrderStatus status = Order.OrderStatus.valueOf(rs.getString("status").toUpperCase());
+        Order.TypeOrder type = Order.TypeOrder.valueOf(rs.getString("type").toUpperCase());
+        String note = rs.getString("note");
+        return new Order(id, car, client, orderDateTime, status, type, note, manager);
     }
 }

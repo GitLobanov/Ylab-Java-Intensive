@@ -1,16 +1,12 @@
 package com.backend;
 
+import com.backend.controller.AdminController;
+import com.backend.controller.ClientController;
+import com.backend.controller.LoginRegisterController;
+import com.backend.controller.ManagerController;
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;
-import com.backend.util.MigrateLiquibase;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.exception.DatabaseException;
-import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
-import liquibase.resource.ResourceAccessor;
-import liquibase.database.jvm.JdbcConnection;
+import com.backend.util.Session;
 
 public class App
 {
@@ -33,9 +29,6 @@ public class App
 //        AdminController adminController = new AdminController();
 //        ClientController clientController = new ClientController();
 //        ManagerController managerController = new ManagerController();
-//
-//        PRE_INITIALISATION.loadData();
-//        Session.getInstance().activate();
 //
 //        Session session = Session.getInstance();
 //        session.activate();

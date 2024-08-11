@@ -4,6 +4,7 @@ package com.backend.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.management.relation.Role;
 import java.util.UUID;
 
 @Data
@@ -13,12 +14,16 @@ public class User {
     private int id;
     private String userName;
     private String password;
-    private String role;
+    private Role role;
     private String name;
     private String email;
     private String phone;
 
-    public User (int id, String userName, String password, String role, String name, String email, String phone){
+    public enum Role {
+        ADMIN, CLIENT, MANAGER
+    }
+
+    public User (int id, String userName, String password, Role role, String name, String email, String phone){
         setId(id);
         setUserName(userName);
         setPassword(password);

@@ -2,10 +2,7 @@ package com.backend.repository.impl;
 
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
-import com.backend.repository.interfaces.CrudRepository;
-import lombok.Setter;
 
-import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -51,13 +48,13 @@ public class UserRepository extends BaseRepository<User> {
 
     public User findByUserNameAndPassword(String userName, String password) {
         String sql = "SELECT * FROM main.user WHERE userName = ? AND password = ?";
-        return findBySomething(sql, userName, password).get(0);
+        return findBy(sql, userName, password).get(0);
     }
 
 
     public User findByUserName(String userName) {
         String sql = "SELECT * FROM main.user WHERE userName = ?";
-        return findBySomething(sql, userName).get(0);
+        return findBy(sql, userName).get(0);
     }
 
 
@@ -66,7 +63,7 @@ public class UserRepository extends BaseRepository<User> {
         int id = rs.getInt("id");
         String userName = rs.getString("userName");
         String password = rs.getString("password");
-        String role = rs.getString("role");
+        User.Role role = User.Role.valueOf(rs.getString("role").toUpperCase());
         String name = rs.getString("name");
         String email = rs.getString("email");
         String phone = rs.getString("phone");

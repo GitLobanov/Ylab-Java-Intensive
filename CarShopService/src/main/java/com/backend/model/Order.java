@@ -3,6 +3,7 @@ package com.backend.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,14 +11,24 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Order {
 
-    private UUID id;
+    private int id;
     private Car car;
     private User client;
-    private LocalDateTime orderDateTime;
+    private String orderDateTime;
     private OrderStatus status;
     private TypeOrder type;
     private String note;
     private User manager;
+
+    public Order(int id, Car car, User client, String orderDateTime, OrderStatus status, TypeOrder type, String note, User manager) {
+        setId(id);
+        setCar(car);
+        setClient(client);
+        setOrderDateTime(orderDateTime);
+        setStatus(status);
+        setType(type);
+        setNote(note);
+    }
 
     public enum OrderStatus {
         PENDING, COMPLETED, CANCELLED
@@ -27,11 +38,11 @@ public class Order {
         BUYING, SERVICE
     }
 
-    public Order(Car car, User client, TypeOrder type, String note) {
-        setId(UUID.randomUUID());
+    public Order(int id, Car car, User client, TypeOrder type, String note) {
+        setId(id);
         setCar(car);
         setClient(client);
-        setOrderDateTime(LocalDateTime.now());
+        setOrderDateTime(LocalDate.now().toString());
         setStatus(OrderStatus.PENDING);
         setType(type);
         setNote(note);

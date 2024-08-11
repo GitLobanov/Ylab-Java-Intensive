@@ -3,8 +3,6 @@ package com.backend.repository.abstracts;
 import com.backend.repository.interfaces.CrudRepository;
 import com.backend.util.DatabaseManager;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +42,7 @@ public abstract class BaseRepository <T> implements CrudRepository<T> {
         return null;
     }
 
-    protected List<T> findBySomething (String sql, Object... params) {
+    protected List<T> findBy(String sql, Object... params) {
         List<T> entities = new ArrayList<>();
         try (Connection conn = DATABASE_MANAGER.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
