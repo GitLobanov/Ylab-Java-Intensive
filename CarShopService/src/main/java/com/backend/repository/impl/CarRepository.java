@@ -1,9 +1,8 @@
 package com.backend.repository.impl;
 
 import com.backend.model.Car;
-import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
-import com.backend.repository.interfaces.CrudRepository;
+import com.backend.util.db.SQLRequest;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ public class CarRepository extends BaseRepository<Car> {
 
     @Override
     public boolean save(Car car) {
-        String sql = "INSERT INTO  main.car VALUES (DEFAULT,?,?,?,?,?,?,?)";
+        String sql = SQLRequest.INSERT_ALL_INTO_CAR;
         return execute(sql, car.getBrand(), car.getModel(), car.getYear(),
                 car.getPrice(), car.getCondition(), car.getColor(), car.isAvailability());
     }

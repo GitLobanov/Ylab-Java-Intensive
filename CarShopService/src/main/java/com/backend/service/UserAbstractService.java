@@ -27,16 +27,17 @@ public abstract class UserAbstractService {
     protected CarRepository carRepository = new CarRepository();
     protected OrderRepository orderRepository = new OrderRepository();
     protected ActionLogRepository actionLogRepository = new ActionLogRepository();
+    protected ActionLogService actionLogService = new ActionLogService();
 
     public boolean addOrder(Order order) {
-        log(ActionLog.ActionType.CREATE, "Created order");
+        actionLogService.logAction(ActionLog.ActionType.CREATE, "Created order");
         checkCarForAvailability(order);
         return orderRepository.save(order);
     }
 
 
     public boolean updateOrder(Order order) {
-        log(ActionLog.ActionType.UPDATE, "Updated order");
+        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated order");
         checkCarForAvailability(order);
         return orderRepository.update(order);
     }
@@ -49,7 +50,7 @@ public abstract class UserAbstractService {
 
 
     public List<Order> findOrderByClientAndTypeOrder(User user, Order.TypeOrder typeOrder) {
-        log(ActionLog.ActionType.VIEW, "Search client order");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search client order");
         List<Order> result = orderRepository.findByClient(user);
         for (Order order : result) {
             if (order.getType() != typeOrder) {
@@ -62,7 +63,7 @@ public abstract class UserAbstractService {
 
 
     public boolean cancelOrder(Order order) {
-        log(ActionLog.ActionType.CANCEL, "Canceled order");
+        actionLogService.logAction(ActionLog.ActionType.CANCEL, "Canceled order");
         order.setStatus(Order.OrderStatus.CANCELLED);
         return orderRepository.update(order);
     }
@@ -70,7 +71,7 @@ public abstract class UserAbstractService {
 
 
     public void viewAllCars() {
-        log(ActionLog.ActionType.VIEW, "View all cars");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all cars");
         Iterator<Car> iterator = carRepository.findAll().iterator();
         displaySearchResultCar(iterator);
     }
@@ -88,7 +89,7 @@ public abstract class UserAbstractService {
 
     public void searchCars(String query) {
 
-        log(ActionLog.ActionType.VIEW, "Search cars");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search cars");
 
         List<Car> cars = carRepository.findAllAvailableCars();
         String[] params = query.split(";");
@@ -361,19 +362,19 @@ public abstract class UserAbstractService {
                     LocalDateTime dateTimeFrom = LocalDateTime.parse(dateTimeRange[0], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     LocalDateTime dateTimeTo = LocalDateTime.parse(dateTimeRange[1], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     logs = logs.stream()
-                            .filter(log -> log.getActionDateTime().isAfter(dateTimeFrom) && log.getActionDateTime().isBefore(dateTimeTo))
+                            .filter(log -> log.getActionDateTime().toLocalDate().isAfter(dateTimeFrom.toLocalDate()) && log.getActionDateTime().toLocalDate().isBefore(dateTimeTo.toLocalDate()))
                             .collect(Collectors.toList());
                     break;
                 case "actionDateTimeFrom<actionDateTime":
                     LocalDateTime dateTimeOnlyFrom = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     logs = logs.stream()
-                            .filter(log -> log.getActionDateTime().isAfter(dateTimeOnlyFrom))
+                            .filter(log -> log.getActionDateTime().toLocalDate().isAfter(dateTimeOnlyFrom.toLocalDate()))
                             .collect(Collectors.toList());
                     break;
                 case "actionDateTime<actionDateTimeTo":
                     LocalDateTime dateTimeOnlyTo = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     logs = logs.stream()
-                            .filter(log -> log.getActionDateTime().isBefore(dateTimeOnlyTo))
+                            .filter(log -> log.getActionDateTime().toLocalDate().isBefore(dateTimeOnlyTo.toLocalDate()))
                             .collect(Collectors.toList());
                     break;
                 default:
@@ -418,12 +419,6 @@ public abstract class UserAbstractService {
         String query = queryBuilder.length() > 0 ? queryBuilder.substring(0, queryBuilder.length() - 1) : "";
 
         return query;
-    }
-
-
-
-    public void log(ActionLog.ActionType actionType, String message){
-        actionLogRepository.save(new ActionLog(Session.getInstance().getUser(), actionType, message));
     }
 
 

@@ -4,6 +4,7 @@ import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;
+import com.backend.service.CarService;
 import com.backend.service.impl.AdminService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
@@ -16,11 +17,13 @@ public class MenuHolderAdmin extends MenuHolder {
 
     private AdminService adminService;
     private UserRepository userRepository;
+    private CarService carService;
 
 
     public MenuHolderAdmin() {
         adminService = new AdminService();
         userRepository = new UserRepository();
+        carService = new CarService();
     }
 
     @Override
@@ -277,7 +280,7 @@ public class MenuHolderAdmin extends MenuHolder {
 
         Car car = new Car(0, brand, model, year, price, condition, color, availability);
 
-        adminService.addCar(car);
+        carService.addCar(car);
         SuccessResponses.printCustomMessage("Woo! We have new car!");
     }
 
@@ -286,7 +289,7 @@ public class MenuHolderAdmin extends MenuHolder {
 
         System.out.println("Input please, id of car you want to update: ");
         String inputUpdateId = scanner.nextLine().trim();
-        Car carForUpdate = adminService.findCarById(Integer.parseInt(inputUpdateId));
+        Car carForUpdate = carService.findCarById(Integer.parseInt(inputUpdateId));
 
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want update this car :");
         System.out.println(carForUpdate.toString() + ConsoleColors.RESET);
@@ -339,7 +342,7 @@ public class MenuHolderAdmin extends MenuHolder {
             carForUpdate.setCondition(conditionInput);
         }
 
-        adminService.updateCar(carForUpdate);
+        carService.updateCar(carForUpdate);
         SuccessResponses.printCustomMessage("Car updated successfully.");
     }
 
@@ -353,7 +356,7 @@ public class MenuHolderAdmin extends MenuHolder {
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want delete this car :");
         System.out.println(carForDeleting.toString() + ConsoleColors.RESET);
 
-        if (confirm("Car deleted.")) adminService.deleteCar(carForDeleting);
+        if (confirm("Car deleted.")) carService.deleteCar(carForDeleting);
     }
 
 
@@ -449,7 +452,7 @@ public class MenuHolderAdmin extends MenuHolder {
             int carId;
             try {
                 carId = Integer.parseInt(carIdStr);
-                Car newCar = adminService.findCarById(carId);
+                Car newCar = carService.findCarById(carId);
                 if (newCar != null) {
                     order.setCar(newCar);
                 } else {

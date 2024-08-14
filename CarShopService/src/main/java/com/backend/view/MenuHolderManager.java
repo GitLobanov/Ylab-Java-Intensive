@@ -3,6 +3,7 @@ package com.backend.view;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
+import com.backend.service.CarService;
 import com.backend.service.impl.ManagerService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
@@ -14,10 +15,12 @@ import java.util.UUID;
 public class MenuHolderManager extends MenuHolder{
 
     private ManagerService managerService;
+    private CarService carService;
 
 
     public MenuHolderManager() {
         managerService = new ManagerService();
+        carService = new CarService();
     }
 
     @Override
@@ -261,7 +264,7 @@ public class MenuHolderManager extends MenuHolder{
 
         Car car = new Car(0, brand, model, year, price, condition, color, availability);
 
-        managerService.addCar(car);
+        carService.addCar(car);
         SuccessResponses.printCustomMessage("Woo! We have new car!");
     }
 
@@ -321,7 +324,7 @@ public class MenuHolderManager extends MenuHolder{
             carForUpdate.setCondition(conditionInput);
         }
 
-        managerService.updateCar(carForUpdate);
+        carService.updateCar(carForUpdate);
         SuccessResponses.printCustomMessage("Car updated successfully.");
     }
 
@@ -329,12 +332,12 @@ public class MenuHolderManager extends MenuHolder{
     public void deleteCarConsole() {
         System.out.println("Input please, id of car you want to delete: ");
         String inputDeleteId = scanner.nextLine().trim();
-        Car carForDeleting = managerService.findCarById(Integer.parseInt(inputDeleteId));
+        Car carForDeleting = carService.findCarById(Integer.parseInt(inputDeleteId));
 
         System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want delete this car :");
         System.out.println(carForDeleting.toString() + ConsoleColors.RESET);
 
-        if (confirm("Car deleted.")) managerService.deleteCar(carForDeleting);
+        if (confirm("Car deleted.")) carService.deleteCar(carForDeleting);
     }
 
 
@@ -474,7 +477,7 @@ public class MenuHolderManager extends MenuHolder{
             int carId;
             try {
                 carId = Integer.parseInt(carIdStr);
-                Car newCar = managerService.findCarById(carId);
+                Car newCar = carService.findCarById(carId);
                 if (newCar != null) {
                     order.setCar(newCar);
                 } else {

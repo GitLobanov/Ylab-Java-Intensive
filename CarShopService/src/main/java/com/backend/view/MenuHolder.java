@@ -4,13 +4,11 @@ import com.backend.model.Car;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.UserRepository;
 import com.backend.service.CarService;
-import com.backend.service.UserAbstractService;
 import com.backend.util.ErrorResponses;
 import com.backend.util.SuccessResponses;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.UUID;
 
 public abstract class MenuHolder {
 
@@ -24,7 +22,7 @@ public abstract class MenuHolder {
 
     public Car selectCar() {
         System.out.println("Available cars:");
-        List<Car> list = carService.getNotOrderedCars();
+        carService.getAvailableCars().forEach(System.out::println);
         System.out.println("Enter the ID of the car you want:");
         String carIdStr = scanner.nextLine();
         int carId;

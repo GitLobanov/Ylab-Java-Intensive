@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.beans.ConstructorProperties;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +13,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
-@NoArgsConstructor
+@AllArgsConstructor
 public class ActionLog {
 
-    private UUID id;
+    private int id;
     private User user;
     private ActionType actionType ;
-    private LocalDateTime actionDateTime;
+    private Date actionDateTime;
     private String message;
 
     public enum ActionType {
         CREATE, UPDATE, DELETE, CANCEL, VIEW, LOGIN, LOGOUT
-    }
-
-    public ActionLog(User user, ActionType actionType, String message) {
-        setId(UUID.randomUUID());
-        setUser(user);
-        setActionType(actionType);
-        setActionDateTime(LocalDateTime.now());
-        setMessage(message);
     }
 
     @Override

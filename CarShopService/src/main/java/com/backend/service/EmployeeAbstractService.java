@@ -14,38 +14,15 @@ import java.util.function.Predicate;
 
 public abstract class EmployeeAbstractService extends UserAbstractService {
 
-    public boolean addCar(Car car) {
-        log(ActionLog.ActionType.CREATE, "Created car");
-        return carRepository.save(car);
-    }
-
-
-    public boolean updateCar(Car car) {
-        log(ActionLog.ActionType.CREATE, "Updated car");
-        return carRepository.update(car);
-    }
-
-    public boolean deleteCar(Car car) {
-        log(ActionLog.ActionType.DELETE, "Deleted car");
-        return carRepository.delete(car);
-    }
-
-
-    public Car findCarById(int id) {
-        Car car = carRepository.findById(id);
-        return car;
-    }
-
-
     public void viewAllBuyingOrders (){
-        log(ActionLog.ActionType.VIEW, "View buying orders");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View buying orders");
         Iterator<Order> iterator = orderRepository.findByType(Order.TypeOrder.BUYING).iterator();
         displaySearchResultOrder(iterator);
     }
 
 
     public void viewAllServiceOrders() {
-        log(ActionLog.ActionType.VIEW, "View service orders");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View service orders");
         Iterator<Order> iterator = orderRepository.findByType(Order.TypeOrder.SERVICE).iterator();
 
         if (!iterator.hasNext()) {
@@ -58,7 +35,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
 
     public void searchOrders(String query) {
-        log(ActionLog.ActionType.VIEW, "Search orders");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search orders");
 
         List<Order> result = new ArrayList<>();
 
@@ -167,7 +144,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
 
     public void viewAllClients () {
-        log(ActionLog.ActionType.VIEW, "View all clients");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all clients");
 
         Iterator<User> iterator = userRepository.findAll().iterator();
         while (iterator.hasNext()) {
@@ -182,7 +159,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
 
     public boolean updateClient(String userName, User updatedClient) {
-        log(ActionLog.ActionType.UPDATE, "Update order");
+        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Update order");
 
         if (userRepository.findByUserName(userName)==null) {
             ErrorResponses.printCustomMessage("Client not found");
@@ -195,7 +172,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
 
     public boolean removeClient(String userName) {
-        log(ActionLog.ActionType.DELETE, "Delete client");
+        actionLogService.logAction(ActionLog.ActionType.DELETE, "Delete client");
 
         if (userRepository.findByUserName(userName)==null){
             ErrorResponses.printCustomMessage("Client not found.");
@@ -248,7 +225,7 @@ public abstract class EmployeeAbstractService extends UserAbstractService {
 
 
     public void searchClients(String query) {
-        log(ActionLog.ActionType.VIEW, "Search clients");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search clients");
 
         Map<String, String> filters = new HashMap<>();
         String[] criteria = query.split(";");

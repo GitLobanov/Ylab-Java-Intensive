@@ -21,7 +21,7 @@ public class ClientService extends UserAbstractService {
 
 
     public void viewMyCars(User client) {
-        log(ActionLog.ActionType.VIEW, "View own cars");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own cars");
 
         List<Order> orders = orderRepository.findByClient(client);
         List<Car> cars = new ArrayList<>();
@@ -37,7 +37,7 @@ public class ClientService extends UserAbstractService {
 
 
     public void viewMyRequests(User client) {
-        log(ActionLog.ActionType.VIEW, "View own requests");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own requests");
          List<Order> myRequests = orderRepository.findByClient(client);
         myRequests = myRequests.stream()
                 .filter(entry -> entry.getType() == Order.TypeOrder.SERVICE)
@@ -47,7 +47,7 @@ public class ClientService extends UserAbstractService {
 
 
     public void viewMyOrders(User client) {
-        log(ActionLog.ActionType.VIEW, "View own orders");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own orders");
         List<Order> myRequests = orderRepository.findByClient(client);
         myRequests = myRequests.stream()
                 .filter(entry -> entry.getType() == Order.TypeOrder.BUYING)

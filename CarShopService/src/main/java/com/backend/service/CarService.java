@@ -5,23 +5,45 @@ import com.backend.model.Car;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.OrderRepository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CarService {
 
-    CarRepository carRepository = new CarRepository();
-    OrderRepository orderRepository = new OrderRepository();
+    CarRepository carRepository;
+    OrderRepository orderRepository;
+    ActionLogService actionLogService;
 
-    public List<Car> getNotOrderedCars() {
-        Iterator<Car> iterator = carRepository.findAllAvailableCars().iterator();
-        List<Car> list = new ArrayList<>();
-        while (iterator.hasNext()) {
-            Car car = iterator.next();
-            if (orderRepository.findByCar(car) == null) list.add(car);
-        }
+    public CarService () {
+        carRepository = new CarRepository();
+        orderRepository = new OrderRepository();
+        actionLogService = new ActionLogService();
+    }
 
+    public boolean addCar(Car car) {
+        actionLogService.logAction(ActionLog.ActionType.CREATE, "Created car");
+        return carRepository.save(car);
+    }
+
+
+    public boolean updateCar(Car car) {
+        actionLogService.logAction(ActionLog.ActionType.CREATE, "Updated car");
+        return carRepository.update(car);
+    }
+
+    public boolean deleteCar(Car car) {
+        actionLogService.logAction(ActionLog.ActionType.DELETE, "Deleted car");
+        return carRepository.delete(car);
+    }
+
+    public Car findCarById(int id) {
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "Searching for car");
+        Car car = carRepository.findById(id);
+        return car;
+    }
+
+    public List<Car> getAvailableCars() {
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "Get available cars");
+        List<Car> list = carRepository.findAllAvailableCars();
         return list;
     }
 

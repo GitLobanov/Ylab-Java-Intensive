@@ -9,11 +9,14 @@ import java.util.UUID;
 
 public interface CrudRepository <T> {
 
+    boolean save(T entity);
 
-    abstract boolean save (T entity);
-    abstract boolean update (T entity);
-    abstract boolean delete (T entity);
-    abstract T findById(int id);
-    abstract List<T> findAll();
+    boolean update(T entity);
+
+    boolean delete(T entity);
+
+    T findById(int id);
+
+    List<T> findAll();
 
 }

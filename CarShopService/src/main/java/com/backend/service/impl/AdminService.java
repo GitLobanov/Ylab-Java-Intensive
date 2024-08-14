@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class AdminService extends EmployeeAbstractService {
 
     public void viewAllEmployees() {
-        log(ActionLog.ActionType.VIEW, "View all employees");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all employees");
         for (User user : userRepository.findAll()) {
             if (user.getRole() == User.Role.ADMIN || user.getRole() == User.Role.MANAGER) {
                 System.out.println(ConsoleColors.PURPLE_BOLD + user + ConsoleColors.RESET);
@@ -26,7 +26,7 @@ public class AdminService extends EmployeeAbstractService {
     }
 
     public void viewAllClients () {
-        log(ActionLog.ActionType.VIEW, "View all clients");
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all clients");
 
         for (User user : userRepository.findAll()) {
             if (user.getRole() == User.Role.CLIENT) {
@@ -37,7 +37,7 @@ public class AdminService extends EmployeeAbstractService {
 
 
     public boolean addEmployee(User employee) {
-        log(ActionLog.ActionType.CREATE, "Created employee: " + employee.getUsername());
+        actionLogService.logAction(ActionLog.ActionType.CREATE, "Created employee: " + employee.getUsername());
         return userRepository.save(employee);
     }
 
@@ -47,7 +47,7 @@ public class AdminService extends EmployeeAbstractService {
             System.out.println(ConsoleColors.YELLOW_BOLD + "Employee not found." + ConsoleColors.RESET);
             return false;
         }
-        log(ActionLog.ActionType.UPDATE, "Updated employee: " + updatedEmployee.getUsername());
+        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated employee: " + updatedEmployee.getUsername());
         return userRepository.update(updatedEmployee);
     }
 
@@ -57,7 +57,7 @@ public class AdminService extends EmployeeAbstractService {
             return false;
         }
         User employee = userRepository.findByUserName(userName);
-        log(ActionLog.ActionType.DELETE, "Deleted employee: " + employee.getUsername());
+        actionLogService.logAction(ActionLog.ActionType.DELETE, "Deleted employee: " + employee.getUsername());
         return userRepository.delete(employee);
     }
 
@@ -92,19 +92,19 @@ public class AdminService extends EmployeeAbstractService {
                     LocalDateTime dateTimeFrom = LocalDateTime.parse(dateTimeRange[0], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     LocalDateTime dateTimeTo = LocalDateTime.parse(dateTimeRange[1], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     logs = logs.stream()
-                            .filter(log -> log.getActionDateTime().isAfter(dateTimeFrom) && log.getActionDateTime().isBefore(dateTimeTo))
+                            .filter(log -> log.getActionDateTime().toLocalDate().isAfter(dateTimeFrom.toLocalDate()) && log.getActionDateTime().toLocalDate().isBefore(dateTimeTo.toLocalDate()))
                             .collect(Collectors.toList());
                     break;
                 case "actionDateTimeFrom<actionDateTime":
                     LocalDateTime dateTimeOnlyFrom = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     logs = logs.stream()
-                            .filter(log -> log.getActionDateTime().isAfter(dateTimeOnlyFrom))
+                            .filter(log -> log.getActionDateTime().toLocalDate().isAfter(dateTimeOnlyFrom.toLocalDate()))
                             .collect(Collectors.toList());
                     break;
                 case "actionDateTime<actionDateTimeTo":
                     LocalDateTime dateTimeOnlyTo = LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     logs = logs.stream()
-                            .filter(log -> log.getActionDateTime().isBefore(dateTimeOnlyTo))
+                            .filter(log -> log.getActionDateTime().toLocalDate().isBefore(dateTimeOnlyTo.toLocalDate()))
                             .collect(Collectors.toList());
                     break;
                 default:
