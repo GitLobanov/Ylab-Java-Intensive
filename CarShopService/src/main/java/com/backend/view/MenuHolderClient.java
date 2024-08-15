@@ -1,64 +1,19 @@
 package com.backend.view;
 
-import com.backend.model.Car;
-import com.backend.model.Order;
-import com.backend.service.CarService;
-import com.backend.service.impl.ClientService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
-import com.backend.util.Session;
-import com.backend.util.SuccessResponses;
+import com.backend.view.handler.*;
 
-import java.util.UUID;
+import java.util.Scanner;
 
-public class MenuHolderClient extends MenuHolder{
+public class MenuHolderClient{
 
-    private ClientService clientService;
-    private CarService carService;
+    Scanner scanner = new Scanner(System.in);
 
-
-    public MenuHolderClient() {
-        clientService = new ClientService();
-        carService = new CarService();
-    }
-
-    @Override
-    public void showMainMenu() {
-        System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Main Menu ===" + ConsoleColors.RESET);
-        System.out.println("\uD83D\uDE97 Type 'c/cars' to cars menu.");
-        System.out.println("\uD83D\uDE97 Type 'r/requests' to requests menu.");
-        System.out.println("\uD83D\uDCE6 Type 'o/orders' to orders menu.");
-        System.out.println("\uD83D\uDDC3\uFE0F Type 'a/actions' to manage actions.");
-        System.out.println("\uD83D\uDD10 Type 'l/logout' to logout from account.");
-        System.out.println("\uD83D\uDD1A Type 'exit' to quit the application.");
-        System.out.print("Enter your choice: ");
-    }
-
-    @Override
-    public void handleLogging() {
-        while (true) {
-            System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Actions Menu ===" + ConsoleColors.RESET);
-            System.out.println("1\uFE0F⃣ View my actions");
-            System.out.println("2\uFE0F⃣ Filter actions");
-            System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
-            System.out.print("Enter your choice: ");
-            String choice = scanner.nextLine().trim().toLowerCase();
-
-            switch (choice) {
-                case "1":
-                    clientService.viewMyActionLog(Session.getInstance().getUser());
-                    break;
-                case "2":
-                    String query = clientService.formingQuerySearchMyActionLogs();
-                    clientService.searchMyActionLog(query, Session.getInstance().getUser());
-                    break;
-                case "back":
-                    return;
-                default:
-                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
-            }
-        }
-    }
+    CarMenuHandler carMenuHandler = new CarMenuHandler();
+    RequestMenuHandler requestMenuHandler = new RequestMenuHandler();
+    OrderMenuHandler orderMenuHandler = new OrderMenuHandler();
+    ActionLogMenuHandler actionLogMenuHandler = new ActionLogMenuHandler();
 
     public void handleCars() {
 
@@ -73,16 +28,15 @@ public class MenuHolderClient extends MenuHolder{
 
             switch (choice) {
                 case "1":
-                    clientService.viewAllCars();
+                    carMenuHandler.viewAll();
                     break;
 
                 case "2":
-                    String query = clientService.formingQuerySearchCars();
-                    clientService.searchCars(query);
+                    carMenuHandler.search();
                     break;
 
                 case "3":
-                    clientService.viewMyCars(Session.getInstance().getUser());
+                    carMenuHandler.viewByClient();
                     break;
 
                 case "back":
@@ -106,15 +60,15 @@ public class MenuHolderClient extends MenuHolder{
 
             switch (choice) {
                 case "1":
-                    clientService.viewMyRequests(Session.getInstance().getUser());
+                    requestMenuHandler.viewByClient();
                     break;
 
                 case "2":
-                    addRequestConsole();
+                    requestMenuHandler.createByUser();
                     break;
 
                 case "3":
-                    cancelRequest();
+                    requestMenuHandler.cancel();
                     break;
                 case "back":
                     return;
@@ -122,51 +76,6 @@ public class MenuHolderClient extends MenuHolder{
                     ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
             }
         }
-    }
-
-    private void addRequestConsole() {
-
-        System.out.println("\uD83C\uDD95 Create a new request:");
-        Car car = selectFromMyCars();
-        while (car == null) {
-            ErrorResponses.printCustomMessage("Car selection failed.");
-            System.out.println("\uD83C\uDD95 Create a new order:");
-            car = selectFromMyCars();
-        }
-
-        System.out.println("Enter a note for the order:");
-        String note = scanner.nextLine();
-
-        Order order = new Order(0, car, Session.getInstance().getUser(), Order.TypeOrder.SERVICE, note);
-
-        clientService.addOrder(order);
-
-        SuccessResponses.printCustomMessage("Order created successfully: " + order);
-    }
-
-    private Car selectFromMyCars() {
-        System.out.println("Available cars:");
-        clientService.viewMyCars(Session.getInstance().getUser());
-        System.out.println("Enter the ID of the car you want to order:");
-        String carIdStr = scanner.nextLine();
-        int carId;
-        try {
-            carId = Integer.parseInt(carIdStr);
-        } catch (ClassCastException e) {
-            ErrorResponses.printCustomMessage("Invalid car ID format.");
-            return null;
-        }
-        return carService.getCarById(carId);
-    }
-
-    private void cancelRequest(){
-        System.out.println("Input please, id of request you want to cancel: ");
-        String inputCancelId = scanner.nextLine().trim();
-        Order orderCancel = clientService.findOrderById(Integer.parseInt(inputCancelId));
-        System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want cancel this:");
-        System.out.println(orderCancel + ConsoleColors.RESET);
-        if (!confirm("Request canceled.")) return;
-        clientService.cancelOrder(orderCancel);
     }
 
     public void handleOrders() {
@@ -181,15 +90,15 @@ public class MenuHolderClient extends MenuHolder{
 
             switch (choice) {
                 case "1":
-                    clientService.viewMyOrders(Session.getInstance().getUser());
+                    orderMenuHandler.getByClient();
                     break;
 
                 case "2":
-                    addOrderConsole();
+                    orderMenuHandler.createByClient();
                     break;
 
                 case "3":
-                    cancelOrder();
+                    orderMenuHandler.cancel();
                     break;
                 case "back":
                     return;
@@ -199,33 +108,27 @@ public class MenuHolderClient extends MenuHolder{
         }
     }
 
-    private void addOrderConsole() {
+    public void handleLogging() {
+        while (true) {
+            System.out.println(ConsoleColors.CYAN_BOLD + "\n=== Actions Menu ===" + ConsoleColors.RESET);
+            System.out.println("1\uFE0F⃣ View my actions");
+            System.out.println("2\uFE0F⃣ Filter actions");
+            System.out.println("\uD83D\uDD19 Type 'back' to return to the main menu.");
+            System.out.print("Enter your choice: ");
+            String choice = scanner.nextLine().trim().toLowerCase();
 
-        System.out.println("\uD83C\uDD95 Create a new order:");
-        Car car = selectCar();
-        while (car == null) {
-            ErrorResponses.printCustomMessage("Car selection failed.");
-            System.out.println("\uD83C\uDD95 Create a new order:");
-            car = selectCar();
+            switch (choice) {
+                case "1":
+                    actionLogMenuHandler.getByUser();
+                    break;
+                case "2":
+                    actionLogMenuHandler.searchByUser();
+                    break;
+                case "back":
+                    return;
+                default:
+                    ErrorResponses.printRandom(ErrorResponses.RESPONSES_TO_UNKNOWN_COMMAND);
+            }
         }
-
-        System.out.println("Enter a note for the order:");
-        String note = scanner.nextLine();
-
-        Order order = new Order(0, car, Session.getInstance().getUser(), Order.TypeOrder.BUYING, note);
-
-        clientService.addOrder(order);
-
-        SuccessResponses.printCustomMessage("Order created successfully: " + order);
-    }
-
-    private void cancelOrder() {
-        System.out.println("Input please, id of order you want to cancel: ");
-        String inputCancelId = scanner.nextLine().trim();
-        Order orderCancel = clientService.findOrderById(Integer.parseInt(inputCancelId));
-        System.out.println(ConsoleColors.YELLOW_BOLD + "\uD83D\uDC40 You sure, what do you want cancel this:");
-        System.out.println(orderCancel + ConsoleColors.RESET);
-        if (!confirm("Request canceled.")) return;
-        clientService.cancelOrder(orderCancel);
     }
 }

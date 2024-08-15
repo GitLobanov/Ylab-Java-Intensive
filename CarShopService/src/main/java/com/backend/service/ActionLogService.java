@@ -38,7 +38,7 @@ public class ActionLogService {
 
 
     public void getActionLogByUserSearch(String query, User user) {
-        List<ActionLog> logs = actionLogRepository.findByUser(user);
+        List<ActionLog> logs = user == null ? actionLogRepository.findAll() : actionLogRepository.findByUser(user);
         String[] params = query.split(";");
 
         for (String param : params) {
@@ -87,7 +87,7 @@ public class ActionLogService {
      * Forming query from user's input in console
      */
 
-    public String formingQuerySearchMyActionLogs() {
+    public String formingQuerySearchActionLogs() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Input parameters (if field doesn't need leave it blank)");

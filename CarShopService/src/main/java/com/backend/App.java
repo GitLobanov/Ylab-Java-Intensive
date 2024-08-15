@@ -1,32 +1,26 @@
 package com.backend;
 
-import com.backend.controller.AdminController;
-import com.backend.controller.ClientController;
-import com.backend.controller.LoginRegisterController;
-import com.backend.controller.ManagerController;
+import com.backend.controller.*;
+import com.backend.factory.ControllerFactory;
 import com.backend.util.MigrateLiquibase;
 import com.backend.util.Session;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class App
 {
-    MigrateLiquibase migrateLiquibase;
-    LoginRegisterController loginRegisterController = new LoginRegisterController();
-    AdminController adminController = new AdminController();
-    ClientController clientController = new ClientController();
-    ManagerController managerController = new ManagerController();
+    private static MigrateLiquibase migrateLiquibase;
+    private static Controller loginRegisterController;
+    private static Controller adminController;
+    private static Controller clientController;
+    private static Controller managerController;
 
-    public App () {
-        migrateLiquibase = new MigrateLiquibase();
-    }
-
+    private static Session session = Session.getInstance();
 
     public static void main( String[] args )
     {
-
-
+        init();
         migrateLiquibase.migrate();
-
-        Session session = Session.getInstance();
         session.activate();
 
         while (session.isActive()) {
@@ -43,6 +37,15 @@ public class App
             }
 
         }
+    }
+
+    private static  void init(){
+        migrateLiquibase = new MigrateLiquibase();
+
+        loginRegisterController = ControllerFactory.createController("login");
+        adminController = ControllerFactory.createController("admin");
+        clientController = ControllerFactory.createController("client");
+        managerController = ControllerFactory.createController("manager");
     }
 
 

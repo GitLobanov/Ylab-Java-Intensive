@@ -6,6 +6,8 @@ import com.backend.repository.impl.UserRepository;
 import com.backend.service.ActionLogService;
 import com.backend.util.ConsoleColors;
 
+import java.util.List;
+
 public class EmployeeService {
 
     ActionLogService actionLogService;
@@ -44,13 +46,13 @@ public class EmployeeService {
         return userRepository.delete(employee);
     }
 
-    public void viewAllEmployees() {
+    public User getByUsername(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+
+    public List<User> getAllEmployees() {
         actionLogService.logAction(ActionLog.ActionType.VIEW, "View all employees");
-        for (User user : userRepository.findAll()) {
-            if (user.getRole() == User.Role.ADMIN || user.getRole() == User.Role.MANAGER) {
-                System.out.println(ConsoleColors.PURPLE_BOLD + user + ConsoleColors.RESET);
-            }
-        }
+        return userRepository.findUsersByRole(User.Role.MANAGER);
     }
 
 }

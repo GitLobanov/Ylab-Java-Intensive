@@ -10,15 +10,20 @@ import com.backend.util.SuccessResponses;
 import java.util.Random;
 import java.util.Scanner;
 
-public class LoginRegisterController {
+public class LoginRegisterController implements Controller  {
 
     private LoginRegisterService loginRegisterService = new LoginRegisterService();
+
+    @Override
+    public void showMenu() {
+        System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
+        System.out.print("\uD83E\uDD14 What you want my friend? (register/login/exit): ");
+    }
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
-            System.out.print("\uD83E\uDD14 What you want my friend? (register/login/exit): ");
+            showMenu();
             String command;
             if (scanner.hasNextLine()) {
                 command = scanner.nextLine();

@@ -10,6 +10,7 @@ import com.backend.service.ActionLogService;
 import com.backend.service.OrderService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
+import com.backend.util.Session;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -100,6 +101,10 @@ public class ClientService {
         return myRequests.stream()
                 .filter(entry -> entry.getType() == Order.TypeOrder.BUYING)
                 .toList();
+    }
+
+    public User getClientByUsername (String username){
+        return userRepository.findByUserName(username);
     }
 
     public List<User> getAllClients () {
