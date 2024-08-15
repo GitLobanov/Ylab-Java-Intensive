@@ -46,24 +46,24 @@ public class OrderRepository extends BaseRepository<Order> {
     }
 
     public List<Order> findByType(Order.TypeOrder typeOrder) {
-        String sql = "SELECT * FROM main.user WHERE type = ?";
+        String sql = "SELECT * FROM main.order WHERE type = ?";
         return findBy(sql, typeOrder.name());
     }
 
 
     public List<Order> findByClient(User client) {
-        String sql = "SELECT * FROM main.user WHERE client = ?";
+        String sql = "SELECT * FROM main.order WHERE client = ?";
         return findBy(sql, client.getId());
     }
 
     public List<Order> findByCar(Car car) {
-        String sql = "SELECT * FROM main.user WHERE car = ?";
+        String sql = "SELECT * FROM main.order WHERE car = ?";
         return findBy(sql, car.getId());
     }
 
 
     public List<Order> findByManager(User manager) {
-        String sql = "SELECT * FROM main.user WHERE manager = ?";
+        String sql = "SELECT * FROM main.order WHERE manager = ?";
         return findBy(sql, manager.getId());
     }
 

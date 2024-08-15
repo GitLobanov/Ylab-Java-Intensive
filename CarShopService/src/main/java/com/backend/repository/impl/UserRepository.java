@@ -57,6 +57,11 @@ public class UserRepository extends BaseRepository<User> {
         return findBy(sql, userName).get(0);
     }
 
+    public List<User> findUsersByRole (User.Role role){
+        String sql = "SELECT * FROM main.user WHERE role = ?";
+        return findBy(sql, role.name());
+    }
+
 
     @Override
     protected User mapRowToEntity(ResultSet rs) throws SQLException {

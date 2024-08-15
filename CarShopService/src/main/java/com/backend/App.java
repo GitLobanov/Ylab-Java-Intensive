@@ -9,18 +9,22 @@ import com.backend.util.Session;
 
 public class App
 {
+    MigrateLiquibase migrateLiquibase;
+    LoginRegisterController loginRegisterController = new LoginRegisterController();
+    AdminController adminController = new AdminController();
+    ClientController clientController = new ClientController();
+    ManagerController managerController = new ManagerController();
+
+    public App () {
+        migrateLiquibase = new MigrateLiquibase();
+    }
 
 
     public static void main( String[] args )
     {
 
-        MigrateLiquibase migrateLiquibase = new MigrateLiquibase();
-        migrateLiquibase.migrate();
 
-        LoginRegisterController loginRegisterController = new LoginRegisterController();
-        AdminController adminController = new AdminController();
-        ClientController clientController = new ClientController();
-        ManagerController managerController = new ManagerController();
+        migrateLiquibase.migrate();
 
         Session session = Session.getInstance();
         session.activate();

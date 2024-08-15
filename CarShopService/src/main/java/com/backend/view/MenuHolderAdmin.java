@@ -15,13 +15,11 @@ import java.util.UUID;
 
 public class MenuHolderAdmin extends MenuHolder {
 
-    private AdminService adminService;
     private UserRepository userRepository;
     private CarService carService;
 
 
     public MenuHolderAdmin() {
-        adminService = new AdminService();
         userRepository = new UserRepository();
         carService = new CarService();
     }

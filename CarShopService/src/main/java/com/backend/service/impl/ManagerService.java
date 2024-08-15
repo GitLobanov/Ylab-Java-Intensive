@@ -2,35 +2,33 @@ package com.backend.service.impl;
 
 import com.backend.model.Order;
 import com.backend.model.User;
-import com.backend.repository.impl.OrderRepository;
-import com.backend.repository.impl.UserRepository;
-import com.backend.service.EmployeeAbstractService;
+import com.backend.service.OrderService;
 
 import java.util.*;
 
 
-public class ManagerService extends EmployeeAbstractService {
+public class ManagerService {
 
-    public void viewMyClients(User manager) {
-       List<Order> orders = orderRepository.findByManager(manager);
+    OrderService orderService;
+
+    public ManagerService() {
+        orderService = new OrderService();
+    }
+
+    public List<User> getManagerClients(User manager) {
+       List<Order> orders = orderService.getManagerOrders(manager);
        List<User> clients = new ArrayList<>();
 
         for (Order order : orders) {
             clients.add(order.getClient().getId(), order.getClient());
         }
 
-        displaySearchResultUser(clients.iterator());
+        return clients;
     }
 
 
-    @Override
-    public boolean addOrder(Order order) {
-        return false;
-    }
-
-
-    public void viewMyTakenOrders(User manager) {
-        List<Order> orders = orderRepository.findByManager(manager);
+    public List<Order> getManagerTakenOrders(User manager) {
+        List<Order> orders = orderService.getManagerOrders(manager);
         List<Order> buyingOrders = new ArrayList<>();
 
         for (Order order : orders) {
@@ -39,12 +37,12 @@ public class ManagerService extends EmployeeAbstractService {
             }
         }
 
-        displaySearchResultOrder(buyingOrders.iterator());
+        return buyingOrders;
     }
 
 
-    public void viewMyTakenRequests(User manager) {
-        List<Order> orders = orderRepository.findByManager(manager);
+    public List<Order> getManagerTakenRequests(User manager) {
+        List<Order> orders = orderService.getManagerOrders(manager);
         List<Order> serviceRequests = new ArrayList<>();
 
         for (Order order : orders) {
@@ -53,6 +51,6 @@ public class ManagerService extends EmployeeAbstractService {
             }
         }
 
-        displaySearchResultOrder(serviceRequests.iterator());
+        return  serviceRequests;
     }
 }
