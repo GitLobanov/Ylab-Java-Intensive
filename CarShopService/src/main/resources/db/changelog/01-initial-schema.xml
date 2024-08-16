@@ -1,0 +1,222 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="postgres">
+        <sql>CREATE SCHEMA main;</sql>
+    </changeSet>
+
+    <changeSet id="2" author="postgres">
+
+        <createTable tableName="car"  schemaName="main">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="brand" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="color" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="availability" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="order"  schemaName="main">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="car" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="orderDateTime" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manager" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="user"  schemaName="main">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <createTable tableName="action"  schemaName="main">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="postgres">
+        <!-- Append foreign key for field 'car' (Car) -->
+        <addForeignKeyConstraint baseTableName="order"
+                                 baseColumnNames="car"
+                                 constraintName="fk_order_car"
+                                 referencedTableName="car"
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
+
+        <!-- Append foreign key for field 'client' (User) -->
+        <addForeignKeyConstraint baseTableName="order"
+                                 baseColumnNames="client"
+                                 constraintName="fk_order_client"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
+
+        <!-- Append foreign key for field 'manager' (User) -->
+        <addForeignKeyConstraint baseTableName="order"
+                                 baseColumnNames="manager"
+                                 constraintName="fk_order_manager"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
+
+        <!-- Append foreign key for field 'action.user' (User) -->
+        <addForeignKeyConstraint baseTableName="action"
+                                 baseColumnNames="user"
+                                 constraintName="fk_action_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="main"
+                                 referencedTableSchemaName="main"/>
+    </changeSet>
+
+    <changeSet id="4" author="postgres">
+        <createSequence sequenceName="order_id_seq"
+                        startValue="100"
+                        schemaName="main"
+                        incrementBy="1"
+                        baseTableSchemaName="main"
+                        referencedTableSchemaName="main"/>
+        <createSequence sequenceName="user_id_seq"
+                        startValue="100"
+                        schemaName="main"
+                        incrementBy="1"
+                        baseTableSchemaName="main"
+                        referencedTableSchemaName="main"/>
+        <createSequence sequenceName="car_id_seq"
+                        startValue="100"
+                        schemaName="main"
+                        incrementBy="1"
+                        baseTableSchemaName="main"
+                        referencedTableSchemaName="main"/>
+        <createSequence sequenceName="action_id_seq"
+                        startValue="100"
+                        incrementBy="1"
+                        schemaName="main"
+                        baseTableSchemaName="main"
+                        referencedTableSchemaName="main"/>
+    </changeSet>
+
+    <changeSet id="5" author="postgres">
+        <addAutoIncrement columnDataType="int"
+                          tableName="car"
+                          columnName="id"
+                          schemaName="main"
+                          startWith="1"
+                          incrementBy="1"
+                          generationType="SEQUENCE"
+                          sequenceName="car_id_seq"
+                          baseTableSchemaName="main"
+                          referencedTableSchemaName="main"/>
+        <addAutoIncrement columnDataType="int"
+                          tableName="order"
+                          columnName="id"
+                          schemaName="main"
+                          startWith="1"
+                          incrementBy="1"
+                          generationType="SEQUENCE"
+                          sequenceName="order_id_seq"
+                          baseTableSchemaName="main"
+                          referencedTableSchemaName="main"/>
+        <addAutoIncrement columnDataType="int"
+                          tableName="user"
+                          columnName="id"
+                          startWith="1"
+                          schemaName="main"
+                          incrementBy="1"
+                          generationType="SEQUENCE"
+                          sequenceName="user_id_seq"
+                          baseTableSchemaName="main"
+                          referencedTableSchemaName="main"/>
+        <addAutoIncrement columnDataType="int"
+                          tableName="action"
+                          columnName="id"
+                          startWith="1"
+                          schemaName="main"
+                          incrementBy="1"
+                          generationType="SEQUENCE"
+                          sequenceName="action_id_seq"
+                          baseTableSchemaName="main"
+                          referencedTableSchemaName="main"/>
+    </changeSet>
+
+
+
+
+</databaseChangeLog>

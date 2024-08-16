@@ -1,9 +1,7 @@
 package com.backend.controller;
 
-import com.backend.model.ActionLog;
 import com.backend.model.User;
-import com.backend.service.LoginRegisterService;
-import com.backend.service.parent.UserAbstractService;
+import com.backend.service.impl.LoginRegisterService;
 import com.backend.util.ConsoleColors;
 import com.backend.util.ErrorResponses;
 import com.backend.util.Session;
@@ -12,16 +10,26 @@ import com.backend.util.SuccessResponses;
 import java.util.Random;
 import java.util.Scanner;
 
-public class LoginRegisterController {
+public class LoginRegisterController implements Controller  {
 
     private LoginRegisterService loginRegisterService = new LoginRegisterService();
+
+    @Override
+    public void showMenu() {
+        System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
+        System.out.print("\uD83E\uDD14 What you want my friend? (register/login/exit): ");
+    }
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println(ConsoleColors.BLUE + "Authentication \uD83D\uDD11" + ConsoleColors.RESET);
-            System.out.print("\uD83E\uDD14 What you want my friend? (register/login/end): ");
-            String command = scanner.nextLine();
+            showMenu();
+            String command;
+            if (scanner.hasNextLine()) {
+                command = scanner.nextLine();
+            } else {
+                continue;
+            }
             switch (command.toLowerCase()) {
                 case "register":
                     if (handleRegister(scanner)) return;
@@ -29,7 +37,7 @@ public class LoginRegisterController {
                 case "login":
                     if (handleLogin(scanner)) return;
                     break;
-                case "end":
+                case "exit":
                     Session.getInstance().setStage(Session.Stage.EXIT);
                     return;
                 default:
@@ -55,7 +63,7 @@ public class LoginRegisterController {
 
         // Создание нового пользователя
         User user = new User(
-                userName, password, role, name, email, phone
+                0, userName, password, role, name, email, phone
         );
         boolean success = loginRegisterService.register(user);
         if (success) {
@@ -97,8 +105,6 @@ public class LoginRegisterController {
             }
 
             SuccessResponses.printCustomMessage("You have successfully logged in.");
-
-            UserAbstractService.log(ActionLog.ActionType.LOGIN, "");
 
             return true;
         } else {
