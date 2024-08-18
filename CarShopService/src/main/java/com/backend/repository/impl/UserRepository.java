@@ -17,8 +17,8 @@ public class UserRepository extends BaseRepository<User> {
     @Override
     public boolean save(User user) {
         String sql = "insert into main.user values(DEFAULT,?,?,?,?,?,?)";
-        return execute(sql, user.getId(), user.getUsername(), user.getPassword(),
-                user.getRole(), user.getName(), user.getEmail(), user.getPhone());
+        return execute(sql, user.getUsername(), user.getPassword(),
+                user.getRole().name(), user.getName(), user.getEmail(), user.getPhone());
     }
 
     @Override

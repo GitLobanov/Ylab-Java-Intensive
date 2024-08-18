@@ -51,9 +51,38 @@ public class OrderRepository extends BaseRepository<Order> {
     }
 
 
-    public List<Order> findByClient(User client) {
-        String sql = "SELECT * FROM main.order WHERE client = ?";
-        return findBy(sql, client.getId());
+    public List<Order> findOrdersByClient(String username) {
+        String sql = """
+                SELECT o.id,
+                       o.car,
+                       o.client,
+                       o."orderDateTime",
+                       o.status,
+                       o.type,
+                       o.note,
+                       o.manager
+                FROM main."order" o
+                         JOIN main."user" u ON o.client = u.id
+                WHERE o.type = 'BUYING' and u.username = ?;
+                """;
+        return findBy(sql, username);
+    }
+
+    public List<Order> findRequestsByClient(String username) {
+        String sql = """
+                SELECT o.id,
+                       o.car,
+                       o.client,
+                       o."orderDateTime",
+                       o.status,
+                       o.type,
+                       o.note,
+                       o.manager
+                FROM main."order" o
+                         JOIN main."user" u ON o.client = u.id
+                WHERE o.type = 'SERVICE' and u.username = ?;
+                """;
+        return findBy(sql, username);
     }
 
     public List<Order> findByCar(Car car) {

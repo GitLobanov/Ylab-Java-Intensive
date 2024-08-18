@@ -49,16 +49,6 @@ public class OrderService {
         }
     }
 
-    public List<Order> findOrderByClientAndTypeOrder(User user, Order.TypeOrder typeOrder) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search client order");
-        List<Order> result = orderRepository.findByClient(user);
-        for (Order order : result) {
-            if (order.getType() != typeOrder) {
-                result.remove(order);
-            }
-        }
-        return result;
-    }
 
     public boolean cancelOrder(Order order) {
         actionLogService.logAction(ActionLog.ActionType.CANCEL, "Canceled order");
@@ -67,11 +57,11 @@ public class OrderService {
     }
 
     public int getClientOrderCount(User client) {
-        return findOrderByClientAndTypeOrder(client, Order.TypeOrder.BUYING).size();
+        return orderRepository.findOrdersByClient(client.getUsername()).size();
     }
 
     public int getClientServiceRequestCount(User client) {
-        return findOrderByClientAndTypeOrder(client, Order.TypeOrder.SERVICE).size();
+        return orderRepository.findRequestsByClient(client.getUsername()).size();
     }
 
     public List<Order> getAllBuyingOrders (){

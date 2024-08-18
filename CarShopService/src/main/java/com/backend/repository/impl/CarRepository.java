@@ -1,6 +1,7 @@
 package com.backend.repository.impl;
 
 import com.backend.model.Car;
+import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
 import com.backend.util.db.SQLRequest;
 
@@ -48,6 +49,25 @@ public class CarRepository extends BaseRepository<Car> {
         String sql = "SELECT * FROM main.car WHERE availability = true";
         return findAll(sql);
     }
+
+    public List<Car> findCarsByClient(String username) {
+        String sql = """
+                SELECT c.id,
+                       c.brand,
+                       c.model,
+                       c.year,
+                       c.price,
+                       c.condition,
+                       c.color,
+                       c.availability
+                FROM main."order" o
+                         JOIN main.car c ON o.car = c.id
+                         JOIN main."user" u ON o.client = u.id
+                WHERE u.username = ?;""";
+        return findBy(sql, username);
+    }
+
+
 
     @Override
     protected Car mapRowToEntity(ResultSet rs) throws SQLException {

@@ -6,8 +6,6 @@ import lombok.Setter;
 
 public class Session {
 
-    @Setter
-    @Getter
     private User user;
     private boolean active = false;
 
@@ -39,15 +37,13 @@ public class Session {
     public void reset() {
         this.user = null;
         this.active = false;
-        this.stage = Stage.HAVE_TO_LOGIN;
     }
 
-    @Getter
-    @Setter
-    private Stage stage = Stage.HAVE_TO_LOGIN;
-
-    public enum Stage {
-        HAVE_TO_LOGIN, ADMIN, CLIENT, MANAGER, EXIT
+    public User getUser() {
+        return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

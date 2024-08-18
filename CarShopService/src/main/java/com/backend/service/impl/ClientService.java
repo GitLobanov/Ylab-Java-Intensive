@@ -4,6 +4,7 @@ import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
+import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.OrderRepository;
 import com.backend.repository.impl.UserRepository;
 import com.backend.service.ActionLogService;
@@ -21,6 +22,7 @@ public class ClientService {
 
     ActionLogService actionLogService;
     OrderRepository orderRepository;
+    CarRepository carRepository;
     UserRepository userRepository;
 
     OrderService orderService;
@@ -29,11 +31,13 @@ public class ClientService {
         actionLogService = new ActionLogService();
         orderRepository = new OrderRepository();
         userRepository = new UserRepository();
+        carRepository = new CarRepository();
 
         orderService = new OrderService();
     }
 
     public boolean addClient(User client) {
+        client.setRole(User.Role.CLIENT);
         return userRepository.save(client);
     }
 
@@ -54,57 +58,31 @@ public class ClientService {
     public boolean removeClient(String userName) {
         actionLogService.logAction(ActionLog.ActionType.DELETE, "Delete client");
 
-        if (userRepository.findByUserName(userName)==null){
-            ErrorResponses.printCustomMessage("Client not found.");
-            return false;
-        }
-        User employee = userRepository.findByUserName(userName);
-        if (employee.getRole() == User.Role.CLIENT) {
-            userRepository.delete(employee);
-            return true;
-        } else {
-            ErrorResponses.printCustomMessage("Hey! Who you want to delete? This user is not a client!");
-            System.out.println(ConsoleColors.YELLOW_BOLD + "User role must be ADMIN or MANAGER." + ConsoleColors.RESET);
-            return false;
-        }
+        User client = userRepository.findByUserName(userName);
+        return userRepository.delete(client);
     }
 
 
-    public List<Car> getClientCars(User client) {
+    public List<Car> getClientCars(String username) {
         actionLogService.logAction(ActionLog.ActionType.VIEW, "View own cars");
-
-        List<Order> orders = orderRepository.findByClient(client);
-        List<Car> cars = new ArrayList<>();
-
-        Iterator<Order> iterator = orders.iterator();
-        while (iterator.hasNext()) {
-            Car car = iterator.next().getCar();
-            cars.add(car);
-        }
-
-        return cars;
+        return carRepository.findCarsByClient(username);
     }
 
 
-    public List<Order> getClientRequests(User client) {
+    public List<Order> getClientRequests(String username) {
         actionLogService.logAction(ActionLog.ActionType.VIEW, "View own requests");
-         List<Order> myRequests = orderRepository.findByClient(client);
-        return myRequests.stream()
-                .filter(entry -> entry.getType() == Order.TypeOrder.SERVICE)
-                .toList();
+        return orderRepository.findRequestsByClient(username);
     }
 
 
-    public List<Order> getClientOrders(User client) {
+    public List<Order> getClientOrders(String username) {
         actionLogService.logAction(ActionLog.ActionType.VIEW, "View own orders");
-        List<Order> myRequests = orderRepository.findByClient(client);
-        return myRequests.stream()
-                .filter(entry -> entry.getType() == Order.TypeOrder.BUYING)
-                .toList();
+        return orderRepository.findOrdersByClient(username);
     }
 
-    public User getClientByUsername (String username){
-        return userRepository.findByUserName(username);
+    public Optional<User> getClientByUsername (String username){
+        return userRepository.findByUserName(username) != null
+                ? Optional.of(userRepository.findByUserName(username)) : Optional.empty();
     }
 
     public List<User> getAllClients () {
