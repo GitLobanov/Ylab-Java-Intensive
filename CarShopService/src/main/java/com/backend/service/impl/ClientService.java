@@ -9,9 +9,6 @@ import com.backend.repository.impl.OrderRepository;
 import com.backend.repository.impl.UserRepository;
 import com.backend.service.ActionLogService;
 import com.backend.service.OrderService;
-import com.backend.util.ConsoleColors;
-import com.backend.util.ErrorResponses;
-import com.backend.util.Session;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -46,7 +43,6 @@ public class ClientService {
         actionLogService.logAction(ActionLog.ActionType.UPDATE, "Update order");
 
         if (userRepository.findByUserName(userName)==null) {
-            ErrorResponses.printCustomMessage("Client not found");
             return false;
         } else {
             userRepository.update(updatedClient);
@@ -66,18 +62,6 @@ public class ClientService {
     public List<Car> getClientCars(String username) {
         actionLogService.logAction(ActionLog.ActionType.VIEW, "View own cars");
         return carRepository.findCarsByClient(username);
-    }
-
-
-    public List<Order> getClientRequests(String username) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own requests");
-        return orderRepository.findRequestsByClient(username);
-    }
-
-
-    public List<Order> getClientOrders(String username) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own orders");
-        return orderRepository.findOrdersByClient(username);
     }
 
     public Optional<User> getClientByUsername (String username){

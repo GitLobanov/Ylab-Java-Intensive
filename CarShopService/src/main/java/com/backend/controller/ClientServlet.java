@@ -18,10 +18,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @WebServlet(name = "ClientServlet", urlPatterns = "/api/clients/*")
@@ -34,8 +31,6 @@ public class ClientServlet extends HttpServlet {
         objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         clientService = new ClientService();
-        Session session = Session.getInstance();
-        session.setUser(clientService.getClientByUsername("man").get());
     }
 
     @Override
@@ -50,11 +45,6 @@ public class ClientServlet extends HttpServlet {
             case "clients":
                 handleGetClients(req, resp);
                 break;
-            case "requests":
-                handleGetClientRequests(req, resp);
-                break;
-            case "orders":
-                handleGetClientRequests(req, resp);
             default:
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -63,7 +53,6 @@ public class ClientServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = clientMapper.toEntity(getDTO(req));
-
         clientService.addClient(user);
         resp.setStatus(HttpServletResponse.SC_CREATED);
         doGet(req, resp);
@@ -117,15 +106,4 @@ public class ClientServlet extends HttpServlet {
         resp.getOutputStream().write(bytes);
     }
 
-    private void handleGetClientRequests(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ClientDTO clientDTO = objectMapper.readValue(req.getInputStream(), ClientDTO.class);
-        byte[] bytes = objectMapper.writeValueAsBytes(clientService.getClientRequests(clientDTO.getUsername()));
-        resp.getOutputStream().write(bytes);
-    }
-
-    private void handleGetClientOrders(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ClientDTO clientDTO = objectMapper.readValue(req.getInputStream(), ClientDTO.class);
-        byte[] bytes = objectMapper.writeValueAsBytes(clientService.getClientOrders(clientDTO.getUsername()));
-        resp.getOutputStream().write(bytes);
-    }
 }

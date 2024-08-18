@@ -4,7 +4,6 @@ import com.backend.model.ActionLog;
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;
 import com.backend.service.ActionLogService;
-import com.backend.util.ConsoleColors;
 
 import java.util.List;
 
@@ -29,7 +28,6 @@ public class EmployeeService {
 
     public boolean updateEmployee(User updatedEmployee) {
         if (updatedEmployee==null) {
-            System.out.println(ConsoleColors.YELLOW_BOLD + "Employee not found." + ConsoleColors.RESET);
             return false;
         }
         actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated employee: " + updatedEmployee.getUsername());
@@ -38,7 +36,6 @@ public class EmployeeService {
 
     public boolean removeEmployee(String userName) {
         if (userRepository.findByUserName(userName)==null){
-            System.out.println(ConsoleColors.YELLOW_BOLD + "Employee not found." + ConsoleColors.RESET);
             return false;
         }
         User employee = userRepository.findByUserName(userName);

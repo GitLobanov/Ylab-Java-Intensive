@@ -26,6 +26,7 @@ public class ActionLogService {
 
     public void logAction(ActionLog.ActionType type, String message) {
         Session session = Session.getInstance();
+        if (session.getUser() == null) return;
         ActionLog log = new ActionLog(0, session.getUser(),type, Date.valueOf(LocalDate.now().toString()), message);
         logger.info("User: {}, Action: {}, Details: {}", log.getUser().getUsername(), log.getActionType(), log.getMessage());
         actionLogRepository.save(log);

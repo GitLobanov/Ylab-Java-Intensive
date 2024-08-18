@@ -31,8 +31,6 @@ public class CarServlet extends HttpServlet {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         carService = new CarService();
         clientService = new ClientService();
-        Session session = Session.getInstance();
-        session.setUser(clientService.getClientByUsername("man").get());
     }
 
     @Override
