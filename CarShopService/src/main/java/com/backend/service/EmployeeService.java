@@ -1,11 +1,11 @@
-package com.backend.service.impl;
+package com.backend.service;
 
 import com.backend.model.ActionLog;
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;
-import com.backend.service.ActionLogService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EmployeeService {
 
@@ -43,13 +43,19 @@ public class EmployeeService {
         return userRepository.delete(employee);
     }
 
-    public User getByUsername(String userName) {
-        return userRepository.findByUserName(userName);
+    public Optional<User> getByUsername(String userName) {
+        return userRepository.findByUserName(userName) == null ?
+                Optional.empty() : Optional.of(userRepository.findByUserName(userName));
+    }
+
+    public List<User> getEmployeesBySearch(User user) {
+        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search employees");
+        return userRepository.search(user);
     }
 
     public List<User> getAllEmployees() {
         actionLogService.logAction(ActionLog.ActionType.VIEW, "View all employees");
-        return userRepository.findUsersByRole(User.Role.MANAGER);
+        return userRepository.findEmployee();
     }
 
 }

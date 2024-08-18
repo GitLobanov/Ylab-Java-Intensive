@@ -1,15 +1,13 @@
 package com.backend.controller;
 
-import com.backend.dto.CarDTO;
 import com.backend.dto.ClientDTO;
-import com.backend.mapper.CarMapper;
+import com.backend.dto.EmployeeDTO;
 import com.backend.mapper.ClientMapper;
-import com.backend.model.Car;
+import com.backend.mapper.EmployeeMapper;
 import com.backend.model.User;
-import com.backend.service.CarService;
-import com.backend.service.impl.ClientService;
+import com.backend.service.OrderService;
+import com.backend.service.ClientService;
 import com.backend.util.ServletUtils;
-import com.backend.util.Session;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.servlet.ServletException;
@@ -26,11 +24,14 @@ public class ClientServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper;
     private ClientMapper clientMapper = ClientMapper.INSTANCE;
+    private EmployeeMapper employeeMapper = EmployeeMapper.INSTANCE;
     private ClientService clientService;
+    private OrderService orderService;
     public ClientServlet() {
         objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         clientService = new ClientService();
+        orderService = new OrderService();
     }
 
     @Override
@@ -44,6 +45,12 @@ public class ClientServlet extends HttpServlet {
                 break;
             case "clients":
                 handleGetClients(req, resp);
+                break;            
+            case "manager":
+                handleGetManagerClients(req, resp);
+                break;
+            case "filter":
+                handleFilterClients(req, resp);
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -103,6 +110,20 @@ public class ClientServlet extends HttpServlet {
 
     private void handleGetClients(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         byte[] bytes = objectMapper.writeValueAsBytes(clientService.getAllClients());
+        resp.getOutputStream().write(bytes);
+    }
+
+    private void handleGetManagerClients(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        EmployeeDTO employeeDTO = objectMapper.readValue(req.getInputStream(), EmployeeDTO.class);
+        User manager = employeeMapper.toEntity(employeeDTO);
+        byte[] bytes = objectMapper.writeValueAsBytes(orderService.getClientsByManager(manager));
+        resp.getOutputStream().write(bytes);
+    }
+
+    private void handleFilterClients(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ClientDTO clientDTO = objectMapper.readValue(req.getInputStream(), ClientDTO.class);
+        User user = clientMapper.toEntity(clientDTO);
+        byte[] bytes = objectMapper.writeValueAsBytes(clientService.getClientsBySearch(user));
         resp.getOutputStream().write(bytes);
     }
 

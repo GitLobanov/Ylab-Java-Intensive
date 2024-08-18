@@ -1,13 +1,11 @@
 package com.backend.repository.impl;
 
-import com.backend.dto.OrderDTO;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -115,38 +113,38 @@ public class OrderRepository extends BaseRepository<Order> {
         return new Order(id, car, client, orderDateTime, status, type, note, manager);
     }
 
-    public List<Order> searchOrders(OrderDTO orderDTO) {
+    public List<Order> search(Order order) {
         StringBuilder sql = new StringBuilder("SELECT * FROM main.\"order\" o WHERE 1=1");
 
         List<Object> parameters = new ArrayList<>();
 
-        if (orderDTO.getCar() != null) {
+        if (order.getCar() != null) {
             sql.append(" AND o.car = ?");
-            parameters.add(orderDTO.getCar().getId());
+            parameters.add(order.getCar().getId());
         }
-        if (orderDTO.getClient() != null) {
+        if (order.getClient() != null) {
             sql.append(" AND o.client = ?");
-            parameters.add(orderDTO.getClient().getId());
+            parameters.add(order.getClient().getId());
         }
-        if (orderDTO.getOrderDate() != null) {
+        if (order.getOrderDate() != null) {
             sql.append(" AND o.orderDate = ?");
-            parameters.add(new java.sql.Date(orderDTO.getOrderDate().getTime()));
+            parameters.add(new java.sql.Date(order.getOrderDate().getTime()));
         }
-        if (orderDTO.getStatus() != null) {
+        if (order.getStatus() != null) {
             sql.append(" AND o.status = ?");
-            parameters.add(orderDTO.getStatus().name());
+            parameters.add(order.getStatus().name());
         }
-        if (orderDTO.getType() != null) {
+        if (order.getType() != null) {
             sql.append(" AND o.type = ?");
-            parameters.add(orderDTO.getType().name());
+            parameters.add(order.getType().name());
         }
-        if (orderDTO.getNote() != null && !orderDTO.getNote().isEmpty()) {
+        if (order.getNote() != null && !order.getNote().isEmpty()) {
             sql.append(" AND o.note LIKE ?");
-            parameters.add("%" + orderDTO.getNote() + "%");
+            parameters.add("%" + order.getNote() + "%");
         }
-        if (orderDTO.getManager() != null) {
+        if (order.getManager() != null) {
             sql.append(" AND o.manager = ?");
-            parameters.add(orderDTO.getManager().getId());
+            parameters.add(order.getManager().getId());
         }
 
         return findBy(sql.toString(), parameters.toArray());

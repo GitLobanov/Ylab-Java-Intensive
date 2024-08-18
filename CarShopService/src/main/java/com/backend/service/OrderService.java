@@ -1,14 +1,13 @@
 package com.backend.service;
 
-import com.backend.dto.OrderDTO;
 import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.OrderRepository;
+import com.backend.repository.impl.UserRepository;
 
-import java.time.LocalDate;
 import java.util.*;
 
 public class OrderService {
@@ -18,10 +17,12 @@ public class OrderService {
     ActionLogService actionLogService;
     OrderRepository orderRepository;
     CarRepository carRepository;
+    UserRepository userRepository;
 
     public OrderService() {
         actionLogService =  new ActionLogService();
         orderRepository  = new OrderRepository();
+        userRepository = new UserRepository();
     }
 
     public boolean addOrder(Order order) {
@@ -76,6 +77,10 @@ public class OrderService {
         return orderRepository.update(order);
     }
 
+    public List<User> getClientsByManager(User manager) {
+        return userRepository.findClientsByManager(manager);
+    }
+
     public int getClientOrderCount(User client) {
         return orderRepository.findOrdersByClient(client.getUsername()).size();
     }
@@ -99,10 +104,10 @@ public class OrderService {
         return orderRepository.findByManager(manager);
     }
 
-    public List<Order> getOrdersBySearch(OrderDTO orderDTO) {
+    public List<Order> getOrdersBySearch(Order order) {
         actionLogService.logAction(ActionLog.ActionType.VIEW, "Search orders");
 
-        return orderRepository.searchOrders(orderDTO);
+        return orderRepository.search(order);
 
     }
 

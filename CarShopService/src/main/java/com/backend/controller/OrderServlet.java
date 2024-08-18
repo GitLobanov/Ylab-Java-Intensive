@@ -107,7 +107,8 @@ public class OrderServlet extends HttpServlet {
 
     private void handleFilterOrders(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         OrderDTO orderDTO = objectMapper.readValue(req.getInputStream(), OrderDTO.class);
-        byte[] bytes = objectMapper.writeValueAsBytes(orderService.getOrdersBySearch(orderDTO));
+        Order order = orderMapper.toEntity(orderDTO);
+        byte[] bytes = objectMapper.writeValueAsBytes(orderService.getOrdersBySearch(order));
         resp.getOutputStream().write(bytes);
     }
 }

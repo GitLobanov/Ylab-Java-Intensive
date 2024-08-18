@@ -1,4 +1,4 @@
-package com.backend.service.impl;
+package com.backend.service;
 
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;

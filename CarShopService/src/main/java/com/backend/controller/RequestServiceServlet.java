@@ -2,12 +2,10 @@ package com.backend.controller;
 
 import com.backend.dto.ClientDTO;
 import com.backend.dto.OrderDTO;
-import com.backend.mapper.ClientMapper;
 import com.backend.mapper.OrderMapper;
 import com.backend.model.Order;
-import com.backend.model.User;
 import com.backend.service.OrderService;
-import com.backend.service.impl.ClientService;
+import com.backend.service.ClientService;
 import com.backend.util.ServletUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -111,7 +109,8 @@ public class RequestServiceServlet extends HttpServlet {
 
     private void handleFilterRequests(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         OrderDTO orderDTO = objectMapper.readValue(req.getInputStream(), OrderDTO.class);
-        byte[] bytes = objectMapper.writeValueAsBytes(orderService.getOrdersBySearch(orderDTO));
+        Order order = orderMapper.toEntity(orderDTO);
+        byte[] bytes = objectMapper.writeValueAsBytes(orderService.getOrdersBySearch(order));
         resp.getOutputStream().write(bytes);
     }
 }

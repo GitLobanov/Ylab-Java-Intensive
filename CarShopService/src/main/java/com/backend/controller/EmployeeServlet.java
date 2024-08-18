@@ -1,9 +1,9 @@
 package com.backend.controller;
 
-import com.backend.dto.ClientDTO;
-import com.backend.mapper.ClientMapper;
+import com.backend.dto.EmployeeDTO;
+import com.backend.mapper.EmployeeMapper;
 import com.backend.model.User;
-import com.backend.service.impl.ClientService;
+import com.backend.service.EmployeeService;
 import com.backend.util.ServletUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -16,16 +16,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet(name = "ClientServlet", urlPatterns = "/api/clients/*")
+@WebServlet(name = "EmployeeServlet", urlPatterns = "/api/employee/*")
 public class EmployeeServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper;
-    private ClientMapper clientMapper = ClientMapper.INSTANCE;
-    private ClientService clientService;
+    private EmployeeMapper employeeMapper = EmployeeMapper.INSTANCE;
+    private EmployeeService employeeService;
     public EmployeeServlet() {
         objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        clientService = new ClientService();
+        employeeService = new EmployeeService();
     }
 
     @Override
@@ -34,11 +34,11 @@ public class EmployeeServlet extends HttpServlet {
         String action = ServletUtils.getAction(req);
 
         switch (action) {
-            case "cars":
-                handleGetClientCars(req, resp);
+            case "employee":
+                handleGetEmployees(req, resp);
                 break;
-            case "clients":
-                handleGetClients(req, resp);
+            case "filter":
+                handleFilterEmployee(req, resp);
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -47,21 +47,21 @@ public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = clientMapper.toEntity(getDTO(req));
-        clientService.addClient(user);
+        User user = employeeMapper.toEntity(getDTO(req));
+        employeeService.addEmployee(user);
         resp.setStatus(HttpServletResponse.SC_CREATED);
         doGet(req, resp);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<User> optionalClient = clientService.getClientByUsername(getDTO(req).getUsername());
+        Optional<User> optionalClient = employeeService.getByUsername(getDTO(req).getUsername());
 
         if (optionalClient.isPresent()) {
-            clientService.removeClient(optionalClient.get().getUsername());
+            employeeService.removeEmployee(optionalClient.get().getUsername());
             resp.setStatus(HttpServletResponse.SC_OK);
         } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Client not found");
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Employee not found");
             return;
         }
 
@@ -70,34 +70,35 @@ public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientDTO clientDTO = getDTO(req);
-        Optional<User> optionalClient = clientService.getClientByUsername(clientDTO.getUsername());
+        EmployeeDTO employeeDTO = getDTO(req);
+        Optional<User> userUpdate = employeeService.getByUsername(employeeDTO.getUsername());
 
-        if (optionalClient.isPresent()) {
-            User clientUpdate = optionalClient.get();
-            clientMapper.updateFromDto(clientDTO, clientUpdate);
-            clientService.updateClient(optionalClient.get().getUsername(), clientUpdate);
+        if (userUpdate.isPresent()) {
+            employeeMapper.updateFromDto(employeeDTO, userUpdate.get());
+            employeeService.updateEmployee(userUpdate.get());
             resp.setStatus(HttpServletResponse.SC_OK);
         } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Client not found");
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Employee not found");
+            return;
         }
 
         doGet(req, resp);
     }
 
-    private ClientDTO getDTO(HttpServletRequest req) throws IOException {
-        ClientDTO clientDTO = objectMapper.readValue(req.getInputStream(), ClientDTO.class);
-        return clientDTO;
+    private EmployeeDTO getDTO(HttpServletRequest req) throws IOException {
+        EmployeeDTO employeeDTO = objectMapper.readValue(req.getInputStream(), EmployeeDTO.class);
+        return employeeDTO;
     }
 
-    private void handleGetClientCars(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientDTO clientDTO = objectMapper.readValue(req.getInputStream(), ClientDTO.class);
-        byte[] bytes = objectMapper.writeValueAsBytes(clientService.getClientCars(clientDTO.getUsername()));
+    private void handleGetEmployees(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        byte[] bytes = objectMapper.writeValueAsBytes(employeeService.getAllEmployees());
         resp.getOutputStream().write(bytes);
     }
 
-    private void handleGetClients(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        byte[] bytes = objectMapper.writeValueAsBytes(clientService.getAllClients());
+    private void handleFilterEmployee(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        EmployeeDTO employeeDTO = objectMapper.readValue(req.getInputStream(), EmployeeDTO.class);
+        User user = employeeMapper.toEntity(employeeDTO);
+        byte[] bytes = objectMapper.writeValueAsBytes(employeeService.getEmployeesBySearch(user));
         resp.getOutputStream().write(bytes);
     }
 
