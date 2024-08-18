@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.annotations.Loggable;
 import com.backend.dto.ClientDTO;
 import com.backend.dto.EmployeeDTO;
 import com.backend.mapper.ClientMapper;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+@Loggable
 @WebServlet(name = "ClientServlet", urlPatterns = "/api/clients/*")
 public class ClientServlet extends HttpServlet {
 

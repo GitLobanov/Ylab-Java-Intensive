@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.annotations.Loggable;
 import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.User;
@@ -9,6 +10,7 @@ import com.backend.repository.impl.UserRepository;
 
 import java.util.*;
 
+@Loggable
 public class ClientService {
 
     Scanner scanner = new Scanner(System.in);
