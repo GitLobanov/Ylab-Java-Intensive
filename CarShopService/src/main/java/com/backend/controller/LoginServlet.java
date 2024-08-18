@@ -51,8 +51,4 @@ public class LoginServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     }
-
-    private CarDTO getDTO(HttpServletRequest req) throws IOException {
-
-    }
 }
