@@ -4,6 +4,7 @@ import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.OrderRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+@Service
 public class CarService {
 
     CarRepository carRepository;

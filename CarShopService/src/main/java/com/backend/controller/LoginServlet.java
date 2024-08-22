@@ -1,15 +1,8 @@
 package com.backend.controller;
 
 
-import com.backend.dto.CarDTO;
-import com.backend.mapper.CarMapper;
-import com.backend.model.Car;
 import com.backend.model.User;
-import com.backend.service.CarService;
-import com.backend.service.ClientService;
 import com.backend.service.LoginRegisterService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -40,15 +33,5 @@ public class LoginServlet extends HttpServlet {
 
         User currentUser = loginRegisterService.login(username, password);
         req.getSession().setAttribute("currentUser", currentUser);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
     }
 }

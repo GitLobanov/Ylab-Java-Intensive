@@ -7,10 +7,12 @@ import com.backend.model.User;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.OrderRepository;
 import com.backend.repository.impl.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Loggable
+@Service
 public class ClientService {
 
     Scanner scanner = new Scanner(System.in);
