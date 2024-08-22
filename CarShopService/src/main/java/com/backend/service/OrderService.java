@@ -14,35 +14,28 @@ import java.util.*;
 @Service
 public class OrderService {
 
-    Scanner scanner = new Scanner(System.in);
-
-    ActionLogService actionLogService;
     OrderRepository orderRepository;
     CarRepository carRepository;
     UserRepository userRepository;
 
     public OrderService() {
-        actionLogService =  new ActionLogService();
         orderRepository  = new OrderRepository();
         userRepository = new UserRepository();
     }
 
     public boolean addOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.CREATE, "Created order");
         checkCarForAvailability(order);
         return orderRepository.save(order);
     }
 
 
     public boolean updateOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated order");
         checkCarForAvailability(order);
         return orderRepository.update(order);
     }
 
 
     public boolean deleteOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated order");
         checkCarForAvailability(order);
         return orderRepository.delete(order);
     }
@@ -54,13 +47,11 @@ public class OrderService {
     }
 
     public List<Order> getClientRequests(String username) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own requests");
         return orderRepository.findRequestsByClient(username);
     }
 
 
     public List<Order> getClientOrders(String username) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own orders");
         return orderRepository.findOrdersByClient(username);
     }
 
@@ -74,7 +65,6 @@ public class OrderService {
 
 
     public boolean cancelOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.CANCEL, "Canceled order");
         order.setStatus(Order.OrderStatus.CANCELLED);
         return orderRepository.update(order);
     }
@@ -92,23 +82,18 @@ public class OrderService {
     }
 
     public List<Order> getAllBuyingOrders (){
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View buying orders");
         return orderRepository.findByType(Order.TypeOrder.BUYING);
     }
 
     public List<Order> getAllServiceOrders() {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View service orders");
         return orderRepository.findByType(Order.TypeOrder.SERVICE);
     }
 
     public List<Order> getManagerOrders (User manager){
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "Manage orders");
         return orderRepository.findByManager(manager);
     }
 
     public List<Order> getOrdersBySearch(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search orders");
-
         return orderRepository.search(order);
 
     }

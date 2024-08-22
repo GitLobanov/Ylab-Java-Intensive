@@ -17,7 +17,6 @@ public class ClientService {
 
     Scanner scanner = new Scanner(System.in);
 
-    ActionLogService actionLogService;
     OrderRepository orderRepository;
     CarRepository carRepository;
     UserRepository userRepository;
@@ -25,7 +24,6 @@ public class ClientService {
     OrderService orderService;
 
     public ClientService() {
-        actionLogService = new ActionLogService();
         orderRepository = new OrderRepository();
         userRepository = new UserRepository();
         carRepository = new CarRepository();
@@ -40,7 +38,6 @@ public class ClientService {
 
 
     public boolean updateClient(String userName, User updatedClient) {
-        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Update order");
 
         if (userRepository.findByUserName(userName)==null) {
             return false;
@@ -52,7 +49,6 @@ public class ClientService {
 
 
     public boolean removeClient(String userName) {
-        actionLogService.logAction(ActionLog.ActionType.DELETE, "Delete client");
 
         User client = userRepository.findByUserName(userName);
         return userRepository.delete(client);
@@ -60,7 +56,6 @@ public class ClientService {
 
 
     public List<Car> getClientCars(String username) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own cars");
         return carRepository.findCarsByClient(username);
     }
 
@@ -70,12 +65,10 @@ public class ClientService {
     }
 
     public List<User> getAllClients () {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all clients");
         return userRepository.findUsersByRole(User.Role.CLIENT);
     }
 
     public List<User> getClientsBySearch(User user) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search clients");
         user.setRole(User.Role.CLIENT);
         return userRepository.search(user);
     }

@@ -4,11 +4,13 @@ import com.backend.model.Car;
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
 import com.backend.util.db.SQLRequest;
+import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@Repository
 public class CarRepository extends BaseRepository<Car> {
 
     @Override

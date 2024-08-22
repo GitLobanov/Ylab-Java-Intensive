@@ -2,10 +2,11 @@ package com.backend.service;
 
 import com.backend.model.Order;
 import com.backend.model.User;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-
+@Service
 public class ManagerService {
 
     OrderService orderService;

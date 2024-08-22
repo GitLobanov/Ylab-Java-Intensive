@@ -4,6 +4,7 @@ import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class OrderRepository extends BaseRepository<Order> {
 
     @Override

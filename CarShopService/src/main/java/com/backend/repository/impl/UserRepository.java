@@ -1,15 +1,14 @@
 package com.backend.repository.impl;
 
-import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.*;
 
+@Repository
 public class UserRepository extends BaseRepository<User> {
 
 

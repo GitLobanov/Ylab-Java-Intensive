@@ -3,25 +3,21 @@ package com.backend.service;
 import com.backend.model.ActionLog;
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class EmployeeService {
-
-    ActionLogService actionLogService;
 
     UserRepository userRepository;
 
     public EmployeeService () {
         userRepository = new UserRepository();
-
-        actionLogService = new ActionLogService();
-
     }
 
     public boolean addEmployee(User employee) {
-        actionLogService.logAction(ActionLog.ActionType.CREATE, "Created employee: " + employee.getUsername());
         return userRepository.save(employee);
     }
 
@@ -30,7 +26,6 @@ public class EmployeeService {
         if (updatedEmployee==null) {
             return false;
         }
-        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated employee: " + updatedEmployee.getUsername());
         return userRepository.update(updatedEmployee);
     }
 
@@ -39,7 +34,6 @@ public class EmployeeService {
             return false;
         }
         User employee = userRepository.findByUserName(userName);
-        actionLogService.logAction(ActionLog.ActionType.DELETE, "Deleted employee: " + employee.getUsername());
         return userRepository.delete(employee);
     }
 
@@ -49,12 +43,10 @@ public class EmployeeService {
     }
 
     public List<User> getEmployeesBySearch(User user) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search employees");
         return userRepository.search(user);
     }
 
     public List<User> getAllEmployees() {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all employees");
         return userRepository.findEmployee();
     }
 
