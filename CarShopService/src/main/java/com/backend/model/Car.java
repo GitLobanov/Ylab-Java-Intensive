@@ -1,10 +1,16 @@
 package com.backend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class Car {
 
     private int id;
@@ -17,17 +23,6 @@ public class Car {
     private boolean availability;
 
     public Car (){
-    }
-
-    public Car (int id, String brand, String model,int year, double price, String condition, String color, boolean availability){
-        setId(id);
-        setBrand(brand);
-        setModel(model);
-        setYear(year);
-        setPrice(price);
-        setCondition(condition);
-        setColor(color);
-        setAvailability(availability);
     }
 
 }

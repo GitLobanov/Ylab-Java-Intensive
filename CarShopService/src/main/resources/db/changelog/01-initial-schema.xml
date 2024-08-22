@@ -10,7 +10,7 @@
 
     <changeSet id="2" author="postgres">
 
-        <createTable tableName="car"  schemaName="main">
+        <createTable tableName="car"  schemaName="main" remarks="">
             <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -115,6 +115,7 @@
                                  constraintName="fk_order_car"
                                  referencedTableName="car"
                                  referencedColumnNames="id"
+                                 onDelete="CASCADE"
                                  baseTableSchemaName="main"
                                  referencedTableSchemaName="main"/>
 
@@ -124,6 +125,7 @@
                                  constraintName="fk_order_client"
                                  referencedTableName="user"
                                  referencedColumnNames="id"
+                                 onDelete="CASCADE"
                                  baseTableSchemaName="main"
                                  referencedTableSchemaName="main"/>
 
@@ -133,6 +135,7 @@
                                  constraintName="fk_order_manager"
                                  referencedTableName="user"
                                  referencedColumnNames="id"
+                                 onDelete="CASCADE"
                                  baseTableSchemaName="main"
                                  referencedTableSchemaName="main"/>
 
@@ -142,6 +145,7 @@
                                  constraintName="fk_action_user"
                                  referencedTableName="user"
                                  referencedColumnNames="id"
+                                 onDelete="CASCADE"
                                  baseTableSchemaName="main"
                                  referencedTableSchemaName="main"/>
     </changeSet>

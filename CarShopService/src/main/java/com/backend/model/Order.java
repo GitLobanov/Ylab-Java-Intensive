@@ -1,5 +1,6 @@
 package com.backend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
     private int id;
@@ -18,16 +20,6 @@ public class Order {
     private TypeOrder type;
     private String note;
     private User manager;
-
-    public Order(int id, Car car, User client, Date orderDate, OrderStatus status, TypeOrder type, String note, User manager) {
-        setId(id);
-        setCar(car);
-        setClient(client);
-        setOrderDate(this.orderDate);
-        setStatus(status);
-        setType(type);
-        setNote(note);
-    }
 
     public enum OrderStatus {
         PENDING, COMPLETED, CANCELLED

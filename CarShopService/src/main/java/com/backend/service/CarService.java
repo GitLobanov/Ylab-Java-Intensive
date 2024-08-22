@@ -7,6 +7,7 @@ import com.backend.repository.impl.OrderRepository;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -50,12 +51,14 @@ public class CarService {
         return list;
     }
 
-    public Car getCarById(int id) {
-        return carRepository.findById(id);
+    public Optional<Car> getCarById(int id) {
+        Optional<Car> optional = carRepository.findById(id)!=null
+                ? Optional.of(carRepository.findById(id)) : Optional.empty();
+        return optional;
     }
 
     public List<Car> getAllCars() {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all cars");
+//        actionLogService.logAction(ActionLog.ActionType.VIEW, "View all cars");
         return carRepository.findAll();
     }
 
