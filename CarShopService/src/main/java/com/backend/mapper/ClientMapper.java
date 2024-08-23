@@ -1,6 +1,5 @@
 package com.backend.mapper;
 
-import ch.qos.logback.core.net.server.Client;
 import com.backend.dto.CarDTO;
 import com.backend.dto.ClientDTO;
 import com.backend.model.Car;

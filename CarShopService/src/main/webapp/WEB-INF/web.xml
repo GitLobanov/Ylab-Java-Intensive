@@ -17,11 +17,6 @@
         <url-pattern>/css/*</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
     <error-page>
         <error-code>404</error-code>
         <location>/error/error-404.html</location>
@@ -32,14 +27,15 @@
         <location>/error</location>
     </error-page>
 
-<!--    <error-page>-->
-<!--        <exception-type>java.lang.Throwable</exception-type>-->
-<!--        <location>/error.jsp</location>-->
-<!--    </error-page>-->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 
-<!--    <error-page>-->
-<!--        <exception-type>java.lang.NullPointerException</exception-type>-->
-<!--        <location>/error-nullpointer.jsp</location>-->
-<!--    </error-page>-->
 
 </web-app>

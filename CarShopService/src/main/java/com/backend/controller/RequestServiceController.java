@@ -26,9 +26,9 @@ public class RequestServiceController {
     private final ClientService clientService;
 
     @Autowired
-    public RequestServiceController(OrderService orderService, OrderMapper orderMapper, ClientService clientService) {
+    public RequestServiceController(OrderService orderService, ClientService clientService) {
         this.orderService = orderService;
-        this.orderMapper = orderMapper;
+        this.orderMapper = OrderMapper.INSTANCE;
         this.clientService = clientService;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

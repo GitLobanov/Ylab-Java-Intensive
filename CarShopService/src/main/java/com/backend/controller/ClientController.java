@@ -28,27 +28,13 @@ public class ClientController {
     private final OrderService orderService;
 
     @Autowired
-    public ClientController(ClientService clientService, OrderService orderService, ClientMapper clientMapper, EmployeeMapper employeeMapper) {
+    public ClientController(ClientService clientService, OrderService orderService) {
         this.clientService = clientService;
         this.orderService = orderService;
-        this.clientMapper = clientMapper;
-        this.employeeMapper = employeeMapper;
+        this.clientMapper = ClientMapper.INSTANCE;
+        this.employeeMapper = EmployeeMapper.INSTANCE;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-    }
-
-    @GetMapping
-    public ResponseEntity<?> handleGetClients(@RequestParam(required = false) String action, @RequestBody(required = false) ClientDTO clientDTO, @RequestBody(required = false) EmployeeDTO employeeDTO) throws IOException {
-        switch (action) {
-            case "cars":
-                return handleGetClientCars(clientDTO);
-            case "manager":
-                return handleGetManagerClients(employeeDTO);
-            case "filter":
-                return handleFilterClients(clientDTO);
-            default:
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @PostMapping
@@ -82,21 +68,21 @@ public class ClientController {
         }
     }
 
-    private ResponseEntity<?> handleGetClientCars(ClientDTO clientDTO) throws IOException {
-        byte[] bytes = objectMapper.writeValueAsBytes(clientService.getClientCars(clientDTO.getUsername()));
-        return ResponseEntity.ok(bytes);
+    @GetMapping()
+    private byte[] handleGetClientCars(ClientDTO clientDTO) throws IOException {
+         return  objectMapper.writeValueAsBytes(clientService.getClientCars(clientDTO.getUsername()));
     }
 
-    private ResponseEntity<?> handleGetManagerClients(EmployeeDTO employeeDTO) throws IOException {
+    @GetMapping("/manager")
+    private byte[] handleGetManagerClients(EmployeeDTO employeeDTO) throws IOException {
         User manager = employeeMapper.toEntity(employeeDTO);
-        byte[] bytes = objectMapper.writeValueAsBytes(orderService.getClientsByManager(manager));
-        return ResponseEntity.ok(bytes);
+        return objectMapper.writeValueAsBytes(orderService.getClientsByManager(manager));
     }
 
-    private ResponseEntity<?> handleFilterClients(ClientDTO clientDTO) throws IOException {
+    @GetMapping("/filter")
+    private byte[] handleFilterClients(ClientDTO clientDTO) throws IOException {
         User user = clientMapper.toEntity(clientDTO);
-        byte[] bytes = objectMapper.writeValueAsBytes(clientService.getClientsBySearch(user));
-        return ResponseEntity.ok(bytes);
+        return objectMapper.writeValueAsBytes(clientService.getClientsBySearch(user));
     }
 }
 

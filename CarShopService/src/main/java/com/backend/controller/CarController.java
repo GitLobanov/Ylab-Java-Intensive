@@ -7,6 +7,8 @@ import com.backend.service.CarService;
 import com.backend.service.ClientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cars")
+@Tag(name = "Car Controller", description = "Operations related to cars")
 public class CarController {
 
     private final ObjectMapper objectMapper;
@@ -33,6 +36,7 @@ public class CarController {
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
+    @Operation(summary = "Get all cars", description = "Fetch all cars from the database")
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {
         List<Car> cars = carService.getAllCars();

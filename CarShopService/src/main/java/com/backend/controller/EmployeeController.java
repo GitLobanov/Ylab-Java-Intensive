@@ -23,23 +23,11 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, EmployeeMapper employeeMapper) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.employeeMapper = employeeMapper;
+        this.employeeMapper = EmployeeMapper.INSTANCE;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-    }
-
-    @GetMapping
-    public ResponseEntity<?> handleGetEmployees(@RequestParam(required = false) String action, @RequestBody(required = false) EmployeeDTO employeeDTO) throws IOException {
-        switch (action) {
-            case "employee":
-                return handleGetEmployees();
-            case "filter":
-                return handleFilterEmployee(employeeDTO);
-            default:
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @PostMapping
@@ -72,14 +60,14 @@ public class EmployeeController {
         }
     }
 
-    private ResponseEntity<?> handleGetEmployees() throws IOException {
-        byte[] bytes = objectMapper.writeValueAsBytes(employeeService.getAllEmployees());
-        return ResponseEntity.ok(bytes);
+    @GetMapping()
+    private byte[] handleGetEmployees() throws IOException {
+        return objectMapper.writeValueAsBytes(employeeService.getAllEmployees());
     }
 
-    private ResponseEntity<?> handleFilterEmployee(EmployeeDTO employeeDTO) throws IOException {
+    @GetMapping("/filter")
+    private byte[] handleFilterEmployee(EmployeeDTO employeeDTO) throws IOException {
         User user = employeeMapper.toEntity(employeeDTO);
-        byte[] bytes = objectMapper.writeValueAsBytes(employeeService.getEmployeesBySearch(user));
-        return ResponseEntity.ok(bytes);
+         return objectMapper.writeValueAsBytes(employeeService.getEmployeesBySearch(user));
     }
 }
