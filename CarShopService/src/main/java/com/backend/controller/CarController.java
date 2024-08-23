@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.annotations.Auditable;
 import com.backend.dto.CarDTO;
 import com.backend.mapper.CarMapper;
 import com.backend.model.Car;
@@ -19,7 +20,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cars")
-@Tag(name = "Car Controller", description = "Operations related to cars")
 public class CarController {
 
     private final ObjectMapper objectMapper;
@@ -36,7 +36,7 @@ public class CarController {
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
-    @Operation(summary = "Get all cars", description = "Fetch all cars from the database")
+    @Auditable(actionType = "GetAllCars", description = "Retrieve all cars")
     @GetMapping
     public ResponseEntity<List<CarDTO>> getAllCars() {
         List<Car> cars = carService.getAllCars();
@@ -46,6 +46,7 @@ public class CarController {
         return ResponseEntity.ok(carDTOs);
     }
 
+    @Auditable(actionType = "AddCar", description = "Add a new car")
     @PostMapping
     public ResponseEntity<Void> addCar(@RequestBody CarDTO carDTO) {
         Car car = carMapper.toEntity(carDTO);

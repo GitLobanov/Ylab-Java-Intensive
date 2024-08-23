@@ -1,9 +1,11 @@
 package com.backend.config;
 
+import com.backend.aspect.LoggingAspect;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -15,7 +17,7 @@ import java.util.List;
 
 @EnableWebMvc
 @Configuration
-
+@EnableAspectJAutoProxy
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -38,6 +40,13 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/swagger-ui/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/5.17.14/");
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
+    }
+
+    @Bean
+    public LoggingAspect loggingAspect() {
+        return new LoggingAspect();
     }
 
 }

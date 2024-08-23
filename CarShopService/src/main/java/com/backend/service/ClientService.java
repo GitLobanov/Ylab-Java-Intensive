@@ -1,7 +1,5 @@
 package com.backend.service;
 
-import com.backend.annotations.Loggable;
-import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.User;
 import com.backend.repository.impl.CarRepository;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Loggable
 @Service
 public class ClientService {
 
