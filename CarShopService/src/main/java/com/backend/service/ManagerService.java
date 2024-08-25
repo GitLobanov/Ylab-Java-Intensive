@@ -1,7 +1,11 @@
 package com.backend.service;
 
+import com.backend.dto.ClientDTO;
+import com.backend.dto.OrderDTO;
+import com.backend.mapper.ClientMapper;
 import com.backend.model.Order;
 import com.backend.model.User;
+import com.backend.repository.impl.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,47 +14,36 @@ import java.util.*;
 public class ManagerService {
 
     OrderService orderService;
+    OrderRepository orderRepository;
+
+    ClientMapper clientMapper;
 
     public ManagerService() {
         orderService = new OrderService();
+        orderRepository = new OrderRepository();
+        clientMapper = ClientMapper.INSTANCE;
     }
 
-    public List<User> getManagerClients(User manager) {
-       List<Order> orders = orderService.getManagerOrders(manager);
-       List<User> clients = new ArrayList<>();
-
-        for (Order order : orders) {
-            clients.add(order.getClient().getId(), order.getClient());
-        }
-
+    public List<ClientDTO> getManagerClients(User manager) {
+       List<ClientDTO> clients = orderService.getClientsByManager(manager.getUsername());
         return clients;
     }
 
 
     public List<Order> getManagerTakenOrders(User manager) {
-        List<Order> orders = orderService.getManagerOrders(manager);
-        List<Order> buyingOrders = new ArrayList<>();
-
-        for (Order order : orders) {
-            if (order.getType() == Order.TypeOrder.BUYING) {
-                buyingOrders.add(order);
-            }
-        }
-
-        return buyingOrders;
+        OrderDTO orderDTO  = new OrderDTO();
+        orderDTO.setManager(manager);
+        orderDTO.setType(Order.TypeOrder.BUYING);
+        List<Order> orders = orderRepository.search(orderDTO);
+        return orders;
     }
 
 
     public List<Order> getManagerTakenRequests(User manager) {
-        List<Order> orders = orderService.getManagerOrders(manager);
-        List<Order> serviceRequests = new ArrayList<>();
-
-        for (Order order : orders) {
-            if (order.getType() == Order.TypeOrder.SERVICE) {
-                serviceRequests.add(order);
-            }
-        }
-
-        return  serviceRequests;
+        OrderDTO orderDTO  = new OrderDTO();
+        orderDTO.setManager(manager);
+        orderDTO.setType(Order.TypeOrder.SERVICE);
+        List<Order> orders = orderRepository.search(orderDTO);
+        return orders;
     }
 }

@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.dto.CarDTO;
 import com.backend.dto.ClientDTO;
 import com.backend.dto.EmployeeDTO;
 import com.backend.mapper.ClientMapper;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,7 +26,7 @@ public class ClientController {
 
     private final ObjectMapper objectMapper;
     private final ClientMapper clientMapper;
-    private final EmployeeMapper employeeMapper;
+
     private final ClientService clientService;
     private final OrderService orderService;
 
@@ -32,9 +35,14 @@ public class ClientController {
         this.clientService = clientService;
         this.orderService = orderService;
         this.clientMapper = ClientMapper.INSTANCE;
-        this.employeeMapper = EmployeeMapper.INSTANCE;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClientDTO>> getAllClients() {
+        List<ClientDTO> clients = clientService.getAllClients();
+        return ResponseEntity.ok(clients);
     }
 
     @PostMapping
@@ -68,21 +76,22 @@ public class ClientController {
         }
     }
 
-    @GetMapping()
-    private byte[] handleGetClientCars(ClientDTO clientDTO) throws IOException {
-         return  objectMapper.writeValueAsBytes(clientService.getClientCars(clientDTO.getUsername()));
+    @GetMapping("/cars")
+    private ResponseEntity<List<CarDTO>> handleGetClientCars(ClientDTO clientDTO) {
+        List<CarDTO> cars = clientService.getClientCars(clientDTO.getUsername());
+        return ResponseEntity.ok(cars);
     }
 
     @GetMapping("/manager")
-    private byte[] handleGetManagerClients(EmployeeDTO employeeDTO) throws IOException {
-        User manager = employeeMapper.toEntity(employeeDTO);
-        return objectMapper.writeValueAsBytes(orderService.getClientsByManager(manager));
+    private ResponseEntity<List<ClientDTO>> handleGetManagerClients(EmployeeDTO employeeDTO) throws IOException {
+        List<ClientDTO> clients = orderService.getClientsByManager(employeeDTO.getUsername());
+        return ResponseEntity.ok(clients);
     }
 
     @GetMapping("/filter")
-    private byte[] handleFilterClients(ClientDTO clientDTO) throws IOException {
-        User user = clientMapper.toEntity(clientDTO);
-        return objectMapper.writeValueAsBytes(clientService.getClientsBySearch(user));
+    private ResponseEntity<List<ClientDTO>> handleFilterClients(ClientDTO clientDTO) throws IOException {
+        List<ClientDTO> clients = clientService.getClientsBySearch(clientDTO);
+        return ResponseEntity.ok(clients);
     }
 }
 

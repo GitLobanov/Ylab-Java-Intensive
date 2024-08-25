@@ -1,5 +1,7 @@
 package com.backend.service;
 
+import com.backend.dto.CarDTO;
+import com.backend.mapper.CarMapper;
 import com.backend.model.Car;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.OrderRepository;
@@ -13,23 +15,27 @@ public class CarService {
 
     CarRepository carRepository;
     OrderRepository orderRepository;
+    private final CarMapper carMapper;
 
     public CarService () {
         carRepository = new CarRepository();
         orderRepository = new OrderRepository();
+        this.carMapper = CarMapper.INSTANCE;
     }
 
-    public boolean addCar(Car car) {
+    public boolean addCar(CarDTO carDTO) {
+        Car car = carMapper.toEntity(carDTO);
         return carRepository.save(car);
     }
 
 
-    public boolean updateCar(Car car) {
+    public boolean updateCar(CarDTO carDTO) {
+        Car car = carMapper.toEntity(carDTO);
         return carRepository.update(car);
     }
 
-    public boolean deleteCar(Car car) {
-        return carRepository.delete(car);
+    public boolean deleteCar(int id) {
+        return carRepository.delete(findCarById(id));
     }
 
     public Car findCarById(int id) {
@@ -48,8 +54,8 @@ public class CarService {
         return optional;
     }
 
-    public List<Car> getAllCars() {
-        return carRepository.findAll();
+    public List<CarDTO> getAllCars() {
+        return carMapper.getDTOs(carRepository.findAll());
     }
 
 

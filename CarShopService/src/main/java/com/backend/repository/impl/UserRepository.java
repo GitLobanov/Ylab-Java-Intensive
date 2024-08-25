@@ -2,6 +2,7 @@ package com.backend.repository.impl;
 
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
+import com.backend.util.db.SQLRequest;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -11,14 +12,12 @@ import java.util.*;
 @Repository
 public class UserRepository extends BaseRepository<User> {
 
-
     public UserRepository() {
     }
 
-
     @Override
     public boolean save(User user) {
-        String sql = "insert into main.user values(DEFAULT,?,?,?,?,?,?)";
+        String sql = SQLRequest.INSERT_ALL_INTO_USER;
         return execute(sql, user.getUsername(), user.getPassword(),
                 user.getRole().name(), user.getName(), user.getEmail(), user.getPhone());
     }
@@ -44,24 +43,13 @@ public class UserRepository extends BaseRepository<User> {
 
     @Override
     public List<User> findAll() {
-        String sql = "SELECT * FROM main.user";
+        String sql = SQLRequest.SELECT_ALL_FROM_USER;
         return findAll(sql);
     }
 
-    public List<User> findClientsByManager(User manager) {
-        String sql = """
-                SELECT distinct cli.id,
-                       cli.username,
-                       cli.password,
-                       cli.role,
-                       cli.name,
-                       cli.email,
-                       cli.phone
-                FROM main.order
-                LEFT JOIN main."user" man on man.id = "order".manager
-                LEFT JOIN main."user" cli on cli.id = "order".client
-                WHERE man.username = ?""";
-        return findBy(sql, manager.getUsername());
+    public List<User> findClientsByManager(String manager) {
+        String sql = SQLRequest.SELECT_CLIENTS_BY_MANAGER;
+        return findBy(sql, manager);
     }
 
     public User findByUserNameAndPassword(String userName, String password) {
@@ -80,7 +68,7 @@ public class UserRepository extends BaseRepository<User> {
         return findBy(sql, role.name());
     }
 
-    public List<User> findEmployee() {
+    public List<User> findEmployees() {
         String sql = "SELECT * FROM main.user WHERE role = 'MANAGER' or role = 'ADMIN'";
         return findBy(sql);
     }

@@ -1,5 +1,9 @@
 package com.backend.service;
 
+import com.backend.dto.ClientDTO;
+import com.backend.dto.OrderDTO;
+import com.backend.mapper.ClientMapper;
+import com.backend.mapper.OrderMapper;
 import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
@@ -18,9 +22,15 @@ public class OrderService {
     CarRepository carRepository;
     UserRepository userRepository;
 
+    OrderMapper orderMapper;
+    ClientMapper clientMapper;
+
     public OrderService() {
         orderRepository  = new OrderRepository();
         userRepository = new UserRepository();
+
+        orderMapper = OrderMapper.INSTANCE;
+        clientMapper = ClientMapper.INSTANCE;
     }
 
     public boolean addOrder(Order order) {
@@ -46,13 +56,15 @@ public class OrderService {
                 Optional.empty() : Optional.of(orderRepository.findById(id));
     }
 
-    public List<Order> getClientRequests(String username) {
-        return orderRepository.findRequestsByClient(username);
+    public List<OrderDTO> getClientRequests(String username) {
+        List<Order> orders = orderRepository.findRequestsByClient(username);
+        return orderMapper.getDTOs(orders);
     }
 
 
-    public List<Order> getClientOrders(String username) {
-        return orderRepository.findOrdersByClient(username);
+    public List<OrderDTO> getClientOrders(String username) {
+        List<Order> orders = orderRepository.findOrdersByClient(username);
+        return orderMapper.getDTOs(orders);
     }
 
     private void checkCarForAvailability(Order order) {
@@ -69,8 +81,9 @@ public class OrderService {
         return orderRepository.update(order);
     }
 
-    public List<User> getClientsByManager(User manager) {
-        return userRepository.findClientsByManager(manager);
+    public List<ClientDTO> getClientsByManager(String manager) {
+        List<User> users = userRepository.findClientsByManager(manager);
+        return clientMapper.getDTOs(users);
     }
 
     public int getClientOrderCount(User client) {
@@ -81,22 +94,20 @@ public class OrderService {
         return orderRepository.findRequestsByClient(client.getUsername()).size();
     }
 
-    public List<Order> getAllBuyingOrders (){
-        return orderRepository.findByType(Order.TypeOrder.BUYING);
-    }
-
-    public List<Order> getAllServiceOrders() {
-        return orderRepository.findByType(Order.TypeOrder.SERVICE);
-    }
-
-    public List<Order> getManagerOrders (User manager){
-        return orderRepository.findByManager(manager);
-    }
-
-    public List<Order> getOrdersBySearch(Order order) {
-        return orderRepository.search(order);
+    public List<OrderDTO> getAllBuyingOrders (){
+        List<Order> orders = orderRepository.findByType(Order.TypeOrder.BUYING);
+        return orderMapper.getDTOs(orders);
 
     }
 
+    public List<OrderDTO> getAllServiceOrders() {
+        List<Order> orders = orderRepository.findByType(Order.TypeOrder.SERVICE);
+        return orderMapper.getDTOs(orders);
+    }
+
+    public List<OrderDTO> getOrdersBySearch(OrderDTO order) {
+        List<Order> orders = orderRepository.search(order);
+        return orderMapper.getDTOs(orders);
+    }
 
 }

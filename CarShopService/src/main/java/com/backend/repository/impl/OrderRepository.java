@@ -1,9 +1,11 @@
 package com.backend.repository.impl;
 
+import com.backend.dto.OrderDTO;
 import com.backend.model.Car;
 import com.backend.model.Order;
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
+import com.backend.util.db.SQLRequest;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
@@ -17,7 +19,7 @@ public class OrderRepository extends BaseRepository<Order> {
 
     @Override
     public boolean save(Order order) {
-        String sql = "insert into main.order values(DEFAULT,?,?,?,?,?,?,?)";
+        String sql = SQLRequest.INSERT_ALL_INTO_ORDER;
         return execute(sql, order.getCar().getId(), order.getClient().getId(), java.sql.Date.valueOf(order.getOrderDate().toLocalDate()),
                 order.getStatus().name(), order.getType().name(), order.getNote(), order.getManager().getId());
     }
@@ -115,7 +117,7 @@ public class OrderRepository extends BaseRepository<Order> {
         return new Order(id, car, client, orderDateTime, status, type, note, manager);
     }
 
-    public List<Order> search(Order order) {
+    public List<Order> search(OrderDTO order) {
         StringBuilder sql = new StringBuilder("SELECT * FROM main.\"order\" o WHERE 1=1");
 
         List<Object> parameters = new ArrayList<>();

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -31,19 +32,21 @@ public class OrderController {
     }
 
     @GetMapping
-    public byte[] getAllOrders() throws IOException {
-        return objectMapper.writeValueAsBytes(orderService.getAllBuyingOrders());
+    public ResponseEntity<List<OrderDTO>> getAllOrders () {
+        List<OrderDTO> orders = orderService.getAllBuyingOrders();
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/client")
-    public byte[] getClientOrders(@RequestBody ClientDTO clientDTO) throws IOException {
-        return objectMapper.writeValueAsBytes(orderService.getClientOrders(clientDTO.getUsername()));
+    public ResponseEntity<List<OrderDTO>> getClientOrders (@RequestBody ClientDTO clientDTO) throws IOException {
+        List<OrderDTO> orders = orderService.getClientOrders(clientDTO.getUsername());
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/filter")
-    public byte[] filterOrders(@RequestBody OrderDTO orderDTO) throws IOException {
-        Order order = orderMapper.toEntity(orderDTO);
-        return objectMapper.writeValueAsBytes(orderService.getOrdersBySearch(order));
+    public ResponseEntity<List<OrderDTO>> filterOrders(@RequestBody OrderDTO orderDTO) throws IOException {
+        List<OrderDTO> orders = orderService.getOrdersBySearch(orderDTO);
+        return ResponseEntity.ok(orders);
     }
 
     @PostMapping

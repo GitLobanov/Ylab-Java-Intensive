@@ -1,6 +1,7 @@
 package com.backend.service;
 
-import com.backend.model.ActionLog;
+import com.backend.dto.EmployeeDTO;
+import com.backend.mapper.EmployeeMapper;
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,11 @@ import java.util.Optional;
 public class EmployeeService {
 
     UserRepository userRepository;
+    EmployeeMapper employeeMapper;
 
     public EmployeeService () {
         userRepository = new UserRepository();
+        employeeMapper = EmployeeMapper.INSTANCE;
     }
 
     public boolean addEmployee(User employee) {
@@ -46,8 +49,8 @@ public class EmployeeService {
         return userRepository.search(user);
     }
 
-    public List<User> getAllEmployees() {
-        return userRepository.findEmployee();
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeMapper.getDTOs(userRepository.findEmployees());
     }
 
 }

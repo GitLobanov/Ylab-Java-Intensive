@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,6 +29,18 @@ public class EmployeeController {
         this.employeeMapper = EmployeeMapper.INSTANCE;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
+
+    @GetMapping()
+    private ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        List<EmployeeDTO> employees =  employeeService.getAllEmployees();
+        return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping("/filter")
+    private byte[] handleFilterEmployee(EmployeeDTO employeeDTO) throws IOException {
+        User user = employeeMapper.toEntity(employeeDTO);
+        return objectMapper.writeValueAsBytes(employeeService.getEmployeesBySearch(user));
     }
 
     @PostMapping
@@ -60,14 +73,4 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping()
-    private byte[] handleGetEmployees() throws IOException {
-        return objectMapper.writeValueAsBytes(employeeService.getAllEmployees());
-    }
-
-    @GetMapping("/filter")
-    private byte[] handleFilterEmployee(EmployeeDTO employeeDTO) throws IOException {
-        User user = employeeMapper.toEntity(employeeDTO);
-         return objectMapper.writeValueAsBytes(employeeService.getEmployeesBySearch(user));
-    }
 }

@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface OrderMapper {
 
@@ -18,5 +20,8 @@ public interface OrderMapper {
     Order toEntity(OrderDTO orderDTO);
 
     void updateFromDto(OrderDTO orderDTO, @MappingTarget Order order);
+
+    List<OrderDTO> getDTOs(List<Order> orders);
+
 
 }
