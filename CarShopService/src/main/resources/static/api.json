@@ -29,7 +29,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "   {\r\n        \"id\": 100,\r\n        \"brand\": \"Toyota\",\r\n        \"model\": \"Roland\",\r\n        \"year\": 2022,\r\n        \"price\": 30000.0,\r\n        \"condition\": \"new\",\r\n        \"color\": \"blue\",\r\n        \"availability\": true\r\n    }",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"brand\": \"Toyota\",\r\n    \"model\": \"Camry\",\r\n    \"year\": 2018,\r\n    \"price\": 20000.0,\r\n    \"condition\": \"Used\",\r\n    \"color\": \"Red\",\r\n    \"availability\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -63,17 +63,8 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 112\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:8080/carshopservice/api/cars",
+							"raw": "http://localhost:8080/carshopservice/api/cars/100",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -82,7 +73,8 @@
 							"path": [
 								"carshopservice",
 								"api",
-								"cars"
+								"cars",
+								"100"
 							],
 							"query": [
 								{
@@ -584,7 +576,29 @@
 					"name": "login in",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/carshopservice/login?login=cl&password=man",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"carshopservice",
+								"login"
+							],
+							"query": [
+								{
+									"key": "login",
+									"value": "cl"
+								},
+								{
+									"key": "password",
+									"value": "man"
+								}
+							]
+						}
 					},
 					"response": []
 				}

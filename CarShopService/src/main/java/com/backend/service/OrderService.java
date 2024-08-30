@@ -1,5 +1,9 @@
 package com.backend.service;
 
+import com.backend.dto.ClientDTO;
+import com.backend.dto.OrderDTO;
+import com.backend.mapper.ClientMapper;
+import com.backend.mapper.OrderMapper;
 import com.backend.model.ActionLog;
 import com.backend.model.Car;
 import com.backend.model.Order;
@@ -7,40 +11,41 @@ import com.backend.model.User;
 import com.backend.repository.impl.CarRepository;
 import com.backend.repository.impl.OrderRepository;
 import com.backend.repository.impl.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class OrderService {
 
-    Scanner scanner = new Scanner(System.in);
-
-    ActionLogService actionLogService;
     OrderRepository orderRepository;
     CarRepository carRepository;
     UserRepository userRepository;
 
+    OrderMapper orderMapper;
+    ClientMapper clientMapper;
+
     public OrderService() {
-        actionLogService =  new ActionLogService();
         orderRepository  = new OrderRepository();
         userRepository = new UserRepository();
+
+        orderMapper = OrderMapper.INSTANCE;
+        clientMapper = ClientMapper.INSTANCE;
     }
 
     public boolean addOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.CREATE, "Created order");
         checkCarForAvailability(order);
         return orderRepository.save(order);
     }
 
 
     public boolean updateOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated order");
         checkCarForAvailability(order);
         return orderRepository.update(order);
     }
 
 
     public boolean deleteOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.UPDATE, "Updated order");
         checkCarForAvailability(order);
         return orderRepository.delete(order);
     }
@@ -51,15 +56,15 @@ public class OrderService {
                 Optional.empty() : Optional.of(orderRepository.findById(id));
     }
 
-    public List<Order> getClientRequests(String username) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own requests");
-        return orderRepository.findRequestsByClient(username);
+    public List<OrderDTO> getClientRequests(String username) {
+        List<Order> orders = orderRepository.findRequestsByClient(username);
+        return orderMapper.getDTOs(orders);
     }
 
 
-    public List<Order> getClientOrders(String username) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View own orders");
-        return orderRepository.findOrdersByClient(username);
+    public List<OrderDTO> getClientOrders(String username) {
+        List<Order> orders = orderRepository.findOrdersByClient(username);
+        return orderMapper.getDTOs(orders);
     }
 
     private void checkCarForAvailability(Order order) {
@@ -72,13 +77,13 @@ public class OrderService {
 
 
     public boolean cancelOrder(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.CANCEL, "Canceled order");
         order.setStatus(Order.OrderStatus.CANCELLED);
         return orderRepository.update(order);
     }
 
-    public List<User> getClientsByManager(User manager) {
-        return userRepository.findClientsByManager(manager);
+    public List<ClientDTO> getClientsByManager(String manager) {
+        List<User> users = userRepository.findClientsByManager(manager);
+        return clientMapper.getDTOs(users);
     }
 
     public int getClientOrderCount(User client) {
@@ -89,27 +94,20 @@ public class OrderService {
         return orderRepository.findRequestsByClient(client.getUsername()).size();
     }
 
-    public List<Order> getAllBuyingOrders (){
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View buying orders");
-        return orderRepository.findByType(Order.TypeOrder.BUYING);
-    }
-
-    public List<Order> getAllServiceOrders() {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "View service orders");
-        return orderRepository.findByType(Order.TypeOrder.SERVICE);
-    }
-
-    public List<Order> getManagerOrders (User manager){
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "Manage orders");
-        return orderRepository.findByManager(manager);
-    }
-
-    public List<Order> getOrdersBySearch(Order order) {
-        actionLogService.logAction(ActionLog.ActionType.VIEW, "Search orders");
-
-        return orderRepository.search(order);
+    public List<OrderDTO> getAllBuyingOrders (){
+        List<Order> orders = orderRepository.findByType(Order.TypeOrder.BUYING);
+        return orderMapper.getDTOs(orders);
 
     }
 
+    public List<OrderDTO> getAllServiceOrders() {
+        List<Order> orders = orderRepository.findByType(Order.TypeOrder.SERVICE);
+        return orderMapper.getDTOs(orders);
+    }
+
+    public List<OrderDTO> getOrdersBySearch(OrderDTO order) {
+        List<Order> orders = orderRepository.search(order);
+        return orderMapper.getDTOs(orders);
+    }
 
 }

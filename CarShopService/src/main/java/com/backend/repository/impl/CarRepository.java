@@ -4,11 +4,13 @@ import com.backend.model.Car;
 import com.backend.model.User;
 import com.backend.repository.abstracts.BaseRepository;
 import com.backend.util.db.SQLRequest;
+import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@Repository
 public class CarRepository extends BaseRepository<Car> {
 
     @Override
@@ -28,13 +30,13 @@ public class CarRepository extends BaseRepository<Car> {
 
     @Override
     public boolean delete(Car car) {
-        String sql = "DELETE FROM main.car WHERE id = ?";
+        String sql = SQLRequest.DELETE_CAR_BY_ID;
         return execute(sql, car.getId());
     }
 
     @Override
     public Car findById(int id) {
-        String sql = "SELECT * FROM main.car WHERE id = ?";
+        String sql = SQLRequest.SELECT_CAR_BY_ID;
         return findById(sql, id);
     }
 
@@ -51,19 +53,7 @@ public class CarRepository extends BaseRepository<Car> {
     }
 
     public List<Car> findCarsByClient(String username) {
-        String sql = """
-                SELECT c.id,
-                       c.brand,
-                       c.model,
-                       c.year,
-                       c.price,
-                       c.condition,
-                       c.color,
-                       c.availability
-                FROM main."order" o
-                         JOIN main.car c ON o.car = c.id
-                         JOIN main."user" u ON o.client = u.id
-                WHERE u.username = ?;""";
+        String sql = SQLRequest.SELECT_CAR_BY_CLIENT;
         return findBy(sql, username);
     }
 

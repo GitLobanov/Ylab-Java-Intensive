@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface CarMapper  {
 
@@ -16,5 +18,7 @@ public interface CarMapper  {
     Car toEntity(CarDTO carDTO);
 
     void updateFromDto(CarDTO carDTO, @MappingTarget Car car);
+
+    List<CarDTO> getDTOs(List<Car> cars);
 
 }

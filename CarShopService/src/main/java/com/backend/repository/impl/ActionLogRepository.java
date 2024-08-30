@@ -7,12 +7,14 @@ import com.backend.repository.abstracts.BaseRepository;
 import com.backend.repository.interfaces.CrudRepository;
 import com.backend.util.db.SQLRequest;
 import lombok.Setter;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@Repository
 public class ActionLogRepository extends BaseRepository<ActionLog> {
 
     @Override

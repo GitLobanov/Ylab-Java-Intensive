@@ -2,6 +2,7 @@ package com.backend.repository.abstracts;
 
 import com.backend.repository.interfaces.CrudRepository;
 import com.backend.util.DatabaseManager;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public abstract class BaseRepository <T> implements CrudRepository<T> {
 
     private static final DatabaseManager DATABASE_MANAGER = new DatabaseManager();

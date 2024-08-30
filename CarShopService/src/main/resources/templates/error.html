@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+</head>
+<body>
+<h1>Error Information</h1>
+<p><strong>Status Code</strong>: <span th:text="${statusCode}"></span></p>
+<p><strong>Servlet Name</strong>: <span th:text="${servletName}"></span></p>
+<p><strong>Requested URI</strong>: <span th:text="${requestUri}"></span></p>
+<p th:if="${exception}"><strong>Exception</strong>: <span th:text="${exception}"></span></p>
+</body>
+</html>

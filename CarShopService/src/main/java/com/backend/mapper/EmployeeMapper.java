@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface EmployeeMapper {
 
@@ -17,5 +19,8 @@ public interface EmployeeMapper {
     User toEntity(EmployeeDTO employeeDTO);
 
     void updateFromDto(EmployeeDTO employeeDTO, @MappingTarget User employee);
+
+    List<EmployeeDTO> getDTOs(List<User> users);
+
 
 }

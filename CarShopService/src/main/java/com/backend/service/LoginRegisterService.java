@@ -2,8 +2,10 @@ package com.backend.service;
 
 import com.backend.model.User;
 import com.backend.repository.impl.UserRepository;
+import org.springframework.stereotype.Service;
 
 
+@Service
 public class LoginRegisterService {
 
     UserRepository userRepository = new UserRepository();

@@ -1,15 +1,18 @@
 package com.backend.mapper;
 
-import ch.qos.logback.core.net.server.Client;
 import com.backend.dto.CarDTO;
 import com.backend.dto.ClientDTO;
 import com.backend.model.Car;
 import com.backend.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
+@JsonIgnoreProperties
 public interface ClientMapper {
 
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
@@ -20,4 +23,5 @@ public interface ClientMapper {
 
     void updateFromDto(ClientDTO clientDTO, @MappingTarget User client);
 
+    List<ClientDTO> getDTOs(List<User> users);
 }
