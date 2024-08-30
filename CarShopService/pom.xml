@@ -2,6 +2,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+    </parent>
+
     <groupId>com.backend</groupId>
     <artifactId>CarShopService</artifactId>
     <version>1.0</version>
@@ -17,6 +23,7 @@
         <jar.plugin.version>3.2.0</jar.plugin.version>
         <map-struct.version>1.6.0</map-struct.version>
         <springframework.version>6.1.12</springframework.version>
+        <springframework.boot.version>3.2.0</springframework.boot.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.war.version>3.3.1</maven.war.version>
@@ -28,11 +35,17 @@
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <aspectj.version>1.9.22.1</aspectj.version>
         <spring.framework.test.version>6.0.3</spring.framework.test.version>
+        <spring.doc.version>2.1.0</spring.doc.version>
         <hamcrest.version>2.2</hamcrest.version>
         <json.path.version>2.8.0</json.path.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -73,24 +86,9 @@
         </dependency>
 
         <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-core</artifactId>
-            <version>2.2.22</version>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-models</artifactId>
-            <version>2.2.22</version>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>2.2.22</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>swagger-ui</artifactId>
-            <version>5.17.14</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${spring.doc.version}</version>
         </dependency>
 
         <dependency>
