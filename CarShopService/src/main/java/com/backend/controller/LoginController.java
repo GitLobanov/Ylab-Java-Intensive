@@ -23,7 +23,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO, HttpSession session) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO, HttpSession session) {
         String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
 

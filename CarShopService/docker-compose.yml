@@ -9,16 +9,11 @@ services:
       POSTGRES_DB: car_shop_db
     ports:
       - "5432:5432"
-    networks:
-      - app-network
     volumes:
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      - ./init-grants.sql:/docker-entrypoint-initdb.d/init-grants.sql
     restart: always
 
-
-networks:
-  app-network:
-    driver: bridge
 
 volumes:
   postgres_data:

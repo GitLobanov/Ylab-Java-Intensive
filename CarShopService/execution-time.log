@@ -1,0 +1,46 @@
+Aug 30, 2024 3:18:58 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T15:18:58.755089600, End: 2024-08-30T15:18:58.755089600, Duration: 0 ms
+Aug 30, 2024 3:18:59 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T15:18:59.133304100, End: 2024-08-30T15:18:59.701898800, Duration: 568 ms
+Aug 30, 2024 3:19:10 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: ResponseEntity com.backend.controller.CarController.getAllCars(), Start: 2024-08-30T15:19:10.846237800, End: 2024-08-30T15:19:10.985115500, Duration: 138 ms
+Aug 30, 2024 3:20:08 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: ResponseEntity com.backend.controller.CarController.getAllCars(), Start: 2024-08-30T15:20:08.488240900, End: 2024-08-30T15:20:08.612357, Duration: 124 ms
+Aug 30, 2024 3:21:19 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: ResponseEntity com.backend.controller.CarController.getAllCars(), Start: 2024-08-30T15:21:19.928190500, End: 2024-08-30T15:21:19.999340900, Duration: 71 ms
+Aug 30, 2024 3:21:51 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: ResponseEntity com.backend.controller.CarController.getAllCars(), Start: 2024-08-30T15:21:51.360324500, End: 2024-08-30T15:21:51.572015500, Duration: 211 ms
+Aug 30, 2024 4:26:51 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T16:26:51.286336500, End: 2024-08-30T16:26:51.286336500, Duration: 0 ms
+Aug 30, 2024 4:26:52 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T16:26:51.699980700, End: 2024-08-30T16:26:52.299892200, Duration: 599 ms
+Aug 30, 2024 4:26:58 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: ResponseEntity com.backend.controller.CarController.getAllCars(), Start: 2024-08-30T16:26:58.588881800, End: 2024-08-30T16:26:58.652989600, Duration: 64 ms
+Aug 30, 2024 4:30:02 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T16:30:02.243947500, End: 2024-08-30T16:30:02.243947500, Duration: 0 ms
+Aug 30, 2024 4:30:03 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T16:30:02.611677100, End: 2024-08-30T16:30:03.191551100, Duration: 579 ms
+Aug 30, 2024 4:30:13 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T16:30:13.040681100, End: 2024-08-30T16:30:13.040681100, Duration: 0 ms
+Aug 30, 2024 4:30:13 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T16:30:13.399951400, End: 2024-08-30T16:30:13.401950800, Duration: 1 ms
+Aug 30, 2024 4:31:32 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T16:31:32.746847500, End: 2024-08-30T16:31:32.746847500, Duration: 0 ms
+Aug 30, 2024 4:31:33 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T16:31:33.118692300, End: 2024-08-30T16:31:33.652112500, Duration: 533 ms
+Aug 30, 2024 4:34:16 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T16:34:16.557828800, End: 2024-08-30T16:34:16.557828800, Duration: 0 ms
+Aug 30, 2024 4:34:17 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T16:34:16.912007700, End: 2024-08-30T16:34:17.473996100, Duration: 561 ms
+Aug 30, 2024 4:34:34 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T16:34:34.423840100, End: 2024-08-30T16:34:34.424841100, Duration: 1 ms
+Aug 30, 2024 4:34:34 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T16:34:34.777104, End: 2024-08-30T16:34:34.780103300, Duration: 2 ms
+Aug 30, 2024 4:35:00 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T16:35:00.339844700, End: 2024-08-30T16:35:00.341484200, Duration: 1 ms
+Aug 30, 2024 5:58:00 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: Map org.springdoc.webmvc.ui.SwaggerConfigResource.openapiJson(HttpServletRequest), Start: 2024-08-30T17:58:00.797269100, End: 2024-08-30T17:58:00.797269100, Duration: 0 ms
+Aug 30, 2024 5:58:01 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: byte[] org.springdoc.webmvc.api.OpenApiWebMvcResource.openapiJson(HttpServletRequest,String,Locale), Start: 2024-08-30T17:58:01.177142700, End: 2024-08-30T17:58:01.755727200, Duration: 578 ms
+Aug 30, 2024 5:58:08 PM com.backend.loggerstarter.aspect.ExecutionTimeLoggerAspect logExecution
+INFO: Method: ResponseEntity com.backend.controller.CarController.getAllCars(), Start: 2024-08-30T17:58:07.991613600, End: 2024-08-30T17:58:08.053259, Duration: 61 ms

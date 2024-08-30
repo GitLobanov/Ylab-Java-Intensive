@@ -5,12 +5,12 @@ import com.backend.service.CarService;
 import com.backend.service.ClientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,28 +19,27 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(CarController.class)
 public class CarControllerTest {
 
-    @InjectMocks
-    private CarController carController;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private CarService carService;
 
-    @Mock
+    @MockBean
     private ClientService clientService;
 
-    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(carController).build();
         objectMapper = new ObjectMapper();
     }
 
     @Test
+    @DisplayName("Test getting all cars")
     public void testGetAllCars() throws Exception {
         CarDTO carDTO = new CarDTO();
         List<CarDTO> carList = Collections.singletonList(carDTO);
@@ -54,6 +53,7 @@ public class CarControllerTest {
     }
 
     @Test
+    @DisplayName("Test adding a car")
     public void testAddCar() throws Exception {
         CarDTO carDTO = new CarDTO();
 
@@ -66,6 +66,7 @@ public class CarControllerTest {
     }
 
     @Test
+    @DisplayName("Test deleting a car")
     public void testDeleteCar() throws Exception {
         int carId = 1;
         when(carService.deleteCar(carId)).thenReturn(true);
@@ -76,6 +77,7 @@ public class CarControllerTest {
     }
 
     @Test
+    @DisplayName("Test deleting a car not found")
     public void testDeleteCarNotFound() throws Exception {
         int carId = 1;
         when(carService.deleteCar(carId)).thenReturn(false);
@@ -85,6 +87,7 @@ public class CarControllerTest {
     }
 
     @Test
+    @DisplayName("Test updating a car")
     public void testUpdateCar() throws Exception {
         CarDTO carDTO = new CarDTO();
 
@@ -99,6 +102,7 @@ public class CarControllerTest {
     }
 
     @Test
+    @DisplayName("Test updating a car not found")
     public void testUpdateCarNotFound() throws Exception {
         CarDTO carDTO = new CarDTO();
 

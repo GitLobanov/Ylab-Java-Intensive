@@ -1,6 +1,7 @@
 package com.backend.controller;
 
 import com.backend.dto.EmployeeDTO;
+import com.backend.loggerstarter.annotation.EnableAudit;
 import com.backend.mapper.EmployeeMapper;
 import com.backend.model.User;
 import com.backend.service.EmployeeService;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -50,6 +52,8 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Delete", description = "Delete employee")
     @DeleteMapping("/{username}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable String username) {
         Optional<User> optionalEmployee = employeeService.getByUsername(username);
@@ -61,6 +65,8 @@ public class EmployeeController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Update", description = "Update employee")
     @PutMapping("/{username}")
     public ResponseEntity<Void> updateEmployee(@PathVariable String username, @RequestBody EmployeeDTO employeeDTO) {
         Optional<User> userUpdate = employeeService.getByUsername(username);

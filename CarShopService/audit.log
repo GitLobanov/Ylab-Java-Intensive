@@ -1,0 +1,12 @@
+Aug 30, 2024 3:19:10 PM com.backend.loggerstarter.aspect.AuditAspect logAudit
+INFO: User: anonymous, Action: GetAllCars, Description: Retrieve all cars, Start: 2024-08-30T15:19:10.846237800, End: 2024-08-30T15:19:10.986116600, Success: true
+Aug 30, 2024 3:20:08 PM com.backend.loggerstarter.aspect.AuditAspect logAudit
+INFO: User: anonymous, Action: GetAllCars, Description: Retrieve all cars, Start: 2024-08-30T15:20:08.488240900, End: 2024-08-30T15:20:08.613357600, Success: true
+Aug 30, 2024 3:21:20 PM com.backend.loggerstarter.aspect.AuditAspect logAudit
+INFO: User: anonymous, Action: GetAllCars, Description: Retrieve all cars, Start: 2024-08-30T15:21:19.928190500, End: 2024-08-30T15:21:20.000343900, Success: true
+Aug 30, 2024 3:21:51 PM com.backend.loggerstarter.aspect.AuditAspect logAudit
+INFO: User: anonymous, Action: GetAllCars, Description: Retrieve all cars, Start: 2024-08-30T15:21:51.358325800, End: 2024-08-30T15:21:51.592012500, Success: true
+Aug 30, 2024 4:26:58 PM com.backend.loggerstarter.aspect.AuditAspect logAudit
+INFO: User: anonymous, Action: GetAllCars, Description: Retrieve all cars, Start: 2024-08-30T16:26:58.588881800, End: 2024-08-30T16:26:58.653989100, Success: true
+Aug 30, 2024 5:58:08 PM com.backend.loggerstarter.aspect.AuditAspect logAudit
+INFO: User: anonymous, Action: GetAllCars, Description: Retrieve all cars, Start: 2024-08-30T17:58:07.991613600, End: 2024-08-30T17:58:08.054257200, Success: true

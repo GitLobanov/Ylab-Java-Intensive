@@ -2,6 +2,7 @@ package com.backend.controller;
 
 import com.backend.dto.ClientDTO;
 import com.backend.dto.OrderDTO;
+import com.backend.loggerstarter.annotation.EnableAudit;
 import com.backend.mapper.OrderMapper;
 import com.backend.model.Order;
 import com.backend.service.OrderService;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -52,30 +54,36 @@ public class RequestServiceController {
         return objectMapper.writeValueAsBytes(orderService.getOrdersBySearch(orderDTO));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Add", description = "Add request service")
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) throws IOException {
+    public ResponseEntity<String> createOrder(@RequestBody OrderDTO orderDTO) throws IOException {
         Order order = orderMapper.toEntity(orderDTO);
         if (orderService.addOrder(order)) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Order created");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Request created");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create order");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create request");
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Delete", description = "Delete request")
     @DeleteMapping
-    public ResponseEntity<?> deleteOrder(@RequestBody OrderDTO orderDTO) throws IOException {
+    public ResponseEntity<String> deleteOrder(@RequestBody OrderDTO orderDTO) throws IOException {
         Optional<Order> optionalOrder = orderService.getOrderById(orderDTO.getId());
 
         if (optionalOrder.isPresent()) {
             orderService.deleteOrder(optionalOrder.get());
-            return ResponseEntity.ok("Order deleted");
+            return ResponseEntity.ok("Request deleted");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Request not found");
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Update", description = "Update request service")
     @PutMapping
-    public ResponseEntity<?> updateOrder(@RequestBody OrderDTO orderDTO) throws IOException {
+    public ResponseEntity<String> updateOrder(@RequestBody OrderDTO orderDTO) throws IOException {
         Optional<Order> optionalOrder = orderService.getOrderById(orderDTO.getId());
 
         if (optionalOrder.isPresent()) {
