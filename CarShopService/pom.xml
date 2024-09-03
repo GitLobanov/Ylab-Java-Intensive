@@ -38,6 +38,7 @@
         <spring.doc.version>2.1.0</spring.doc.version>
         <hamcrest.version>2.2</hamcrest.version>
         <json.path.version>2.8.0</json.path.version>
+        <backend.version>0.0.2-SNAPSHOT</backend.version>
     </properties>
 
     <dependencies>
@@ -155,7 +156,7 @@
         <dependency>
             <groupId>com.backend</groupId>
             <artifactId>logger-starter</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>${backend.version}</version>
         </dependency>
 
     </dependencies>
