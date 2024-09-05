@@ -7,15 +7,13 @@ import com.backend.model.Order;
 import com.backend.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -25,32 +23,31 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(OrderController.class)
 public class OrderControllerTest {
 
-    @InjectMocks
-    private OrderController orderController;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private OrderService orderService;
 
-    @Mock
+    @MockBean
     private OrderMapper orderMapper;
 
-    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
         objectMapper = new ObjectMapper();
     }
 
     @Test
+    @DisplayName("Test getting all orders")
     public void testGetAllOrders() throws Exception {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setType(Order.TypeOrder.BUYING);
-        orderDTO.setOrderDate(Date.valueOf(LocalDate.now()));
+        orderDTO.setOrderDate(java.sql.Date.valueOf(LocalDate.now()));
         List<OrderDTO> orders = Collections.singletonList(orderDTO);
 
         when(orderService.getAllBuyingOrders()).thenReturn(orders);
@@ -62,6 +59,7 @@ public class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Test getting client orders")
     public void testGetClientOrders() throws Exception {
         String username = "testUser";
         ClientDTO clientDTO = new ClientDTO();
@@ -71,14 +69,14 @@ public class OrderControllerTest {
         when(orderService.getClientOrders(username)).thenReturn(orders);
 
         mockMvc.perform(get("/api/orders/client")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(clientDTO)))
+                        .param("username", username))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0]").exists());
     }
 
     @Test
+    @DisplayName("Test filtering orders")
     public void testFilterOrders() throws Exception {
         OrderDTO orderDTO = new OrderDTO();
         List<OrderDTO> orders = Collections.singletonList(orderDTO);
@@ -94,6 +92,7 @@ public class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Test adding an order")
     public void testAddOrder() throws Exception {
         OrderDTO orderDTO = new OrderDTO();
         Order order = new Order();
@@ -109,6 +108,7 @@ public class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Test adding an order failure")
     public void testAddOrderFailure() throws Exception {
         OrderDTO orderDTO = new OrderDTO();
         Order order = new Order();
@@ -124,6 +124,7 @@ public class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Test deleting an order")
     public void testDeleteOrder() throws Exception {
         int orderId = 1;
         Order order = new Order();
@@ -138,6 +139,7 @@ public class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Test deleting an order not found")
     public void testDeleteOrderNotFound() throws Exception {
         int orderId = 1;
 
@@ -149,6 +151,7 @@ public class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Test updating an order")
     public void testUpdateOrder() throws Exception {
         int orderId = 1;
         OrderDTO orderDTO = new OrderDTO();
@@ -166,6 +169,7 @@ public class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Test updating an order not found")
     public void testUpdateOrderNotFound() throws Exception {
         int orderId = 1;
         OrderDTO orderDTO = new OrderDTO();

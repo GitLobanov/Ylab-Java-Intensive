@@ -1,4 +1,4 @@
-package com.backend.annotations;
+package com.backend.loggerstarter.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Auditable {
+public @interface EnableAudit {
     String actionType();
     String description() default "";
 }

@@ -2,6 +2,7 @@ package com.backend.controller;
 
 import com.backend.dto.ClientDTO;
 import com.backend.dto.OrderDTO;
+import com.backend.loggerstarter.annotation.EnableAudit;
 import com.backend.mapper.OrderMapper;
 import com.backend.model.Order;
 import com.backend.service.OrderService;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -31,26 +33,34 @@ public class OrderController {
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Get", description = "Get all orders")
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getAllOrders () {
         List<OrderDTO> orders = orderService.getAllBuyingOrders();
         return ResponseEntity.ok(orders);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Get", description = "Get orders by client")
     @GetMapping("/client")
     public ResponseEntity<List<OrderDTO>> getClientOrders (@RequestBody ClientDTO clientDTO) throws IOException {
         List<OrderDTO> orders = orderService.getClientOrders(clientDTO.getUsername());
         return ResponseEntity.ok(orders);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Get", description = "Filter orders")
     @GetMapping("/filter")
     public ResponseEntity<List<OrderDTO>> filterOrders(@RequestBody OrderDTO orderDTO) throws IOException {
         List<OrderDTO> orders = orderService.getOrdersBySearch(orderDTO);
         return ResponseEntity.ok(orders);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Add", description = "Add order")
     @PostMapping
-    public ResponseEntity<?> addOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<String> addOrder(@RequestBody OrderDTO orderDTO) {
         Order order = orderMapper.toEntity(orderDTO);
         if (orderService.addOrder(order)) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Order created");
@@ -59,8 +69,10 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Delete", description = "Delete order")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable int id) {
+    public ResponseEntity<String> deleteOrder(@PathVariable int id) {
         Optional<Order> optionalOrder = orderService.getOrderById(id);
 
         if (optionalOrder.isPresent()) {
@@ -71,8 +83,10 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @EnableAudit(actionType = "Update", description = "Update order")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable int id, @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<String> updateOrder(@PathVariable int id, @RequestBody OrderDTO orderDTO) {
         Optional<Order> optionalOrder = orderService.getOrderById(id);
 
         if (optionalOrder.isPresent()) {

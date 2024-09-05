@@ -2,21 +2,17 @@ package com.backend.controller;
 
 import com.backend.dto.CarDTO;
 import com.backend.dto.ClientDTO;
-import com.backend.dto.EmployeeDTO;
-import com.backend.mapper.ClientMapper;
 import com.backend.model.User;
 import com.backend.service.ClientService;
 import com.backend.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,28 +22,27 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(ClientController.class)
 public class ClientControllerTest {
 
-    @InjectMocks
-    private ClientController clientController;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private ClientService clientService;
 
-    @Mock
+    @MockBean
     private OrderService orderService;
 
-    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(clientController).build();
         objectMapper = new ObjectMapper();
     }
 
     @Test
+    @DisplayName("Test getting all clients")
     public void testGetAllClients() throws Exception {
         ClientDTO clientDTO = new ClientDTO();
         List<ClientDTO> clients = Collections.singletonList(clientDTO);
@@ -61,6 +56,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test adding a client")
     public void testAddClient() throws Exception {
         ClientDTO clientDTO = new ClientDTO();
         clientDTO.setUsername("user228");
@@ -80,6 +76,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test deleting a client")
     public void testDeleteClient() throws Exception {
         String username = "testUser";
         when(clientService.getClientByUsername(username)).thenReturn(Optional.of(new User()));
@@ -91,6 +88,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test deleting a client not found")
     public void testDeleteClientNotFound() throws Exception {
         String username = "testUser";
         when(clientService.getClientByUsername(username)).thenReturn(Optional.empty());
@@ -100,6 +98,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test updating a client")
     public void testUpdateClient() throws Exception {
         String username = "testUser";
         ClientDTO clientDTO = new ClientDTO();
@@ -116,6 +115,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test updating a client not found")
     public void testUpdateClientNotFound() throws Exception {
         String username = "testUser";
         ClientDTO clientDTO = new ClientDTO();
@@ -129,6 +129,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test getting client's cars")
     public void testHandleGetClientCars() throws Exception {
         String username = "testUser";
         CarDTO carDTO = new CarDTO();
@@ -143,6 +144,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test getting clients by manager")
     public void testHandleGetManagerClients() throws Exception {
         String managerUsername = "managerUser";
         ClientDTO clientDTO = new ClientDTO();
@@ -157,6 +159,7 @@ public class ClientControllerTest {
     }
 
     @Test
+    @DisplayName("Test filtering clients")
     public void testHandleFilterClients() throws Exception {
         ClientDTO filterDTO = new ClientDTO();
         List<ClientDTO> clients = Collections.singletonList(filterDTO);
